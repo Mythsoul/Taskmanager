@@ -1,101 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TaskFlow</title>
+  <title>TaskManager</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
-  <div class="container">
+
+<body class="bg-gray-50 text-gray-800">
+  <div class="container mx-auto px-4">
     <!-- Header -->
-    <header class="header">
-      <a class="logo" href="#">
-        <img src="images/logo.png" alt="TaskFlow Logo" class="icon">
-        <span>TaskFlow</span>
+    <header class="flex items-center justify-between py-4 bg-white shadow-md">
+      <a class="flex items-center text-2xl font-bold text-blue-600" href="#">
+        <img src="images/taskmanager.png" alt="TaskManager Logo" class="h-10 mr-2">
+        <span>TaskManager</span>
       </a>
-      <nav class="nav">
-        <a href="#features">Features</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
+      <nav class="space-x-4">
+        <a href="#features" class="text-gray-600 hover:text-blue-600">Features</a>
+        <a href="#about" class="text-gray-600 hover:text-blue-600">About</a>
+        <a href="#contact" class="text-gray-600 hover:text-blue-600">Contact</a>
       </nav>
     </header>
 
     <!-- Main Content -->
     <main>
       <!-- Hero Section -->
-      <section class="hero">
+      <section class="hero bg-blue-600 text-white py-20 text-center">
         <div class="hero-content">
-          <h1>Manage Tasks, Track Time, Boost Productivity</h1>
-          <p>TaskFlow is your free, all-in-one solution for task management and time tracking. Streamline your workflow and achieve more, without spending a dime.</p>
-          <div class="cta-buttons">
-            <a href="/register" class="btn primary">Get Started for Free</a>
-            <a href="#" class="btn secondary">Learn More</a>
+          <h1 class="text-4xl font-semibold mb-4">Manage Tasks, Track Time, Boost Productivity</h1>
+          <p class="mb-6">TaskManager is your free, all-in-one solution for task management and time tracking. Streamline your workflow and achieve more, without spending a dime.</p>
+          <div class="flex justify-center space-x-4">
+            <a href="/register" class="bg-white text-blue-600 px-6 py-2 rounded-md shadow hover:bg-gray-200">Get Started for Free</a>
+            <a href="#" class="bg-transparent border border-white text-white px-6 py-2 rounded-md shadow hover:bg-white hover:text-blue-600">Learn More</a>
           </div>
         </div>
       </section>
 
       <!-- Features Section -->
-      <section id="features" class="features">
-        <h2>Powerful Features, Zero Cost</h2>
-        <div class="features-grid">
-          <div class="feature-item">
-            <img src="path-to-icon" alt="Icon" class="icon">
-            <h3>Intuitive Task Management</h3>
+      <section id="features" class="features py-20">
+        <h2 class="text-3xl font-semibold text-center mb-10">Powerful Features, Zero Cost</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div class="feature-item bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
+            <img src="path-to-icon" alt="Icon" class="h-12 mb-4">
+            <h3 class="text-xl font-semibold mb-2">Intuitive Task Management</h3>
             <p>Create, organize, and prioritize tasks with ease. Stay on top of your to-do list and never miss a deadline.</p>
           </div>
-          <div class="feature-item">
-            <img src="path-to-icon" alt="Icon" class="icon">
-            <h3>Precise Time Tracking</h3>
+          <div class="feature-item bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
+            <img src="path-to-icon" alt="Icon" class="h-12 mb-4">
+            <h3 class="text-xl font-semibold mb-2">Precise Time Tracking</h3>
             <p>Track time spent on tasks and projects with a single click. Gain insights into your productivity patterns.</p>
           </div>
-          <div class="feature-item">
-            <img src="path-to-icon" alt="Icon" class="icon">
-            <h3>Comprehensive Dashboard</h3>
+          <div class="feature-item bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
+            <img src="path-to-icon" alt="Icon" class="h-12 mb-4">
+            <h3 class="text-xl font-semibold mb-2">Comprehensive Dashboard</h3>
             <p>Get a clear overview of your tasks, projects, and time allocation at a glance. Make data-driven decisions.</p>
           </div>
         </div>
       </section>
 
       <!-- About Section -->
-      <section id="about" class="about">
-        <div class="about-content">
-          <h2>Why Choose TaskFlow?</h2>
-          <p>TaskFlow is more than just a free tool; it's a commitment to boosting your productivity without any cost. We believe that everyone should have access to powerful task management and time tracking capabilities.</p>
-          <ul>
+      <section id="about" class="about py-20 bg-gray-100">
+        <div class="about-content text-center">
+          <h2 class="text-3xl font-semibold mb-4">Why Choose TaskManager?</h2>
+          <p class="mb-6">TaskManager is more than just a free tool; it's a commitment to boosting your productivity without any cost. We believe that everyone should have access to powerful task management and time tracking capabilities.</p>
+          <ul class="list-disc list-inside mb-6 text-left mx-auto max-w-2xl">
             <li>Always free, no hidden charges</li>
             <li>Regular updates and new features</li>
             <li>Secure and privacy-focused</li>
           </ul>
         </div>
-        <div class="join-community">
-          <h3>Join Our Community</h3>
-          <p>Be part of a growing community of productive individuals and teams. Share tips, get support, and stay updated.</p>
-          <a href="#" class="btn">Join GitHub Community</a>
+        <div class="join-community text-center">
+          <h3 class="text-2xl font-semibold mb-2">Join Our Community</h3>
+          <p class="mb-4">Be part of a growing community of productive individuals and teams. Share tips, get support, and stay updated.</p>
+          <a href="#" class="bg-blue-600 text-white px-6 py-2 rounded-md shadow hover:bg-blue-500">Join GitHub Community</a>
         </div>
       </section>
 
       <!-- Contact Section -->
-      <section id="contact" class="contact">
-        <h2>Start Your Productivity Journey</h2>
-        <p>Join thousands of users who have improved their productivity with TaskFlow. It's free, and always will be.</p>
-        <form>
-          <input type="email" placeholder="Enter your email">
-          <button type="submit">Sign Up</button>
+      <section id="contact" class="contact py-20">
+        <h2 class="text-3xl font-semibold text-center mb-4">Start Your Productivity Journey</h2>
+        <p class="text-center mb-6">Join thousands of users who have improved their productivity with TaskManager. It's free, and always will be.</p>
+        <form class="flex flex-col items-center">
+          <input type="email" placeholder="Enter your email" class="mb-4 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-md shadow hover:bg-blue-500">Sign Up</button>
         </form>
-        <p class="terms">By signing up, you agree to our <a href="#">Terms & Conditions</a>.</p>
+        <p class="terms text-center mt-4">By signing up, you agree to our <a href="#" class="text-blue-600 underline">Terms & Conditions</a>.</p>
       </section>
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
-      <p>© 2024 TaskFlow. All rights reserved.</p>
-      <nav class="footer-nav">
-        <a href="#">Terms of Service</a>
-        <a href="#">Privacy</a>
+    <footer class="footer py-4 bg-gray-800 text-white text-center">
+      <p>© 2024 TaskManager. All rights reserved.</p>
+      <nav class="footer-nav space-x-4">
+        <a href="#" class="hover:underline">Terms of Service</a>
+        <a href="#" class="hover:underline">Privacy</a>
       </nav>
     </footer>
   </div>
   <script src="js/main.js"></script>
 </body>
+
 </html>

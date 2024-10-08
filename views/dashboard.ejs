@@ -4,22 +4,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> Management Dashboard</title>
+  <title>Management Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="css/tailwind.css">
-<link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/tailwind.css">
+  <link rel="stylesheet" href="css/dashboard.css">
 </head>
 
-<body class="min-h-screen bg-gray-100  text-black transition-colors duration-300">
+<body class="min-h-screen bg-gray-100 text-black transition-colors duration-300">
 
   <!-- Dashboard Container -->
   <div class="container mx-auto py-8 px-4 md:px-8">
     <!-- Header -->
     <header class="flex justify-between items-center mb-10">
-      <h1 class="text-3xl font-bold">Dashboard</h1>
+      <h1 class="text-3xl font-bold dashboard">Dashboard</h1>
       <div class="flex items-center space-x-4">
-        <span class="text-sm text-gray-700">Welcome back, Alex</span>
-        <img src="/placeholder.svg?height=40&width=40" alt="Alex" class="w-10 h-10 rounded-full">
+        <span class="text-2xl font-bold text-black greet">Welcome back, Alex</span>
+        <img src="images/user.svg" alt="Alex" class="w-10 h-10 rounded-full">
         <button class="bg-gray-200 p-2 rounded-full" onclick="toggleDarkMode()">
           <span class="text-yellow-500">🌞</span>
         </button>
@@ -35,17 +35,17 @@
         <p class="text-sm text-gray-600 mb-4">Drag and drop to organize</p>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="bg-gray-50 p-4 rounded-lg">
-            <h3 class="text-lg font-medium mb-2">To Do</h3>
+            <h3 class="text-lg font-bold mb-2 text-black">To Do</h3>
             <div class="bg-white p-2 mb-2 rounded-lg shadow-sm">Complete project proposal</div>
             <button class="text-blue-500 hover:underline">Add Task</button>
           </div>
           <div class="bg-gray-50 p-4 rounded-lg">
-            <h3 class="text-lg font-medium mb-2">In Progress</h3>
+            <h3 class="text-lg font-bold text-black mb-2">In Progress</h3>
             <div class="bg-white p-2 mb-2 rounded-lg shadow-sm">Review team performance</div>
             <button class="text-blue-500 hover:underline">Add Task</button>
           </div>
           <div class="bg-gray-50 p-4 rounded-lg">
-            <h3 class="text-lg font-medium mb-2">Done</h3>
+            <h3 class="text-lg font-bold text-black mb-2">Done</h3>
             <div class="bg-white p-2 mb-2 rounded-lg shadow-sm">Prepare for client meeting</div>
             <button class="text-blue-500 hover:underline">Add Task</button>
           </div>
@@ -106,9 +106,16 @@
 
   <script>
     function toggleDarkMode() {
-      document.body.classList.toggle('bg-gray-900');
-      document.body.classList.toggle('text-white');
-
+      const body = document.body;
+      body.classList.toggle('bg-gray-900');
+      body.classList.toggle('text-black');
+      document.querySelector(".greet").classList.toggle('text-white');
+      document.querySelector(".dashboard").classList.toggle('text-white'); 
+      const cards = document.querySelectorAll('.bg-white');
+      cards.forEach(card => {
+        card.classList.toggle('bg-gray-800'); // Darker background for cards
+        card.classList.toggle('text-gray-200'); // Lighter text color for readability
+      });
     }
   </script>
 
