@@ -1,0 +1,91 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Dependency directories
+jspm_packages/
+bower_components/
+
+# Build directories
+dist/
+build/
+out/
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+*.bak
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Cache
+.sass-cache/
+.cache/
+.cache-loader/
+public/static/cache/
+
+# Coverage reports
+coverage/
+
+# Test results
+*.lcov
+test-results/
+*.spec.js
+*.test.js
+
+# Next.js specific (if using)
+.next/
+out/
+
+# React specific (if using)
+.eslintcache
+*.env.local
+
+# Build output
+build/
+dist/
+public/
+
+# Miscellaneous
+*.log
+*.lock
+*.gz
+*.zip
+*.map
+
+# PostgreSQL files
+*.sql
+*.sqlite
+*.db
+
+# Optional: Ignore IDE-specific files
+*.iml
+
+# Optional: Ignore temporary files
+tmp/
+temp/
+
+# Optional: Ignore generated documentation
+docs/
