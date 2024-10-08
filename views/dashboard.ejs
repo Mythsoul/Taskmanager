@@ -4,147 +4,114 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Time Management Dashboard</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/custom.css">
+  <title> Management Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="css/tailwind.css">
+<link rel="stylesheet" href="css/dashboard.css">
 </head>
 
-<body class="bg-gray-100 min-h-screen p-8">
-  <div class="container mx-auto">
+<body class="min-h-screen bg-gray-100  text-black transition-colors duration-300">
+
+  <!-- Dashboard Container -->
+  <div class="container mx-auto py-8 px-4 md:px-8">
     <!-- Header -->
-    <header class="flex justify-between items-center mb-8">
-      <h1 class="text-3xl font-bold">Time Management Dashboard</h1>
+    <header class="flex justify-between items-center mb-10">
+      <h1 class="text-3xl font-bold">Dashboard</h1>
       <div class="flex items-center space-x-4">
-        <span class="text-sm text-gray-600">Welcome back, Alex</span>
-        <div class="relative w-10 h-10 rounded-full bg-gray-200">
-          <img src="/placeholder.svg?height=40&width=40" alt="Alex" class="w-full h-full rounded-full">
-          <div class="absolute inset-0 flex items-center justify-center text-sm font-bold">AL</div>
-        </div>
+        <span class="text-sm text-gray-700">Welcome back, Alex</span>
+        <img src="/placeholder.svg?height=40&width=40" alt="Alex" class="w-10 h-10 rounded-full">
+        <button class="bg-gray-200 p-2 rounded-full" onclick="toggleDarkMode()">
+          <span class="text-yellow-500">🌞</span>
+        </button>
       </div>
     </header>
 
-    <!-- Main Dashboard Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- Grid Layout -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-      <!-- Today's Tasks Card -->
-      <div class="bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-bold mb-2">Today's Tasks</h2>
-        <p class="text-sm text-gray-600 mb-4">Your progress for today</p>
-        <div class="flex items-center space-x-4">
-          <i class="fas fa-list-ul text-blue-500 text-2xl"></i>
-          <div class="flex-1">
-            <div class="flex justify-between text-sm font-medium">
-              <span>5/8 completed</span>
-              <span class="text-gray-500">62.5%</span>
-            </div>
-            <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-              <div class="bg-blue-600 h-2 rounded-full" style="width: 62.5%;"></div>
-            </div>
+      <!-- Task Management Card -->
+      <div class="bg-white p-6 rounded-lg shadow-lg col-span-full">
+        <h2 class="text-xl font-semibold mb-2">Task Management</h2>
+        <p class="text-sm text-gray-600 mb-4">Drag and drop to organize</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <h3 class="text-lg font-medium mb-2">To Do</h3>
+            <div class="bg-white p-2 mb-2 rounded-lg shadow-sm">Complete project proposal</div>
+            <button class="text-blue-500 hover:underline">Add Task</button>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <h3 class="text-lg font-medium mb-2">In Progress</h3>
+            <div class="bg-white p-2 mb-2 rounded-lg shadow-sm">Review team performance</div>
+            <button class="text-blue-500 hover:underline">Add Task</button>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <h3 class="text-lg font-medium mb-2">Done</h3>
+            <div class="bg-white p-2 mb-2 rounded-lg shadow-sm">Prepare for client meeting</div>
+            <button class="text-blue-500 hover:underline">Add Task</button>
           </div>
         </div>
       </div>
 
-      <!-- Weekly Calendar Card -->
-      <div class="bg-white p-6 rounded-lg shadow-md text-center">
-        <h2 class="text-xl font-bold mb-2">Weekly Calendar</h2>
-        <p class="text-sm text-gray-600 mb-4">Your schedule at a glance</p>
-        <i class="far fa-calendar-alt text-blue-500 text-6xl"></i>
+      <!-- Productivity Overview Card -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-semibold mb-2">Productivity Overview</h2>
+        <p class="text-sm text-gray-600 mb-4">Your performance this week</p>
+        <!-- Placeholder for chart -->
+        <div class="bg-gray-100 h-40 flex items-center justify-center rounded-lg">[Chart]</div>
       </div>
 
-      <!-- Productivity Card -->
-      <div class="bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-bold mb-2">Productivity</h2>
-        <p class="text-sm text-gray-600 mb-4">Hours worked this week</p>
-        <div id="productivity-chart" class="h-32">
-          <!-- Bar chart placeholder -->
+      <!-- Pomodoro Timer Card -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-semibold mb-2">Pomodoro Timer</h2>
+        <p class="text-sm text-gray-600 mb-4">Stay focused and productive</p>
+        <div class="text-center">
+          <span class="text-4xl font-bold block mb-4">25:00</span>
+          <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Start Pomodoro</button>
         </div>
       </div>
 
-      <!-- Upcoming Deadlines Card -->
-      <div class="bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-bold mb-2">Upcoming Deadlines</h2>
-        <p class="text-sm text-gray-600 mb-4">Don't miss these important dates</p>
-        <ul class="space-y-2">
-          <li class="flex justify-between">
-            <span>Project Proposal</span>
-            <span class="text-red-500">Tomorrow</span>
-          </li>
-          <li class="flex justify-between">
-            <span>Client Meeting</span>
-            <span class="text-yellow-500">In 3 days</span>
-          </li>
-          <li class="flex justify-between">
-            <span>Quarterly Report</span>
-            <span class="text-green-500">In 2 weeks</span>
-          </li>
-        </ul>
+      <!-- Team Performance Card -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-semibold mb-2">Team Performance</h2>
+        <p class="text-sm text-gray-600 mb-4">Collaboration insights</p>
+        <!-- Placeholder for pie chart -->
+        <div class="bg-gray-100 h-40 flex items-center justify-center rounded-lg">[Pie Chart]</div>
       </div>
 
-      <!-- Time Tracking Card -->
-      <div class="bg-white p-6 rounded-lg shadow-md text-center">
-        <h2 class="text-xl font-bold mb-2">Time Tracking</h2>
-        <p class="text-sm text-gray-600 mb-4">Monitor your work sessions</p>
-        <i class="far fa-clock text-blue-500 text-6xl mb-4"></i>
-        <div class="text-4xl font-bold mb-4" id="elapsed-time">00:00</div>
-        <button class="bg-blue-600 text-white px-4 py-2 rounded-md" id="track-btn">Start Tracking</button>
+      <!-- AI Task Suggestions Card -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-semibold mb-2">AI Task Suggestions</h2>
+        <ul class="list-disc list-inside space-y-2">
+          <li class="text-gray-700">Prioritize project proposal</li>
+          <li class="text-gray-700">Schedule team check-in</li>
+          <li class="text-gray-700">Review latest industry trends</li>
+        </ul>
+        <button class="bg-blue-500 text-white mt-4 px-4 py-2 rounded hover:bg-blue-600 w-full">Generate More Suggestions</button>
       </div>
 
-      <!-- Goals Card -->
-      <div class="bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-bold mb-2">Goals</h2>
-        <p class="text-sm text-gray-600 mb-4">Your current objectives</p>
-        <ul class="space-y-2">
-          <li class="flex items-center space-x-2">
-            <i class="fas fa-bullseye text-green-500"></i>
-            <span>Complete project milestone</span>
-          </li>
-          <li class="flex items-center space-x-2">
-            <i class="fas fa-bullseye text-yellow-500"></i>
-            <span>Learn new programming language</span>
-          </li>
-          <li class="flex items-center space-x-2">
-            <i class="fas fa-bullseye text-blue-500"></i>
-            <span>Improve time management skills</span>
-          </li>
-        </ul>
-        <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md w-full mt-4">
-          <i class="fas fa-plus mr-2"></i>Add New Goal
-        </button>
+      <!-- Gamification Card -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-semibold mb-2">Gamification</h2>
+        <p class="text-sm text-gray-600 mb-4">Level up your productivity</p>
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-2xl font-bold">100 Points</span>
+          <span class="text-yellow-500">🏆</span>
+        </div>
+        <progress class="w-full" value="50" max="100"></progress>
+        <p class="text-xs text-gray-500 mt-2">50 points to next level</p>
       </div>
 
     </div>
   </div>
 
   <script>
-// idk why 
-    let isTracking = false;
-    let elapsedTime = 0;
-    let interval;
+    function toggleDarkMode() {
+      document.body.classList.toggle('bg-gray-900');
+      document.body.classList.toggle('text-white');
 
-    function formatTime(seconds) {
-      const minutes = Math.floor(seconds / 60);
-      const remainingSeconds = seconds % 60;
-      return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
     }
-
-    document.getElementById('track-btn').addEventListener('click', function () {
-      if (isTracking) {
-        clearInterval(interval);
-        isTracking = false;
-        this.innerText = 'Start Tracking';
-        elapsedTime = 0;
-        document.getElementById('elapsed-time').innerText = formatTime(elapsedTime);
-      } else {
-        isTracking = true;
-        this.innerText = 'Stop Tracking';
-        interval = setInterval(() => {
-          elapsedTime++;
-          document.getElementById('elapsed-time').innerText = formatTime(elapsedTime);
-        }, 1000);
-      }
-    });
   </script>
+
 </body>
 
 </html>
