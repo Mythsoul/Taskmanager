@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import pg from "pg"; 
 import path from "path"; 
 import { fileURLToPath } from "url"; 
-
+import database from "./config/db.js";
 const app = express();
 const port = 3000;
 
