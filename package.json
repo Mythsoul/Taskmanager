@@ -4,8 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    
-  "build:css": "tailwindcss -i ./public/css/styles.css -o ./public/css/tailwind.css --watch" ,
+    "build:css": "tailwindcss -i ./public/css/styles.css -o ./public/css/tailwind.css --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js"
   },
@@ -20,8 +19,11 @@
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.21.0",
+    "express-session": "^1.18.1",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth": "^2.0.0",
     "pg": "^8.13.0"
   },
   "devDependencies": {
