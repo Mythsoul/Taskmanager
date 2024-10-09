@@ -40,21 +40,27 @@ app.get("/login", (req, res) => {
 app.get("/dashboard", (req, res) => {
   if (req.isAuthenticated()) {
     res.render("dashboard.ejs");
+  }else{
+    res.redirect("/login");
   }
+});
+
+app.get("/logout", (req, res) => {
+  req.logout();
   res.redirect("/login");
 });
 
 app.get(
   "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
+  passport.authenticate("google", { scope: ["profile", "email"] }
+  ));
 
 app.get(
   "/auth/google/dashboard",
   passport.authenticate("google", {
     successRedirect: "/dashboard",
     failureRedirect: "/login",
-  })
+  }), 
 );
 passport.use(
   new GoogleStrategy(
@@ -64,6 +70,8 @@ passport.use(
       callbackURL: "http://localhost:3000/auth/google/dashboard", 
     },
     function verify(accessToken, refreshToken, profile, done) {
+console.log(profile)
+
       done(null, profile);
     }
   )
@@ -80,3 +88,5 @@ passport.deserializeUser((user, done) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+
