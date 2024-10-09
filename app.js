@@ -7,6 +7,8 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import {database} from "./src/config/db.js";
 import { fileURLToPath } from "url";
 import session from "express-session";
+import authRoutes from "./src/routes/authRoutes.js";
+
 const app = express();
 const port = 3000;
 
@@ -20,6 +22,7 @@ const __dirname = path.dirname(__filename);
 app.use(
   session({ secret: "keyboard cat", resave: true, saveUninitialized: true })
 );
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -39,7 +42,13 @@ app.get("/login", (req, res) => {
 
 app.get("/dashboard", (req, res) => {
   if (req.isAuthenticated()) {
-    res.render("dashboard.ejs");
+    const user = {
+      displayName: req.user.displayName,
+      name: req.user.name.givenName,
+      email: req.user.emails[0].value,
+      picture: req.user.photos[0].value
+    };
+    res.render("dashboard.ejs", { user : user });
   }else{
     res.redirect("/login");
   }
@@ -50,43 +59,13 @@ app.get("/logout", (req, res) => {
   res.redirect("/login");
 });
 
-app.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] }
-  ));
-
-app.get(
-  "/auth/google/dashboard",
-  passport.authenticate("google", {
-    successRedirect: "/dashboard",
-    failureRedirect: "/login",
-  }), 
-);
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3000/auth/google/dashboard", 
-    },
-    function verify(accessToken, refreshToken, profile, done) {
-console.log(profile)
-
-      done(null, profile);
-    }
-  )
-);
-
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
-
-passport.deserializeUser((user, done) => {
-  done(null, user);
-});
+app.use(authRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+
+
 
 
