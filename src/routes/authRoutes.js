@@ -4,43 +4,61 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import dotenv from "dotenv";
 
 dotenv.config();
+const app = express();
 
-const router = express.Router();
-export default router;
+const renderlogin = (req, res) => {
+  if (req.isAuthenticated()) {
+    return res.redirect("/dashboard");
+  }
+  res.render("login");
+};
 
-router.get(
-    "/auth/google",
-    passport.authenticate("google", { scope: ["profile", "email"] }
-    ));
+const renderregister = (req, res) => {
+  if (req.isAuthenticated()) {
+    return res.redirect("/dashboard");
+  }
+  res.render("register");
+};
 
+const google_auth = (req, res) => {
+  passport.authenticate("google", { scope: ["profile"] })(req, res);
+};
 
-router.get(
-  "/auth/google/dashboard",
+const google_callback = (req, res) => {
   passport.authenticate("google", {
-    successRedirect: "/dashboard",
     failureRedirect: "/login",
-  }), 
-);
+    successRedirect: "/dashboard",
+  });
+};
+const renderlogout = (req, res) => {
+  req.logout();
+  res.redirect("/login");
+};
 
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3000/auth/google/dashboard", 
+      callbackURL: "http://localhost:3000/auth/google/dashboard",
     },
-    function verify(accessToken, refreshToken, profile, done) {
-     console.log(profile)
-
-      done(null, profile );
+    function (accessToken, refreshToken, profile, cb) {
+      return cb(null, profile);
     }
   )
 );
-passport.serializeUser((user, done) => {
+
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+passport.deserializeUser(function (user, done) {
   done(null, user);
 });
 
-passport.deserializeUser((user, done) => {
-  done(null, user);
-});
-
+export {
+  renderlogin,
+  renderregister,
+  google_auth,
+  google_callback,
+  renderlogout,
+};

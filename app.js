@@ -4,11 +4,10 @@ import pg from "pg";
 import path from "path";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import {database} from "./src/config/db.js";
+import { database } from "./src/config/db.js";
 import { fileURLToPath } from "url";
 import session from "express-session";
-import authRoutes from "./src/routes/authRoutes.js";
-
+import { renderlogin, renderregister,google_auth, google_callback, renderlogout } from "./src/routes/authRoutes.js";
 const app = express();
 const port = 3000;
 
@@ -28,44 +27,40 @@ app.use(passport.session());
 
 app.set("view engine", "ejs");
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-
-app.get("/register", (req, res) => {
-  res.render("register.ejs");
-});
-
-app.get("/login", (req, res) => {
-  res.render("login.ejs");
-});
-
-app.get("/dashboard", (req, res) => {
+function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-    const user = {
-      displayName: req.user.displayName,
-      name: req.user.name.givenName,
-      email: req.user.emails[0].value,
-      picture: req.user.photos[0].value
-    };
-    res.render("dashboard.ejs", { user : user });
-  }else{
-    res.redirect("/login");
-  }
+    return next();
+  } 
+  res.redirect("/login"); 
+}
+
+app.get("/", (req, res) => {
+  res.render("index");
+}); 
+
+app.get("/login",  renderlogin);
+
+app.get("/register", renderregister);
+
+app.get("/auth/google",google_auth); 
+
+app.get("/auth/google/dashboard", passport.authenticate("google", { failureRedirect: "/login" , 
+   successRedirect: "/dashboard" }),); 
+
+app.get("/dashboard", checkAuthenticated, (req, res) => {
+  console.log(req.user);  
+  const user = req.user;
+  res.render("dashboard" , { 
+    user : user
+  });
+
 });
 
-app.get("/logout", (req, res) => {
-  req.logout();
-  res.redirect("/login");
-});
+app.get("/logout", renderlogout);
 
-app.use(authRoutes);
+
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-
-
-
-

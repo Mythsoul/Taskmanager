@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="css/dashboard.css">
 </head>
 
-<body class="min-h-screen bg-gray-100 text-black transition-colors duration-300">
 
   <!-- Dashboard Container -->
   <div class="container mx-auto py-8 px-4 md:px-8">
@@ -18,12 +17,14 @@
     <header class="flex justify-between items-center mb-10">
       <h1 class="text-3xl font-bold dashboard">Dashboard</h1>
       <div class="flex items-center space-x-4">
-        <span class="text-2xl font-bold text-black greet">Welcome back, <%=  user ? user.displayName : 'Alex' %>
-        <img src="images/user.svg" alt="Alex" class="w-10 h-10 rounded-full">
+        <img src="<%= user ? user.picture : 'https://cdn-icons-png.flaticon.com/512/149/149071.png'%>" 
+             alt="User Avatar" class="w-10 h-10 rounded-full">
+        <span class="text-2xl font-bold text-black greet">Welcome back, <%= user ? user.displayName : 'Alex' %></span>
         <button class="bg-gray-200 p-2 rounded-full" onclick="toggleDarkMode()">
           <span class="text-yellow-500">🌞</span>
         </button>
       </div>
+      
     </header>
 
     <!-- Grid Layout -->
