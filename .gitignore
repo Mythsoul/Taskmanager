@@ -88,3 +88,6 @@ temp/
 
 # Optional: Ignore generated documentation
 docs/
+#ignore tailwind css file 
+tailwind.css
+
