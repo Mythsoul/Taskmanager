@@ -1,6 +1,5 @@
 import { database } from "../config/db.js";
 
-// Function to add a new task
 export const add_task = async (req, res) => {
   if (req.isAuthenticated()) {
     const { taskName, taskDescription } = req.body;
@@ -23,7 +22,6 @@ export const add_task = async (req, res) => {
   }
 };
 
-// Function to update the task status
 export const update_task_status = async (req, res) => {
   const { taskName, status } = req.body;
   const userId = req.user.id;
@@ -47,7 +45,6 @@ export const update_task_status = async (req, res) => {
   }
 };
 
-// Function to render tasks based on their status
 export async function render_task(userId) {
   try {
     const result = await database.query("SELECT * FROM tasks WHERE user_id = $1 ORDER BY status", [userId]);
@@ -60,3 +57,4 @@ export async function render_task(userId) {
     throw new Error("Failed to fetch tasks");
   }
 }
+

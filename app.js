@@ -21,7 +21,6 @@ const port = 3000;
 
 dotenv.config();
 
-// Middleware to parse form data and JSON
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
@@ -38,7 +37,6 @@ app.use(passport.session());
 
 app.set("view engine", "ejs");
 
-// Authentication check middleware
 function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
@@ -46,23 +44,16 @@ function checkAuthenticated(req, res, next) {
   res.redirect("/login");
 }
 
-// Routes
-
-// Home page
 app.get("/", (req, res) => {
   res.render("index");
 });
 
-// Render login page
 app.get("/login", renderlogin);
 
-// Render register page
 app.get("/register", renderregister);
 
-// Google authentication
 app.get("/auth/google", google_auth);
 
-// Google authentication callback
 app.get(
   "/auth/google/dashboard",
   passport.authenticate("google", {
@@ -71,12 +62,10 @@ app.get(
   })
 );
 
-// Dashboard route
 app.get("/dashboard", checkAuthenticated, async (req, res) => {
   const user = req.user;
 
   try {
-    // Render tasks filtered by status
     const tasks = await render_task(user.id);
     res.render("dashboard", {
       user: user,
@@ -88,19 +77,14 @@ app.get("/dashboard", checkAuthenticated, async (req, res) => {
   }
 });
 
-// Logout route
 app.get("/logout", renderlogout);
 
-// Add a task
 app.post("/add-task", add_task);
 
-// Update task status
 app.post("/update-task-status", update_task_status);
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
 
 
