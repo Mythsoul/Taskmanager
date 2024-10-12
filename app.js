@@ -64,13 +64,16 @@ app.get(
 
 app.get("/dashboard", checkAuthenticated, async (req, res) => {
   const user = req.user;
-
+console.log(req.user);
   try {
+    
     const tasks = await render_task(user.id);
     res.render("dashboard", {
       user: user,
       tasks: tasks,
+
     });
+
   } catch (err) {
     console.error(err);
     res.status(500).send("Failed to load dashboard");

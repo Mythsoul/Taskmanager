@@ -23,7 +23,7 @@ const renderregister = (req, res) => {
 };
 
 const google_auth = (req, res, next) => {
-  passport.authenticate("google", { scope: ["profile"] })(req, res, next);
+  passport.authenticate("google", { scope: ["profile", "email"] })(req, res, next);
 };
 
 const google_callback = (req, res, next) => {
@@ -50,11 +50,13 @@ passport.use(
       const username = profile.displayName.trim();
       const hashedPassword = bcrypt.hashSync(id, 10);
 
+      const picture = profile.photos[0].value;
+
       try {
         const userResult = await db.query(`SELECT * FROM users WHERE id = $1`, [id]);
 
         if (userResult.rows.length > 0) {
-          const user = userResult.rows[0];
+         const user = await userResult.rows[0];
 
           const taskResult = await db.query(`SELECT * FROM tasks WHERE user_id = $1`, [id]);
 
@@ -64,22 +66,20 @@ passport.use(
               [id, 'Sample task']
             );
           }
-
-          return cb(null, user);
+          return cb(null, { id, username, picture : picture});
         } else {
           const addUser = await db.query(
             `INSERT INTO users (id, username, password) VALUES ($1, $2, $3) RETURNING *`,
             [id, username, hashedPassword]
           );
 
-          const newUser = addUser.rows[0];
+         const newUser = addUser.rows[0];
 
           await db.query(
             `INSERT INTO tasks (user_id, task_name) VALUES ($1, $2)`,
             [id, "Sample task"]
           );
-
-          return cb(null, newUser);
+          return cb(null, { id, username,  picture : picture});
         }
       } catch (err) {
         return cb(err);
@@ -101,5 +101,6 @@ export {
   google_auth,
   google_callback,
   renderlogout,
+  passport,
 };
 
