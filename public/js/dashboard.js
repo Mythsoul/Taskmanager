@@ -47,41 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const timer_box = document.querySelector(".timer-box"); 
-  const set_reminder = document.querySelector(".set-reminder");
-  const currenttime = document.querySelector(".timer"); 
-  const start_timer_btn = document.querySelector(".start-timer-btn"); 
-
-  let time = 0; // Start from 0 seconds
-
-  start_timer_btn.addEventListener("click", () => {
-    if (start_timer_btn.textContent === "Start Pomodoro") {
-      start_timer_btn.textContent = "Stop Pomodoro";
-      timerInterval = setInterval(() => {
-        const minutes = Math.floor(time / 60);
-        const seconds = time % 60;
-
-        currenttime.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        time++; 
-
-        if (time === reminderTime) {
-          alert("hi");
-        }
-      }, 1000);
-    } else {
-      clearInterval(timerInterval);
-      start_timer_btn.textContent = "Start Pomodoro";
-      currenttime.textContent = "00:00"; 
-      time = 0; 
-    }
-  });
-
-  set_reminder.addEventListener("click", () => {
-    const time_limit = prompt("Enter time limit in minutes"); 
-    if(time_limit){ 
-      reminderTime = time_limit * 60;
-    }
-  });
+ 
 
   // Event Delegation for Task Status Buttons
   document.body.addEventListener("click", async (event) => {

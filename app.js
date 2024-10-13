@@ -28,8 +28,7 @@ app.use(express.static("public"));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const PgSession = connectPgSimple(session);
-async ()=>{ try{
-  await app.use(
+ try{ app.use(
   session({
       store: new PgSession({
           pool: database, 
@@ -43,7 +42,7 @@ async ()=>{ try{
 );
 console.log("sucessfully added sesssion")
 }catch(err){console.log(err);}
-}
+
 
 
 app.use(passport.initialize());
