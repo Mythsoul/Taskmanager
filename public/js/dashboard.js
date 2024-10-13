@@ -4,7 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const cancelBtn = document.getElementById("cancelBtn");
   const taskForm = document.getElementById("taskForm");
 
-  let timerInterval; // Store the timer interval globally to stop the timer later
+  let timerInterval; 
+  let reminderTime = 0; 
 
   // Task Dialog: Show/Hide Logic
   if (addTaskBtn && dialog && cancelBtn && taskForm) {
@@ -16,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
       dialog.close();
     });
 
-    // Add Task Form Submission Logic
+    
     taskForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const taskName = document.getElementById("taskName").value;
@@ -33,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (response.ok) {
           alert("Task added successfully");
-          location.reload(); // Reload the page to reflect the new task
+          location.reload();
         } else {
           alert("Failed to add task");
         }
@@ -46,36 +47,41 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Timer Logic
-  async function timer() {
-    const currenttime = document.querySelector(".timer"); 
-    const start_timer_btn = document.querySelector(".start-timer-btn"); 
+  const timer_box = document.querySelector(".timer-box"); 
+  const set_reminder = document.querySelector(".set-reminder");
+  const currenttime = document.querySelector(".timer"); 
+  const start_timer_btn = document.querySelector(".start-timer-btn"); 
 
-    let time = 0; // Start from 0 seconds
+  let time = 0; // Start from 0 seconds
 
-    start_timer_btn.addEventListener("click", () => {
-      if (start_timer_btn.textContent === "Start Pomodoro") {
-        start_timer_btn.textContent = "Stop Pomodoro";
-        
-        // Start the timer
-        timerInterval = setInterval(() => {
-          const minutes = Math.floor(time / 60);
-          const seconds = time % 60;
+  start_timer_btn.addEventListener("click", () => {
+    if (start_timer_btn.textContent === "Start Pomodoro") {
+      start_timer_btn.textContent = "Stop Pomodoro";
+      timerInterval = setInterval(() => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
 
-          currenttime.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-          time++; // Increment time by 1 second
-        }, 1000);
-      } else {
-        // Stop the timer
-        clearInterval(timerInterval);
-        start_timer_btn.textContent = "Start Pomodoro";
-        currenttime.textContent = "00:00"; // Reset timer to 0:00
-        time = 0; // Reset time
-      }
-    });
-  }
+        currenttime.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        time++; 
 
-  timer();
+        if (time === reminderTime) {
+          alert("hi");
+        }
+      }, 1000);
+    } else {
+      clearInterval(timerInterval);
+      start_timer_btn.textContent = "Start Pomodoro";
+      currenttime.textContent = "00:00"; 
+      time = 0; 
+    }
+  });
+
+  set_reminder.addEventListener("click", () => {
+    const time_limit = prompt("Enter time limit in minutes"); 
+    if(time_limit){ 
+      reminderTime = time_limit * 60;
+    }
+  });
 
   // Event Delegation for Task Status Buttons
   document.body.addEventListener("click", async (event) => {
@@ -117,19 +123,19 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("An error occurred while updating the task status.");
     }
   }
-});
 
+  function handle_click() {
+    const dialog_box = document.querySelector(".add-task-dialog");  
+    const sumbit_btn = document.querySelector(".add-task-sumbit");
+    dialog_box.addEventListener("keyup", (event) => {
+      const pressed_key = event.key; 
+      if (pressed_key === "Enter") {
+        sumbit_btn.click();
+      }
+    });
+  }; 
 
-function handle_click() {
-  const dialog_box = document.querySelector(".add-task-dialog");  
-  const sumbit_btn = document.querySelector(".add-task-sumbit");
-  dialog_box.addEventListener("keyup", (event) => {
-    const pressed_key = event.key; 
-    console.log(pressed_key);
-    if (pressed_key === "Enter") {
-      sumbit_btn.click();
-    }
-  });
-}; 
+  handle_click();
 
-handle_click();
+})
+

@@ -15,7 +15,7 @@ import {
   google_callback,
   renderlogout,
 } from "./src/routes/authRoutes.js";
-
+import connectPgSimple from "connect-pg-simple";
 const app = express();
 const port = 3000;
 
@@ -27,10 +27,24 @@ app.use(express.static("public"));
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-app.use(
-  session({ secret: "keyboard cat", resave: true, saveUninitialized: true })
+const PgSession = connectPgSimple(session);
+async ()=>{ try{
+  await app.use(
+  session({
+      store: new PgSession({
+          pool: database, 
+          tableName: "sessions",  
+      }),
+      secret: process.env.SESSION_SECRET || "keyboard cat",
+      resave: false,
+      saveUninitialized: false,
+      cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 },
+  })
 );
+console.log("sucessfully added sesssion")
+}catch(err){console.log(err);}
+}
+
 
 app.use(passport.initialize());
 app.use(passport.session());
