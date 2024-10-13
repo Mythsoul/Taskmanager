@@ -4,9 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const cancelBtn = document.getElementById("cancelBtn");
   const taskForm = document.getElementById("taskForm");
 
-  let timerInterval; 
-  let reminderTime = 0; 
-
   // Task Dialog: Show/Hide Logic
   if (addTaskBtn && dialog && cancelBtn && taskForm) {
     addTaskBtn.addEventListener("click", () => {
@@ -48,9 +45,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
  
+  const taskdiv = document.querySelectorAll(".task");
 
-  // Event Delegation for Task Status Buttons
-  document.body.addEventListener("click", async (event) => {
+
+  taskdiv.addEventListener("click", async (event) => {
     if (event.target.classList.contains("pending")) {
       const taskDiv = event.target.closest("div");
       const taskName = taskDiv.querySelector(".task_name").textContent;

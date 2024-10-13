@@ -10,6 +10,7 @@
   <script type="module" src="/js/dashboard.js"></script>
   <script type="module" src="/js/timesetting.js"></script>
   <script type="module" src="../src/utils/timesetting.js"></script>
+  <script src="https://kit.fontawesome.com/60cc3418d0.js" crossorigin="anonymous"></script>
 
 </head>
 
@@ -37,14 +38,24 @@
       <div class="bg-white p-6 rounded-lg shadow-lg col-span-full">
         <h2 class="text-xl font-semibold mb-2">Task Management</h2>
         <p class="text-sm text-gray-600 mb-4">Drag and drop to organize</p>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid task grid-cols-1 md:grid-cols-3 gap-4">
           <div class="bg-gray-50 p-4 rounded-lg">
             <h3 class="text-lg font-bold mb-2 text-black">To Do</h3>
             <% tasks.todo.forEach(task => { %>
             <div class="bg-white p-2 mb-2 rounded-lg shadow-sm">
               <p class="task_name"><%= task.task_name %></p>
-              <button class="pending text-blue-500 hover:underline pending-btn">Pending</button>
-              <button class="done text-red-500 hover:underline delete-btn">Done</button>
+              <div class="flex items-center space-x-2 mt-2">
+                <button class="pending text-blue-500 hover:underline pending flex items-center  space-x-1 transition duration-150 ease-in-out py-1 px-2 text-lg"><i class="fa-solid fa-hourglass-half mr-1 pending"></i></button>
+                <button class="done text-red-500 hover:underline delete-btn flex items-center  space-x-1 transition duration-150 ease-in-out py-1 px-2 text-lg"><i class="fa-solid fa-check done-btn done"></i></button>
+              </div>
+              <style>
+                .pending:hover {
+                  animation: fade-in 0.2s ease-in-out;
+                }
+                .done:hover {
+                  animation: fade-out 0.2s ease-in-out;
+                }
+              </style>
             </div>
             <% }) %>
             <button class="text-blue-500 hover:underline add-task">Add Task</button>
