@@ -18,15 +18,14 @@ document.addEventListener("DOMContentLoaded", () => {
     taskForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const taskName = document.getElementById("taskName").value;
-      const taskDescription = document.getElementById("taskDescription").value;
-
+      
       try {
         const response = await fetch("/add-task", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ taskName, taskDescription }),
+          body: JSON.stringify({ taskName}),
         });
 
         if (response.ok) {
@@ -45,27 +44,25 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
  
-  const taskdiv = document.querySelectorAll(".task");
 
 
-  taskdiv.addEventListener("click", async (event) => {
+  document.addEventListener("click", async (event) => {
     if (event.target.classList.contains("pending")) {
-      const taskDiv = event.target.closest("div");
-      const taskName = taskDiv.querySelector(".task_name").textContent;
+        const taskDiv = event.target.closest(".task_div"); // Get the closest task container
+        const taskName = taskDiv.querySelector(".task_name").textContent; // Get the task name from the correct element
 
-      await updateTaskStatus(taskName, "pending");
-      taskDiv.remove(); 
+        await updateTaskStatus(taskName, "pending");
+        taskDiv.remove(); 
     }
 
     if (event.target.classList.contains("done")) {
-      const taskDiv = event.target.closest("div");
-      const taskName = taskDiv.querySelector(".task_name").textContent;
+        const taskDiv = event.target.closest(".task_div"); // Get the closest task container
+        const taskName = taskDiv.querySelector(".task_name").textContent; // Get the task name from the correct element
 
-      await updateTaskStatus(taskName, "done");
-      taskDiv.remove(); 
+        await updateTaskStatus(taskName, "done");
+        taskDiv.remove(); 
     }
-  });
-
+});
   // Function to update task status
   async function updateTaskStatus(taskName, status) {
     try {

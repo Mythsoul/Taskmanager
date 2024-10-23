@@ -2,17 +2,17 @@ import { database } from "../config/db.js";
 
 export const add_task = async (req, res) => {
   if (req.isAuthenticated()) {
-    const { taskName, taskDescription } = req.body;
+    const { taskName} = req.body;
     const userId = req.user.id;
 
-    if (!taskName || !taskDescription || !userId) {
-      return res.status(400).json({ message: "Task name, description, and user ID are required" });
+    if (!taskName || !userId) {
+      return res.status(400).json({ message: "Task name and user ID are required" });
     }
 
     try {
       const result = await database.query(
-        "INSERT INTO tasks (task_name, task_description, user_id, status) VALUES ($1, $2, $3, 'todo') RETURNING *",
-        [taskName, taskDescription, userId]
+        "INSERT INTO tasks (task_name, user_id, status) VALUES ($1, $2 ,'todo') RETURNING *",
+        [taskName,  userId]
       );
       res.status(201).json({ message: "Task added", task: result.rows[0] });
     } catch (err) {

@@ -42,10 +42,10 @@
           <div class="bg-gray-50 p-4 rounded-lg">
             <h3 class="text-lg font-bold mb-2 text-black">To Do</h3>
             <% tasks.todo.forEach(task => { %>
-            <div class="bg-white p-2 mb-2 rounded-lg shadow-sm">
+            <div class=" task_div bg-white p-2 mb-2 rounded-lg shadow-sm">
               <p class="task_name"><%= task.task_name %></p>
               <div class="flex items-center space-x-2 mt-2">
-                <button class="pending text-blue-500 hover:underline pending flex items-center  space-x-1 transition duration-150 ease-in-out py-1 px-2 text-lg"><i class="fa-solid fa-hourglass-half mr-1 pending"></i></button>
+                <button class="pending text-blue-500 hover:underline  flex items-center  space-x-1 transition duration-150 ease-in-out py-1 px-2 text-lg"><i class="fa-solid fa-hourglass-half mr-1 pending"></i></button>
                 <button class="done text-red-500 hover:underline delete-btn flex items-center  space-x-1 transition duration-150 ease-in-out py-1 px-2 text-lg"><i class="fa-solid fa-check done-btn done"></i></button>
               </div>
               <style>
@@ -146,8 +146,8 @@
         <input type="text" id="taskName" name="taskName" class="w-full p-2 border rounded" placeholder="Enter task name" required>
       </div>
       <div class="mb-4">
-        <label for="taskDescription" class="block text-gray-700">Task Description</label>
-        <textarea id="taskDescription" class="w-full p-2 border rounded" name="taskDescription" placeholder="Enter task description" required></textarea>
+        <label for="taskDescription" class="block text-gray-700">Task Description (temp disabled)</label>
+        <textarea id="taskDescription" class="w-full p-2 border rounded" name="taskDescription" placeholder="Enter task description" disabled></textarea>
       </div>
       <div class="flex justify-end">
         <button type="button" class="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2" id="cancelBtn">Cancel</button>

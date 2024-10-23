@@ -13,6 +13,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",
     "connect-pg-simple": "^10.0.0",
@@ -30,6 +31,5 @@
   "devDependencies": {
     "nodemon": "^3.1.7",
     "tailwindcss": "^3.4.13"
-
   }
 }
