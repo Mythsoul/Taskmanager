@@ -3,7 +3,6 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import dotenv from "dotenv";
 import { database as db } from "../config/db.js";
-import bcrypt from "bcrypt";
 
 dotenv.config();
 const app = express();
@@ -14,6 +13,19 @@ const renderlogin = (req, res) => {
   }
   res.render("login");
 };
+
+// const postregister = async (req , res )=>{ 
+//   const {username , password } = req.body;
+//   if (!username || !password) {
+//     res.redirect("/register?error=Username and password are required");
+//   }
+//   try{ 
+//     const hashedpassword = await bcrypt.hashSync(password, 10);
+//     const result = await db.query("INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *", [username, hashedpassword]);
+//     if(result.rowCount === 0){
+//       res.redirect("/register?error=Failed to register");}
+//   }
+// }
 
 const renderregister = (req, res) => {
   if (req.isAuthenticated()) {
