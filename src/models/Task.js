@@ -44,19 +44,31 @@ export const update_task_status = async (req, res) => {
     res.status(500).json({ message: "Failed to update task status" });
   }
 };
-
 export async function render_task(userId) {
   try {
     const result = await database.query("SELECT * FROM tasks WHERE user_id = $1 ORDER BY status", [userId]);
-    const todo = result.rows.filter(task => task.status === 'todo');
-    const pending = result.rows.filter(task => task.status === 'pending');
-    const done = result.rows.filter(task => task.status === 'done');
+
+   
+    const tasks = result.rows.map(task => {
+      task.due_date = new Date(task.due_date).toLocaleDateString('default', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+      return task;
+    });
+
+    const todo = tasks.filter(task => task.status === 'todo');
+    const pending = tasks.filter(task => task.status === 'pending');
+    const done = tasks.filter(task => task.status === 'done');
+
     return { todo, pending, done };
   } catch (err) {
     console.error(err);
     throw new Error("Failed to fetch tasks");
   }
 }
+
 // async function productivity(){ 
 //   const result = await database.query("SELECT * FROM tasks WHERE user_id = $1" , [user.id]);
 //   console.log(result); 

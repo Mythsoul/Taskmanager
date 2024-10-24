@@ -103,4 +103,4 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   handleKeyPress();
-});
+})
