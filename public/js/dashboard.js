@@ -14,18 +14,26 @@ document.addEventListener("DOMContentLoaded", () => {
       dialog.close();
     });
 
-    
-    taskForm.addEventListener("submit", async (e) => {
+    const addTaskForm = document.getElementById("taskForm");
+    const addTask = async (e) => {
       e.preventDefault();
+
       const taskName = document.getElementById("taskName").value;
-      
+      const dueDate = document.getElementById("due-date").value;
+      const currentDate = new Date().toISOString().split("T")[0]; 
+
+      if (dueDate < currentDate) {
+        alert("Please set a valid due date.");
+        return;
+      }
+
       try {
         const response = await fetch("/add-task", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ taskName}),
+          body: JSON.stringify({ taskName, due_date: dueDate }),
         });
 
         if (response.ok) {
@@ -40,29 +48,29 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       dialog.close();
-    });
+    };
+
+    addTaskForm.addEventListener("submit", addTask);
   }
-
- 
-
 
   document.addEventListener("click", async (event) => {
     if (event.target.classList.contains("pending")) {
-        const taskDiv = event.target.closest(".task_div"); // Get the closest task container
-        const taskName = taskDiv.querySelector(".task_name").textContent; // Get the task name from the correct element
+      const taskDiv = event.target.closest(".task_div");
+      const taskName = taskDiv.querySelector(".task_name").textContent;
 
-        await updateTaskStatus(taskName, "pending");
-        taskDiv.remove(); 
+      await updateTaskStatus(taskName, "pending");
+      taskDiv.remove();
     }
 
     if (event.target.classList.contains("done")) {
-        const taskDiv = event.target.closest(".task_div"); // Get the closest task container
-        const taskName = taskDiv.querySelector(".task_name").textContent; // Get the task name from the correct element
+      const taskDiv = event.target.closest(".task_div");
+      const taskName = taskDiv.querySelector(".task_name").textContent;
 
-        await updateTaskStatus(taskName, "done");
-        taskDiv.remove(); 
+      await updateTaskStatus(taskName, "done");
+      taskDiv.remove();
     }
-});
+  });
+
   // Function to update task status
   async function updateTaskStatus(taskName, status) {
     try {
@@ -85,18 +93,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function handle_click() {
-    const dialog_box = document.querySelector(".add-task-dialog");  
-    const sumbit_btn = document.querySelector(".add-task-sumbit");
-    dialog_box.addEventListener("keyup", (event) => {
-      const pressed_key = event.key; 
-      if (pressed_key === "Enter") {
-        sumbit_btn.click();
+  function handleKeyPress() {
+    const submitBtn = document.querySelector(".add-task-sumbit");
+    taskForm.addEventListener("keyup", (event) => {
+      if (event.key === "Enter") {
+        submitBtn.click();
       }
     });
-  }; 
+  }
 
-  handle_click();
-
-})
-
+  handleKeyPress();
+});

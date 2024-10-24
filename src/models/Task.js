@@ -2,7 +2,7 @@ import { database } from "../config/db.js";
 
 export const add_task = async (req, res) => {
   if (req.isAuthenticated()) {
-    const { taskName} = req.body;
+    const { taskName , due_date} = req.body;
     const userId = req.user.id;
 
     if (!taskName || !userId) {
@@ -11,10 +11,10 @@ export const add_task = async (req, res) => {
 
     try {
       const result = await database.query(
-        "INSERT INTO tasks (task_name, user_id, status) VALUES ($1, $2 ,'todo') RETURNING *",
-        [taskName,  userId]
+        "INSERT INTO tasks (task_name, user_id, due_date , status) VALUES ($1, $2 , $3 , 'todo') RETURNING *",
+        [taskName, userId , due_date]
       );
-      res.status(201).json({ message: "Task added", task: result.rows[0] });
+      res.redirect("/dashboard")
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: "Failed to add task" });
@@ -57,4 +57,9 @@ export async function render_task(userId) {
     throw new Error("Failed to fetch tasks");
   }
 }
+// async function productivity(){ 
+//   const result = await database.query("SELECT * FROM tasks WHERE user_id = $1" , [user.id]);
+//   console.log(result); 
+// }; 
 
+// productivity(); 

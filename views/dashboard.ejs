@@ -11,7 +11,7 @@
   <script type="module" src="/js/timesetting.js"></script>
   <script type="module" src="../src/utils/timesetting.js"></script>
   <script src="https://kit.fontawesome.com/60cc3418d0.js" crossorigin="anonymous"></script>
-
+  <script type = "module" src="../src/models/User.js"></script>
 </head>
 
 <body class="bg-gray-100">
@@ -148,6 +148,10 @@
       <div class="mb-4">
         <label for="taskDescription" class="block text-gray-700">Task Description (temp disabled)</label>
         <textarea id="taskDescription" class="w-full p-2 border rounded" name="taskDescription" placeholder="Enter task description" disabled></textarea>
+      </div>
+      <div class="mb-4">
+       <label for="due-date" class="block text-black due-date">Due Date</label>
+       <input type="date" id="due-date" name="due-date" class="w-full p-2 border rounded" required>
       </div>
       <div class="flex justify-end">
         <button type="button" class="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2" id="cancelBtn">Cancel</button>
