@@ -4,12 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tasks</title>
-    <script type = "module" src="/js/tasks.js"></script>
+    <script type="module" src="/js/tasks.js"></script>
+    <script src="https://kit.fontawesome.com/60cc3418d0.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/tailwind.css">
+    <style>
+        .task-container {
+            max-width: 600px;
+            margin: auto;
+            margin-top: 2rem;
+        }
+        .task-item {
+            transition: transform 0.2s ease-in-out;
+        }
+        .task-item:hover {
+            transform: scale(1.02);
+        }
+    </style>
 </head>
-<body>
-   <h1>User tasks </h1>
-   <div class="user-tasks">
-    <p class="user-tasks"></p>
-   </div>
+<body class="bg-gray-100 font-sans text-gray-800">
+
+    <header class="text-center py-6 bg-indigo-500 text-white">
+        <h1 class="text-3xl font-bold">User Tasks</h1>
+    </header>
+
+    <div class="task-container">
+        <div class="user-tasks space-y-4">
+       
+        </div>
+    </div>
+
+    <template id="task-template">
+        <div class="task-item flex items-center justify-between p-4 bg-white rounded-lg shadow-md">
+            <p class="task-text text-lg font-semibold"></p>
+            <div class="flex items-center space-x-2">
+                <button class="status-pending p-2 rounded-full hover:bg-yellow-200 transition">
+                    <i class="fas fa-hourglass-half text-yellow-500"></i>
+                </button>
+                <button class="status-done p-2 rounded-full hover:bg-green-200 transition">
+                    <i class="fas fa-check-circle text-green-500"></i> 
+                </button>
+            </div>
+        </div>
+    </template>
+
 </body>
 </html>
