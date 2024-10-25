@@ -68,10 +68,13 @@ export async function render_task(userId) {
     throw new Error("Failed to fetch tasks");
   }
 }
+export const api_render_tasks = async(req, res)=>{ 
+  const userId = req.user.id; 
+  const result = await database.query("SELECT * FROM tasks WHERE user_id = $1 ", [userId]);
+  res.json ({tasks : result.rows});
+}
 
-// async function productivity(){ 
-//   const result = await database.query("SELECT * FROM tasks WHERE user_id = $1" , [user.id]);
-//   console.log(result); 
-// }; 
 
-// productivity(); 
+export const render_tasks_page = async (req , res)=>{  
+  res.render("task.ejs"); 
+}
