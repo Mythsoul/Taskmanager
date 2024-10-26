@@ -46,10 +46,7 @@ const google_callback = (req, res, next) => {
   })(req, res, next);
 };
 
-const renderlogout = (req, res) => {
-  req.logout();
-  res.redirect("/login");
-};
+
 
 passport.use(
   new GoogleStrategy(
@@ -108,6 +105,15 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(function (user, done) {
   done(null, user);
 });
+const renderlogout = (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+};
+
 
 export {
   renderlogin,

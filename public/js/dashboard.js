@@ -1,99 +1,105 @@
 document.addEventListener("DOMContentLoaded", () => {
   const dialog = document.getElementById("taskDialog");
-  const addTaskBtn = document.querySelector(".add-task-btn"); 
+  const addTaskBtn = document.querySelector(".add-task-btn");
   const cancelBtn = document.getElementById("cancelBtn");
   const taskForm = document.getElementById("taskForm");
+  const statusBtns = document.querySelectorAll(".status-btn"); 
+
 
   addTaskBtn.addEventListener("click", () => {
-    dialog.showModal();
+      dialog.showModal();
   });
 
   cancelBtn.addEventListener("click", () => {
-    dialog.close();
+      dialog.close();
   });
 
+  // Add task function
   const addTask = async (e) => {
-    e.preventDefault();
-    const taskName = document.getElementById("taskName").value;
-    const dueDate = document.getElementById("due-date").value;
-    const currentDate = new Date().toISOString().split("T")[0];
+      e.preventDefault();
+      const taskName = document.getElementById("taskName").value;
+      const dueDate = document.getElementById("due-date").value;
+      const priority = document.getElementById("priority").value;
+      const currentDate = new Date().toISOString().split("T")[0];
 
-    if (dueDate < currentDate) {
-      alert("Please set a valid due date.");
-      return;
-    }
-
-    try {
-      const response = await fetch("/add-task", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ taskName, due_date: dueDate }),
-      });
-
-      if (response.ok) {
-        alert("Task added successfully");
-        location.reload();
-      } else {
-        alert("Failed to add task");
+      if (!taskName || !dueDate) {
+          alert("Please fill in all fields.");
+          return;
       }
-    } catch (error) {
-      console.error("Error adding task:", error);
-      alert("An error occurred while adding the task.");
-    }
 
-    dialog.close();
+      if (dueDate < currentDate) {
+          alert("Please set a valid due date.");
+          return;
+      }
+
+      try {
+          const response = await fetch("/add-task", {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ taskName, due_date: dueDate, priority }),
+          });
+
+          if (response.ok) {
+              alert("Task added successfully");
+              location.reload(); // Reload to see the new task
+          } else {
+              const error = await response.json();
+              alert(`Failed to add task: ${error.message}`);
+          }
+      } catch (error) {
+          console.error("Error adding task:", error);
+          alert("An error occurred while adding the task.");
+      }
+
+      dialog.close();
   };
 
   taskForm.addEventListener("submit", addTask);
 
-  document.addEventListener("click", async (event) => {
-    if (event.target.classList.contains("fa-hourglass-half")) {
-      const taskDiv = event.target.closest(".task_div");
-      const taskName = taskDiv.querySelector("p").textContent;
-      await updateTaskStatus(taskName, "pending");
-      taskDiv.remove();
-    }
 
-    if (event.target.classList.contains("fa-check-circle")) {
+
+
+  statusBtns.forEach((statusBtn) => {
+    statusBtn.addEventListener("click", async (event) => {
       const taskDiv = event.target.closest(".task_div");
-      const taskName = taskDiv.querySelector("p").textContent;
-      await updateTaskStatus(taskName, "done");
+      if (!taskDiv) return;
+  
+      let taskName = taskDiv.querySelector("p").textContent.trim().toLowerCase(); 
+      const status = event.target.classList.contains("pending") ? "pending" : "done";
+  
+      await updateTaskStatus(taskName, status);
       taskDiv.remove();
-    }
+    });
   });
+   
+
 
   async function updateTaskStatus(taskName, status) {
-    try {
-      const response = await fetch("/update-task-status", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ taskName, status }),
-      });
+      try {
+          const response = await fetch("/update-task-status", {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ taskName, status }),
+          });
 
-      if (response.ok) {
-        alert("Task status updated successfully");
-      } else {
-        alert("Failed to update task status");
+          if (!response.ok) {
+              const error = await response.json();
+              alert(`Failed to update task status: ${error.message}`);
+          }
+      } catch (error) {
+          console.error("Error updating task status:", error);
+          alert("An error occurred while updating the task status.");
       }
-    } catch (error) {
-      console.error("Error updating task status:", error);
-      alert("An error occurred while updating the task status.");
-    }
   }
 
-  function handleKeyPress() {
-    const submitBtn = document.querySelector("button[type='submit']");
-    taskForm.addEventListener("keyup", (event) => {
+  taskForm.addEventListener("keyup", (event) => {
       if (event.key === "Enter") {
-        submitBtn.click();
+          event.preventDefault();
+          taskForm.dispatchEvent(new Event("submit"));
       }
-    });
-  }
-
-  handleKeyPress();
+  });
 });
-

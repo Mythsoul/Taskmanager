@@ -41,7 +41,6 @@ const PgSession = connectPgSimple(session);
       cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 },
   })
 );
-console.log("sucessfully added sesssion")
 }catch(err){console.log(err);}
 
 
@@ -78,12 +77,10 @@ app.get(
 
 app.get("/dashboard", checkAuthenticated, async (req, res) => {
   const user = req.user;
-  console.log(req.user);
   try {
     const tasks = await render_task(user.id);
+    
     const tasks_suggestions = await generateTaskSuggestions(user.id); 
-    console.log(tasks_suggestions);
-
     res.render("dashboard", {
       user: user,
       tasks: tasks,
@@ -94,8 +91,10 @@ app.get("/dashboard", checkAuthenticated, async (req, res) => {
     res.status(500).send("Failed to load dashboard");
   }
 });
+app.route('/logout')
+    .get (renderlogout)
 
-app.get("/logout", renderlogout);
+  
 
 app.post("/add-task", checkAuthenticated ,  add_task);
 

@@ -8,7 +8,8 @@ const openai = new OpenAI();
 
 export const add_task = async (req, res) => {
   if (req.isAuthenticated()) {
-    const { taskName, due_date } = req.body;
+    const { taskName, due_date , priority } = req.body;
+    console.log(req.body);
     const userId = req.user.id;
 
     if (!taskName || !userId) {
@@ -22,8 +23,8 @@ export const add_task = async (req, res) => {
       }
 
       await database.query(
-        "INSERT INTO tasks (task_name, user_id, due_date, status) VALUES ($1, $2, $3, 'todo') RETURNING *",
-        [taskName, userId, due_date]
+        "INSERT INTO tasks (task_name, user_id, due_date,priority,status) VALUES ($1, $2, $3, $4, 'todo') RETURNING *",
+        [taskName, userId, due_date , priority]
       );
       res.redirect("/dashboard");
     } catch (err) {
@@ -34,28 +35,32 @@ export const add_task = async (req, res) => {
 };
 
 export const update_task_status = async (req, res) => {
-  const { taskName, status } = req.body;
+  let { taskName, status } = req.body;
   const userId = req.user.id;
 
+ 
+  taskName = taskName.trim();
+  
   if (!taskName || !status) {
     return res.status(400).json({ message: "Task name and status are required" });
   }
 
   try {
     const result = await database.query(
-      "UPDATE tasks SET status = $1 WHERE task_name = $2 AND user_id = $3 RETURNING *",
+      "UPDATE tasks SET status = $1 WHERE task_name = $2 AND user_id = $3",
       [status, taskName, userId]
     );
+
+    console.log("Update result:", result); 
     if (result.rowCount === 0) {
       return res.status(404).json({ message: "Task not found" });
     }
-    res.status(200).json({ message: "Task status updated", task: result.rows[0] });
+    res.status(200).json({ message: "Task status updated" });
   } catch (err) {
     console.error("Error updating task status:", err);
     res.status(500).json({ message: "Failed to update task status" });
   }
 };
-
 export async function render_task(userId) {
   try {
     const result = await database.query("SELECT * FROM tasks WHERE user_id = $1 ORDER BY status", [userId]);
@@ -72,7 +77,8 @@ export async function render_task(userId) {
     return {
       todo: tasks.filter(task => task.status === 'todo'),
       pending: tasks.filter(task => task.status === 'pending'),
-      done: tasks.filter(task => task.status === 'done')
+      done: tasks.filter(task => task.status === 'done'), 
+      
     };
   } catch (err) {
     console.error("Error fetching tasks:", err);
@@ -105,18 +111,13 @@ export const api_render_tasks = async (req, res) => {
 export async function generateTaskSuggestions(userId) {
   const response = await database.query("SELECT task_name FROM tasks WHERE user_id = $1", [userId]);
   const tasks = response.rows;
-  
   const taskDescriptions = tasks.map(({ task_name }) => task_name).join(", ");
-  const prompt = `Based on these tasks: ${taskDescriptions}, suggest three practical and helpful related tasks.`;
+  const prompt = `hi`;
 
   try {
-    const completion = await openai.chat.completions.create({
-      messages: [{ role: "system", content: prompt }],
-      model: "gpt-3.5-turbo",
-    });
-      return completion;
-
-  } catch (error) {
+    console.log("on progress")
+    }
+      catch (error) {
     if (error.response && error.response.status === 429) {
       console.error('Rate limit exceeded. Please wait a few seconds before trying again.');
       return "Rate limit exceeded. Please wait a few seconds before trying again."

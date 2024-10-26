@@ -5,20 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Management Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="css/tailwind.css">
   <link rel="stylesheet" href="css/dashboard.css">
   <script type="module" src="/js/dashboard.js"></script>
-  <script type="module" src="/js/timesetting.js"></script>
   <script src="https://kit.fontawesome.com/60cc3418d0.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </head>
-
+<style>
+  .task_div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  #todoColumn, #inProgressColumn, #doneColumn {
+    display: flex;
+    flex-direction: column;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+  }
+</style>
 <body class="bg-gray-100 dark:bg-gray-900 transition-all duration-300 text-gray-800 dark:text-gray-100">
-
-  <!-- Dashboard Container -->
   <div class="container mx-auto py-6 px-4 md:px-8 lg:px-16">
-
-    <!-- Header -->
     <header class="flex flex-wrap items-center justify-between mb-8 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
       <h1 class="text-3xl font-extrabold text-gray-800 dark:text-gray-100">Dashboard</h1>
       <div class="flex items-center space-x-4 mt-4 md:mt-0">
@@ -26,21 +35,17 @@
              alt="User Avatar" class="w-12 h-12 rounded-full border-2 border-gray-300 dark:border-gray-700">
         <span class="text-xl font-medium">Welcome, <%= user ? user.username : 'Alex' %></span>
         <button class="toggle-button rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-300">
-          <i id="darkModeIcon" class="fa-moon dark:text-yellow-400 text-gray-600"></i>
+          <i id="darkModeIcon" class="fa-moon fa-solid fa-moon dark:text-yellow-400 text-gray-600"></i>
         </button>
       </div>
     </header>
 
-    <!-- Grid Layout -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-      <!-- Task Management Card -->
       <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg col-span-full">
         <h2 class="text-2xl font-semibold mb-3">Task Management</h2>
         <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Organize tasks by dragging & dropping</p>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-          <!-- To Do Column -->
           <div id="todoColumn" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
             <h3 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-200">
               <i class="fas fa-tasks mr-2"></i>To Do
@@ -58,21 +63,20 @@
                 <%= task.task_name %>
               </p>
               <div class="flex space-x-2 text-lg">
-                <button class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-600 transition duration-150">
-                  <i class="fas fa-hourglass-half mr-2 p-1"></i>
+                <button class="status-btn pending text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-600 transition duration-150">
+                  <i class="pending fas fa-hourglass-half mr-2 p-1"></i>
                 </button>
-                <button class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-600 transition duration-150">
-                  <i class="fas fa-check-circle mr-2 p-1"></i>
+                <button class="status-btn done text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-600 transition duration-150">
+                  <i class="done fas fa-check-circle mr-2 p-1"></i>
                 </button>
               </div>
             </div>
             <% }) %>
-            <button id="add-task-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150">
+            <button id="add-task-btn" class="add-task-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150">
               <i class="fas fa-plus mr-2"></i>Add Task
             </button>
           </div>
 
-          <!-- In Progress Column -->
           <div id="inProgressColumn" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
             <h3 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-200">
               <i class="fas fa-spinner mr-2"></i>In Progress
@@ -80,14 +84,13 @@
             <% tasks.pending.forEach(task => { %>
             <div class="task_div flex justify-between bg-white dark:bg-gray-800 p-3 mb-3 rounded-lg shadow-md items-center">
               <p class="text-base font-medium"><%= task.task_name %></p>
-              <button class="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-600 transition duration-150">
+              <button class="status-btn done text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-600 transition duration-150">
                 <i class="fas fa-check-circle"></i>
               </button>
             </div>
             <% }) %>
           </div>
 
-          <!-- Done Column -->
           <div id="doneColumn" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
             <h3 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-200">
               <i class="fas fa-check-double mr-2"></i>Done
@@ -101,64 +104,33 @@
         </div>
       </div>
 
-      <!-- Pomodoro Timer Card -->
-      <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg max-w-md mx-auto">
-        <h2 class="text-3xl font-bold mb-2 text-center text-gray-800 dark:text-gray-200">
-          <i class="fas fa-stopwatch mr-2"></i>Pomodoro Timer
-        </h2>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mb-6 text-center">Stay focused with effective time management</p>
-        <div class="text-center">
-          <span class="text-6xl font-extrabold mb-6 block text-gray-800 dark:text-gray-200 timer">25:00</span>
-          <div class="flex justify-center space-x-4 mb-6">
-            <input type="number" id="workDuration" placeholder="Work (min)" class="p-3 rounded-md bg-gray-100 dark:bg-gray-700 text-center focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 transition duration-150 mr-2">
-            <input type="number" id="breakDuration" placeholder="Break (min)" class="p-3 rounded-md bg-gray-100 dark:bg-gray-700 text-center focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 transition duration-150 mr-2">
+      <dialog id="taskDialog" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+        <form id="taskForm" method="dialog">
+          <h2 class="text-2xl font-semibold mb-4">Add New Task</h2>
+          <div class="mb-4">
+            <label for="taskName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Task Name</label>
+            <input type="text" id="taskName" required class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
           </div>
-          <button id="startTimer" class="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition duration-150 transform hover:scale-105 shadow-lg">
-            Start
-          </button>
-        </div>
-      </div>
-      
-
-   <!-- AI Task Suggestions Card -->
-   <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-    <h2 class="text-2xl font-semibold mb-2"><i class="fas fa-lightbulb mr-2"></i>AI Task Suggestions</h2>
-    <ul class="space-y-2 mt-4 text-base text-gray-700 dark:text-gray-300">
-      <% if (Array.isArray(tasks_suggestions) && tasks_suggestions.length > 0) { %>
-        <% tasks_suggestions.forEach(task => { %>
-          <li><%= task %></li>
-          <button class="bg-blue-600 text-white mt-6 w-full py-2 rounded-full hover:bg-blue-700 transition duration-150">More Suggestions</button>
-        <% }) %>
-      <% } else { %>
-        <li>No task suggestions available.</li>
-      <% } %>
-    </ul>
-    <button class="bg-blue-600 text-white mt-6 w-full py-2 rounded-full hover:bg-blue-700 transition duration-150">Reload</button>
+          <div class="mb-4">
+            <label for="due-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Due Date</label>
+            <input type="date" id="due-date" required class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
+          </div>
+          <div class="mb-4">
+            <label for="priority" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Priority</label>
+            <select id="priority" class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <div class="flex justify-between">
+            <button id="cancelBtn" type="button" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Cancel</button>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Add Task</button>
+          </div>
+        </form>
+      </dialog>
+    </div>
   </div>
-  
-
-
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const toggleButton = document.querySelector(".toggle-button");
-      const icon = document.getElementById("darkModeIcon");
-
-      
-      if (localStorage.getItem("theme") === "dark") {
-        document.body.classList.add("dark");
-        icon.classList.replace("fa-moon", "fa-sun");
-      }
-
-      toggleButton.addEventListener("click", () => {
-        document.body.classList.toggle("dark");
-        const theme = document.body.classList.contains("dark") ? "dark" : "light";
-        localStorage.setItem("theme", theme);
-        icon.classList.toggle("fa-sun");
-        icon.classList.toggle("fa-moon");
-      });
-
-      
-    })
-  </script>
-</body>
-</html>
+    </body>
+    </html> 
+    
