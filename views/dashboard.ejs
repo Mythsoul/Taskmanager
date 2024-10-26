@@ -10,6 +10,7 @@
   <script type="module" src="/js/dashboard.js"></script>
   <script type="module" src="/js/timesetting.js"></script>
   <script src="https://kit.fontawesome.com/60cc3418d0.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </head>
 
 <body class="bg-gray-100 dark:bg-gray-900 transition-all duration-300 text-gray-800 dark:text-gray-100">
@@ -40,33 +41,39 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
           <!-- To Do Column -->
-          <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+          <div id="todoColumn" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
             <h3 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-200">
               <i class="fas fa-tasks mr-2"></i>To Do
             </h3>
             <% tasks.todo.forEach(task => { %>
             <div class="task_div flex justify-between bg-white dark:bg-gray-800 p-3 mb-3 rounded-lg shadow-md items-center">
-              <p class="text-base font-medium"><%= task.task_name %></p>
+              <p class="text-base font-medium">
+                <% if (task.priority === 'high') { %>
+                  <i class="fas fa-exclamation-circle text-red-500"></i>
+                <% } else if (task.priority === 'medium') { %>
+                  <i class="fas fa-exclamation-circle text-yellow-500"></i>
+                <% } else { %>
+                  <i class="fas fa-exclamation-circle text-green-500"></i>
+                <% } %>
+                <%= task.task_name %>
+              </p>
               <div class="flex space-x-2 text-lg">
-                <button class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-600 transition duration-150 padding-2 margin-2">
-                  <i class="fas fa-hourglass-half"></i>
+                <button class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-600 transition duration-150">
+                  <i class="fas fa-hourglass-half mr-2 p-1"></i>
                 </button>
-                <button class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-600 transition duration-150 ">
-                  <i class="fas fa-check-circle"></i>
+                <button class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-600 transition duration-150">
+                  <i class="fas fa-check-circle mr-2 p-1"></i>
                 </button>
               </div>
             </div>
-            
             <% }) %>
-            <div class="mb-6">
-              <button id="add-task-btn" class=" add-task-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150">
-                <i class="fas fa-plus mr-2"></i>Add Task
-              </button>
-            </div>
+            <button id="add-task-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150">
+              <i class="fas fa-plus mr-2"></i>Add Task
+            </button>
           </div>
 
           <!-- In Progress Column -->
-          <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+          <div id="inProgressColumn" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
             <h3 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-200">
               <i class="fas fa-spinner mr-2"></i>In Progress
             </h3>
@@ -81,7 +88,7 @@
           </div>
 
           <!-- Done Column -->
-          <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+          <div id="doneColumn" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
             <h3 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-200">
               <i class="fas fa-check-double mr-2"></i>Done
             </h3>
@@ -95,64 +102,63 @@
       </div>
 
       <!-- Pomodoro Timer Card -->
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h2 class="text-2xl font-semibold mb-2"><i class="fas fa-stopwatch mr-2"></i>Pomodoro Timer</h2>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Stay focused with time management</p>
+      <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg max-w-md mx-auto">
+        <h2 class="text-3xl font-bold mb-2 text-center text-gray-800 dark:text-gray-200">
+          <i class="fas fa-stopwatch mr-2"></i>Pomodoro Timer
+        </h2>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-6 text-center">Stay focused with effective time management</p>
         <div class="text-center">
-          <span class="text-5xl font-bold mb-4 block timer">25:00</span>
-          <button class="start-timer-btn bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700 transition duration-150 start-timer-btn">Start</button>
-          <button class="bg-red-600 text-white px-5 py-2 mt-4 rounded-full hover:bg-red-700 transition duration-150 set-reminder">Set Timer</button>
+          <span class="text-6xl font-extrabold mb-6 block text-gray-800 dark:text-gray-200 timer">25:00</span>
+          <div class="flex justify-center space-x-4 mb-6">
+            <input type="number" id="workDuration" placeholder="Work (min)" class="p-3 rounded-md bg-gray-100 dark:bg-gray-700 text-center focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 transition duration-150 mr-2">
+            <input type="number" id="breakDuration" placeholder="Break (min)" class="p-3 rounded-md bg-gray-100 dark:bg-gray-700 text-center focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 transition duration-150 mr-2">
+          </div>
+          <button id="startTimer" class="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition duration-150 transform hover:scale-105 shadow-lg">
+            Start
+          </button>
         </div>
       </div>
-
-      <!-- AI Task Suggestions Card -->
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h2 class="text-2xl font-semibold mb-2"><i class="fas fa-lightbulb mr-2"></i>AI Task Suggestions</h2>
-        <ul class="space-y-2 mt-4 text-base text-gray-700 dark:text-gray-300">
-          <li>📌 Prioritize project proposal</li>
-          <li>📅 Schedule team check-in</li>
-          <li>📊 Review latest industry trends</li>
-        </ul>
-        <button class="bg-blue-600 text-white mt-6 w-full py-2 rounded-full hover:bg-blue-700 transition duration-150">More Suggestions</button>
-      </div>
-
-    </div>
-  </div>
-
-  <dialog id="taskDialog" class="rounded-lg bg-white dark:bg-gray-800 p-6 shadow-md">
-    <form id="taskForm" class="space-y-4">
-      <h3 class="text-2xl font-semibold">Add New Task</h3>
-      <label for="taskName" class="block text-gray-700 dark:text-gray-300">Task Name:</label>
-      <input type="text" id="taskName" name="taskName" class="w-full p-2 rounded-lg border border-gray-300 dark:border-gray-600" required>
       
-      <label for="due-date" class="block text-gray-700 dark:text-gray-300">Due Date:</label>
-      <input type="date" id="due-date" name="dueDate" class="w-full p-2 rounded-lg border border-gray-300 dark:border-gray-600" required>
 
-      <div class="flex justify-end space-x-4 mt-4">
-        <button type="button" id="cancelBtn" class="px-4 py-2 bg-gray-300 dark:bg-gray-600 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-700">Cancel</button>
-        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Add Task</button>
-      </div>
-    </form>
-  </dialog>
+   <!-- AI Task Suggestions Card -->
+   <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-semibold mb-2"><i class="fas fa-lightbulb mr-2"></i>AI Task Suggestions</h2>
+    <ul class="space-y-2 mt-4 text-base text-gray-700 dark:text-gray-300">
+      <% if (Array.isArray(tasks_suggestions) && tasks_suggestions.length > 0) { %>
+        <% tasks_suggestions.forEach(task => { %>
+          <li><%= task %></li>
+          <button class="bg-blue-600 text-white mt-6 w-full py-2 rounded-full hover:bg-blue-700 transition duration-150">More Suggestions</button>
+        <% }) %>
+      <% } else { %>
+        <li>No task suggestions available.</li>
+      <% } %>
+    </ul>
+    <button class="bg-blue-600 text-white mt-6 w-full py-2 rounded-full hover:bg-blue-700 transition duration-150">Reload</button>
+  </div>
+  
 
-  <!-- JavaScript for Dark Mode Toggle -->
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const toggleButton = document.querySelector(".toggle-button");
       const icon = document.getElementById("darkModeIcon");
 
-      if (toggleButton && icon) {
-        toggleButton.addEventListener("click", () => {
-          document.body.classList.toggle("dark");
-          if (document.body.classList.contains("dark")) {
-            icon.classList.replace("fa-moon", "fa-sun");
-          } else {
-            icon.classList.replace("fa-sun", "fa-moon");
-          }
-        });
+      
+      if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark");
+        icon.classList.replace("fa-moon", "fa-sun");
       }
-    });
-  </script>
 
+      toggleButton.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+        const theme = document.body.classList.contains("dark") ? "dark" : "light";
+        localStorage.setItem("theme", theme);
+        icon.classList.toggle("fa-sun");
+        icon.classList.toggle("fa-moon");
+      });
+
+      
+    })
+  </script>
 </body>
 </html>

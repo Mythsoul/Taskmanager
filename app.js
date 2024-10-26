@@ -7,7 +7,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { database } from "./src/config/db.js";
 import { fileURLToPath } from "url";
 import session from "express-session";
-import { add_task, update_task_status, render_task , api_render_tasks  ,render_tasks_page} from "./src/models/Task.js";
+import { add_task, update_task_status, render_task , api_render_tasks  ,render_tasks_page , generateTaskSuggestions} from "./src/models/Task.js";
 import {
   renderlogin,
   renderregister,
@@ -78,18 +78,19 @@ app.get(
 
 app.get("/dashboard", checkAuthenticated, async (req, res) => {
   const user = req.user;
-console.log(req.user);
+  console.log(req.user);
   try {
-    
     const tasks = await render_task(user.id);
+    const tasks_suggestions = await generateTaskSuggestions(user.id); 
+    console.log(tasks_suggestions);
+
     res.render("dashboard", {
       user: user,
       tasks: tasks,
-
+      tasks_suggestions: tasks_suggestions
     });
-
   } catch (err) {
-    console.error(err);
+    console.error("Error loading dashboard:", err);
     res.status(500).send("Failed to load dashboard");
   }
 });

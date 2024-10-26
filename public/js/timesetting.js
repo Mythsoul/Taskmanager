@@ -1,43 +1,41 @@
-document.addEventListener("DOMContentLoaded" , ()=>{ 
-// GOT SOME ERROR FIXING IT LTR    
-const timer_box = document.querySelector(".timer-box"); 
-const set_reminder = document.querySelector(".set-reminder");
-const currenttime = document.querySelector(".timer"); 
+document.getElementById("startTimer").addEventListener("click", () => {
+  const workDuration = parseInt(document.getElementById("workDuration").value) || 25;
+  const breakDuration = parseInt(document.getElementById("breakDuration").value) || 5;
+  startPomodoro(workDuration, breakDuration);
+});
 
-const start_timer_btn = document.querySelector(".start-timer-btn"); 
-let reminderTime = 0;
-let time = 0; 
-let timerInterval;
+function startPomodoro(workDuration, breakDuration) {
+  const timerDisplay = document.querySelector(".timer");
 
-start_timer_btn.addEventListener("click", () => {
-  if (start_timer_btn.textContent === "Start Pomodoro") {
-    start_timer_btn.textContent = "Stop Pomodoro";
-    timerInterval = setInterval(() => {
+  startCountdown(workDuration * 60, "Work", () => {
+    alert("Time for a break!");
+    startCountdown(breakDuration * 60, "Break", () => {
+      alert("Break over! Time to work again.");
+      startPomodoro(workDuration, breakDuration);
+    });
+  });
+
+  function startCountdown(duration, phase, onComplete) {
+    let time = duration;
+
+    const countdown = setInterval(() => {
       const minutes = Math.floor(time / 60);
       const seconds = time % 60;
+      timerDisplay.textContent = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+      time--;
 
-      currenttime.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-      time++; 
-
-      if (time === reminderTime) {
-        alert("Time's up! You have reached ur time limit !");
-        clearInterval(timerInterval);
-        start_timer_btn.textContent = "Start Pomodoro";
-        time = 0;
+      if (time < 0) {
+        clearInterval(countdown);
+        onComplete();
       }
     }, 1000);
-  } else {
-    clearInterval(timerInterval);
-    start_timer_btn.textContent = "Start Pomodoro";
-    currenttime.textContent = "00:00"; 
-    time = 0; 
   }
-});
+}
 
-set_reminder.addEventListener("click", () => {
- const time_limit = prompt("Enter the time limit in minutes");
- console.log("Time_limit_recived " + time_limit);
- reminderTime = time_limit * 60;
- start_timer_btn.click(); 
+const columns = ["todoColumn", "inProgressColumn", "doneColumn"];
+columns.forEach(id => {
+  new Sortable(document.getElementById(id), {
+    group: "tasks",
+    animation: 150,
+  });
 });
-}); 
