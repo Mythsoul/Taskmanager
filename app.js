@@ -96,9 +96,9 @@ console.log(req.user);
 
 app.get("/logout", renderlogout);
 
-app.post("/add-task", add_task);
+app.post("/add-task", checkAuthenticated ,  add_task);
 
-app.post("/update-task-status", update_task_status);
+app.post("/update-task-status", checkAuthenticated,  update_task_status);
 
 app.get("/api/user-tasks" , checkAuthenticated ,  api_render_tasks);
 app.get("/user-tasks", checkAuthenticated , render_tasks_page)

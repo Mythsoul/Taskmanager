@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded" , ()=>{
 const timer_box = document.querySelector(".timer-box"); 
 const set_reminder = document.querySelector(".set-reminder");
 const currenttime = document.querySelector(".timer"); 
+
 const start_timer_btn = document.querySelector(".start-timer-btn"); 
 let reminderTime = 0;
 let time = 0; 
