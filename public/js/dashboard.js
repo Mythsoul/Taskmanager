@@ -1,4 +1,8 @@
+
+
 document.addEventListener("DOMContentLoaded", () => {
+   
+
   const dialog = document.getElementById("taskDialog");
   const addTaskBtn = document.querySelector(".add-task-btn");
   const cancelBtn = document.getElementById("cancelBtn");
@@ -43,7 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
           });
 
           if (response.ok) {
-              alert("Task added successfully");
               location.reload(); // Reload to see the new task
           } else {
               const error = await response.json();
@@ -57,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
       dialog.close();
   };
 
-  taskForm.addEventListener("submit", addTask);
+  taskForm.addEventListener("submit", addTask , request_notificiaton());
 
 
 
@@ -163,3 +166,16 @@ function showFunFact(fact) {
 }
 
 delete_task();
+
+function request_notificiaton() {
+    Notification.requestPermission().then((result) => {
+        if (result === "granted") {
+            console.log("Notification permission granted");
+            new Notification("Hello, world!");
+        }if (Notification.permission === "denied") {
+           
+            alert("You've blocked notifications. Please enable them in your browser settings to receive task reminders.");
+          } 
+          
+    })}
+
