@@ -9,7 +9,7 @@ const openai = new OpenAI();
 export const add_task = async (req, res) => {
   if (req.isAuthenticated()) {
     const { taskName, due_date , priority } = req.body;
-    console.log(req.body);
+    
     const userId = req.user.id;
 
     if (!taskName || !userId) {

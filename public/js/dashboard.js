@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", () => {
   const dialog = document.getElementById("taskDialog");
   const addTaskBtn = document.querySelector(".add-task-btn");
@@ -66,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const taskDiv = event.target.closest(".task_div");
       if (!taskDiv) return;
   
-      let taskName = taskDiv.querySelector("p").textContent.trim().toLowerCase(); 
+      let taskName = taskDiv.querySelector("p").textContent.trim(); 
       const status = event.target.classList.contains("pending") ? "pending" : "done";
   
       await updateTaskStatus(taskName, status);
@@ -103,3 +104,32 @@ document.addEventListener("DOMContentLoaded", () => {
       }
   });
 });
+
+async function fetchFunFact() {
+    try {
+      const response = await fetch('https://api.api-ninjas.com/v1/facts', {
+        headers: {
+          'X-Api-Key': "Eter your api key from api ninja : D ",
+        }
+      });
+      const data = await response.json();
+      console.log(data);
+      showFunFact(data[0].fact);
+    } catch (error) {
+      console.error("Error fetching fun fact:", error);
+    }
+  }
+
+  fetchFunFact();
+
+
+function showFunFact(fact) {
+    const funFactPopup = document.getElementById('funFactPopup');
+    const funFactText = document.getElementById('funFactText');
+    funFactText.textContent = fact;
+    funFactPopup.classList.add('visible');
+    setTimeout(() => {
+      funFactPopup.classList.remove('visible');
+    }, 3000); 
+  }
+
