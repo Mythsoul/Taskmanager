@@ -1,10 +1,10 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   const dialog = document.getElementById("taskDialog");
   const addTaskBtn = document.querySelector(".add-task-btn");
   const cancelBtn = document.getElementById("cancelBtn");
   const taskForm = document.getElementById("taskForm");
   const statusBtns = document.querySelectorAll(".status-btn"); 
+  
 
 
   addTaskBtn.addEventListener("click", () => {
@@ -76,7 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
    
 
-
   async function updateTaskStatus(taskName, status) {
       try {
           const response = await fetch("/update-task-status", {
@@ -109,7 +108,7 @@ async function fetchFunFact() {
     try {
       const response = await fetch('https://api.api-ninjas.com/v1/facts', {
         headers: {
-          'X-Api-Key': "Eter your api key from api ninja : D ",
+          'X-Api-Key': "huhalalala",
         }
       });
       const data = await response.json();
@@ -133,3 +132,34 @@ function showFunFact(fact) {
     }, 3000); 
   }
 
+  function delete_task() { 
+    const delete_task_btns = document.querySelectorAll(".delete-task-btn");
+
+    delete_task_btns.forEach((btn) => {
+        btn.addEventListener("click", async (event) => {
+            console.log("Delete button clicked");
+            const taskDiv = event.target.closest(".done_div");
+            if (!taskDiv) return;
+            const task_name = taskDiv.querySelector("p").textContent.trim();
+            try {
+                const response = await fetch("/delete-task", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ taskName: task_name }),
+                });
+                if (response.ok) {
+                    taskDiv.remove();
+                } else {
+                    const error = await response.json();
+                    alert(`Failed to delete task: ${error.message}`);
+                }
+            } catch (error) {
+                console.error("Error deleting task:", error);
+            }
+        });
+    });
+}
+
+delete_task();

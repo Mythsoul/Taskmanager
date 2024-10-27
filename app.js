@@ -7,7 +7,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { database } from "./src/config/db.js";
 import { fileURLToPath } from "url";
 import session from "express-session";
-import { add_task, update_task_status, render_task , api_render_tasks  ,render_tasks_page , generateTaskSuggestions} from "./src/models/Task.js";
+import { add_task, delete_task, update_task_status, render_task , api_render_tasks  ,render_tasks_page , generateTaskSuggestions} from "./src/models/Task.js";
 import {
   renderlogin,
   renderregister,
@@ -103,6 +103,8 @@ app.post("/update-task-status", checkAuthenticated,  update_task_status);
 
 app.get("/api/user-tasks" , checkAuthenticated ,  api_render_tasks);
 app.get("/user-tasks", checkAuthenticated , render_tasks_page)
+app.post("/delete-task", checkAuthenticated,  delete_task);
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

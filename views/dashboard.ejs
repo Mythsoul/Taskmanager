@@ -127,8 +127,11 @@
               <i class="fas fa-check-double mr-2"></i>Done
             </h3>
             <% tasks.done.forEach(task => { %>
-            <div class="bg-white dark:bg-gray-800 p-3 mb-3 rounded-lg shadow-md">
+            <div class=" done_div bg-white flex justify-between bg-white dark:bg-gray-800 p-3 mb-3 rounded-lg shadow-md">
               <p class="text-base font-medium text-gray-700 dark:text-gray-200"><%= task.task_name %></p>
+              <button class="delete-task-btn text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-600 transition duration-150" >
+                <i class="delete-task-btn fas fa-check-circle"></i>
+              </button>
             </div>
             <% }) %>
           </div>
