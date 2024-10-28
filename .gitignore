@@ -75,7 +75,6 @@ dist/
 *.map
 
 # PostgreSQL files
-*.sql
 *.sqlite
 *.db
 
