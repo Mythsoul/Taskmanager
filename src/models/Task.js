@@ -46,16 +46,30 @@ export const update_task_status = async (req, res) => {
   }
 
   try {
+    if(status === "done"){
     const result = await database.query(
       "UPDATE tasks SET status = $1 WHERE task_name = $2 AND user_id = $3",
       [status, taskName, userId]
     );
-
-    console.log("Update result:", result); 
+    setTimeout(async () => {
+       const delete_task = await database.query("DELETE FROM tasks WHERE task_name= $1 and user_id = $2" , [taskName , userId])
+      
+      }, 1000000);
     if (result.rowCount === 0) {
       return res.status(404).json({ message: "Task not found" });
     }
     res.status(200).json({ message: "Task status updated" });
+
+  }else{
+    const result = await database.query("UPDATE tasks SET status = $1 WHERE task_name = $2 AND user_id = $3", [status, taskName, userId]);
+    console.log("Update result:", result);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+    res.status(200).json({ message: "Task status updated" }); 
+  }
+   
+   
   } catch (err) {
     console.error("Error updating task status:", err);
     res.status(500).json({ message: "Failed to update task status" });
@@ -143,6 +157,7 @@ export async function generateTaskSuggestions(userId) {
         res.status(500).json({ message: "Error deleting task" });
     }
 };
+
 
 
 // 
