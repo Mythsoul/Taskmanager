@@ -1,52 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
-    <link rel="stylesheet" href="css/tailwind.css">
-    <link rel="stylesheet" href="css/login.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <script src="https://kit.fontawesome.com/60cc3418d0.js" crossorigin="anonymous"></script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div class="container mx-auto p-4">
-        <div class="card bg-white rounded-lg shadow-md p-6 max-w-sm mx-auto">
-            <div class="card-header text-center mb-4">
-                <h2 class="card-title text-2xl font-bold">Login to your account</h2>
-                <p class="card-description text-gray-600">Enter your credentials to access your account</p>
-            </div>
-            <div class="card-content mb-4">
-                <div class="input-group mb-4">
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" id="email" placeholder="m@example.com" required disabled 
-                           class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300 bg-gray-100 cursor-not-allowed">
-                </div>
-                <div class="input-group mb-4">
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" id="password" required disabled 
-                           class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300 bg-gray-100 cursor-not-allowed">
-                </div>
-                <button class="btn primary-btn w-full bg-blue-600 text-white rounded-md p-2 cursor-not-allowed disabled:opacity-50" disabled>Login</button>
-                <div class="separator text-center my-4">
-                    <span class="bg-gray-100 px-2 text-gray-600">Or login with</span>
-                </div>
-                <div class="social-buttons flex justify-between">
-                    <button class="btn outline-btn flex items-center border border-gray-300 text-gray-700 rounded-md p-2 cursor-not-allowed" disabled>
-                        <i class="fab fa-github mr-2"></i> GitHub
-                    </button>
-                    <button class="btn outline-btn flex items-center border border-gray-300 text-gray-700 rounded-md p-2">
-                        <i class="fab fa-google mr-2"></i><a href="/auth/google"> Google</a>
-                    </button>
-                    <button class="btn outline-btn flex items-center border border-gray-300 text-gray-700 rounded-md p-2 cursor-not-allowed" disabled>
-                        <i class="fab fa-twitter mr-2"></i> Twitter
-                    </button>
-                </div>
-            </div>
-            <div class="card-footer text-center text-sm text-gray-600">
-                <p>Don't have an account? <a href="/register" class="text-blue-600 hover:underline" aria-disabled="true">Sign Up</a></p>
-                <p><a href="#" class="text-blue-600 hover:underline" aria-disabled="true">Forgot your password?</a></p>
-            </div>
-        </div>
+<body class="bg-gray-900 flex items-center justify-center min-h-screen">
+
+  <form class="form bg-gray-800 rounded-2xl p-6 text-white w-80 space-y-4 shadow-lg">
+    <p id="heading" class="text-center text-xl font-semibold mb-4">Login</p>
+
+    <!-- Username Field -->
+    <div class="flex items-center bg-gray-700 rounded-lg p-2">
+      <svg class="input-icon w-5 h-5 text-gray-400" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+        <path d="M13.106 7.222c0-2.967-2.249-5.032-5.482-5.032-3.35 0-5.646 2.318-5.646 5.702 0 3.493 2.235 5.708 5.762 5.708.862 0 1.689-.123 2.304-.335v-.862c-.43.199-1.354.328-2.29.328-2.926 0-4.813-1.88-4.813-4.798 0-2.844 1.921-4.881 4.594-4.881 2.735 0 4.608 1.688 4.608 4.156 0 1.682-.554 2.769-1.416 2.769-.492 0-.772-.28-.772-.76V5.206H8.923v.834h-.11c-.266-.595-.881-.964-1.6-.964-1.4 0-2.378 1.162-2.378 2.823 0 1.737.957 2.906 2.379 2.906.8 0 1.415-.39 1.709-1.087h.11c.081.67.703 1.148 1.503 1.148 1.572 0 2.57-1.415 2.57-3.643z"/>
+      </svg>
+      <input type="text" placeholder="Username" class="input-field bg-transparent border-none outline-none text-gray-300 ml-2 w-full" disabled />
     </div>
+
+    <!-- Password Field -->
+    <div class="flex items-center bg-gray-700 rounded-lg p-2">
+      <svg class="input-icon w-5 h-5 text-gray-400" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" disabled />
+      </svg>
+      <input type="password" placeholder="Password" class="input-field bg-transparent border-none outline-none text-gray-300 ml-2 w-full" disabled />
+    </div>
+
+    <!-- Main Buttons -->
+    <div class="flex space-x-2 mt-4">
+      <button type="button"disabled class="button1 w-full bg-gray-700 text-white py-2 rounded-lg hover:bg-black transition" disabled >Login</button>
+      <button type="button" disabled class="button2 w-full bg-gray-700 text-white py-2 rounded-lg hover:bg-black transition" disabled >Sign Up</button>
+    </div>
+    
+    <button  disabled class="button3 mt-4 w-full text-center text-blue-500 hover:text-blue-700" disabled >Forgot Password?</button>
+
+    <!-- Social Login Options -->
+    <div class="mt-6 space-y-3">
+      <button disabled type="button" class="w-full flex items-center justify-center bg-red-600 py-2 rounded-lg hover:bg-red-700 transition text-white" disabled >
+       <i class="fab fa-facebook mr-2"></i>
+        Login with Facebook
+      </button>
+
+      <button type="button" class="w-full flex items-center justify-center bg-gray-800 py-2 rounded-lg hover:bg-gray-700 transition text-white" disabled >
+        <i class="fab fa-github mr-2"></i>
+        Login with GitHub
+      </button>
+
+      <button type="button" class="w-full flex items-center justify-center bg-blue-500 py-2 rounded-lg hover:bg-blue-600 transition text-white">
+       <i class="fab fa-google mr-2"></i>
+        <a href="/auth/google">Login with Google </a>
+      </button>
+    </div>
+    
+    <!-- Notification for Google Login Only -->
+    <p class="text-center text-xs text-gray-400 mt-4">Only Google login is currently available</p>
+  </form>
+
 </body>
 </html>
