@@ -171,7 +171,7 @@ function request_notificiaton() {
     Notification.requestPermission().then((result) => {
         if (result === "granted") {
             console.log("Notification permission granted");
-            new Notification("Hello, world!");
+            
         }if (Notification.permission === "denied") {
            
             alert("You've blocked notifications. Please enable them in your browser settings to receive task reminders.");
@@ -179,3 +179,20 @@ function request_notificiaton() {
           
     })}
 
+
+    function check_due_date() {
+        const tasks = document.querySelectorAll(".task_div");
+        tasks.forEach((task) => {
+          const due_date = new Date(task.dataset.due_date);
+          const today = new Date();
+          if (due_date === today) {
+            console.log(`Task ${task.dataset.taskName} is due today!`);
+          }
+        });
+      }
+
+      check_due_date(); 
+
+ function get_task_detail(){ 
+    
+ }
