@@ -72,8 +72,8 @@ passport.use(
 
           if (taskResult.rows.length === 0) {
             await db.query(
-              `INSERT INTO tasks (user_id, task_name) VALUES ($1, $2)`,
-              [id, 'Sample task']
+              `INSERT INTO tasks (user_id, task_name , due_date , status , priority) VALUES ($1, $2 , $3 , $4 , $5)`,
+              [id, 'Sample task' , new Date().toISOString().split('T')[0] , 'todo' , 'low']
             );
           }
           return cb(null, { id, username, picture });
