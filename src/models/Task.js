@@ -54,7 +54,7 @@ export const update_task_status = async (req, res) => {
     setTimeout(async () => {
        const delete_task = await database.query("DELETE FROM tasks WHERE task_name= $1 and user_id = $2" , [taskName , userId])
       
-      }, 1000000);
+      }, 1000000); 
     if (result.rowCount === 0) {
       return res.status(404).json({ message: "Task not found" });
     }
