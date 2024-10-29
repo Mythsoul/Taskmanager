@@ -2,7 +2,7 @@
 
 CREATE TABLE users
 (
-    id SERIAL PRIMARY KEY,
+    id  VARCHAR(255) PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL
 )
@@ -12,7 +12,7 @@ CREATE TABLE users
 CREATE TABLE tasks
 (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
+    user_id VARCHAR(255) NOT NULL,
     task_name VARCHAR(255) NOT NULL,
     due_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
