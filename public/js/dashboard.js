@@ -1,5 +1,4 @@
 
-
 document.addEventListener("DOMContentLoaded", () => {
    
 
@@ -69,8 +68,8 @@ document.addEventListener("DOMContentLoaded", () => {
     statusBtn.addEventListener("click", async (event) => {
       const taskDiv = event.target.closest(".task_div");
       if (!taskDiv) return;
-  
-      let taskName = taskDiv.querySelector("p").textContent.trim(); 
+     const [taskName, dueDateText] = taskDiv.innerText.split("Due Date : ").map(str => str.trim()); 
+      console.log(taskName);
       const status = event.target.classList.contains("pending") ? "pending" : "done";
   
       await updateTaskStatus(taskName, status);
@@ -107,33 +106,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-async function fetchFunFact() {
-    try {
-      const response = await fetch('https://api.api-ninjas.com/v1/facts', {
-        headers: {
-          'X-Api-Key': "huhalalala",
-        }
-      });
-      const data = await response.json();
-      console.log(data);
-      showFunFact(data[0].fact);
-    } catch (error) {
-      console.error("Error fetching fun fact:", error);
-    }
-  }
-
-  fetchFunFact();
 
 
-function showFunFact(fact) {
-    const funFactPopup = document.getElementById('funFactPopup');
-    const funFactText = document.getElementById('funFactText');
-    funFactText.textContent = fact;
-    funFactPopup.classList.add('visible');
-    setTimeout(() => {
-      funFactPopup.classList.remove('visible');
-    }, 3000); 
-  }
+
 
   function delete_task() { 
     const delete_task_btns = document.querySelectorAll(".delete-task-btn");
@@ -176,23 +151,79 @@ function request_notificiaton() {
            
             alert("You've blocked notifications. Please enable them in your browser settings to receive task reminders.");
           } 
-          
     })}
 
+    request_notificiaton();
 
-    function check_due_date() {
-        const tasks = document.querySelectorAll(".task_div");
-        tasks.forEach((task) => {
-          const due_date = new Date(task.dataset.due_date);
-          const today = new Date();
-          if (due_date === today) {
-            console.log(`Task ${task.dataset.taskName} is due today!`);
-          }
-        });
-      }
 
-      check_due_date(); 
 
- function get_task_detail(){ 
-    
- }
+ 
+async function change_background() {
+const toggle_button = document.querySelector("#darkModeToggle");
+toggle_button.addEventListener("click", () => {
+ console.log("clicked toggle button");
+ document.body.classList.toggle("bg-white");
+});
+}
+change_background();
+
+ const funfact_div = document.querySelector(".fun-facts");
+ funfact_div.style = "fun-facts fun-fact-sidebar";
+ setTimeout(() => {
+     funfact_div.attributes.style.value = "display: none;";
+
+ } , 3000)
+
+ const notificationBtn = document.getElementById('notificationBtn');
+ const notificationDiv = document.getElementById('notificationDiv');
+
+ notificationBtn.addEventListener('hover', () => {
+    notificationDiv.classList.remove('hidden');
+    setTimeout(() => {
+        notificationDiv.classList.add('hidden');
+    } , 2000)
+ });
+
+notificationBtn.addEventListener("click" ,  ()=>{ 
+    notificationDiv.classList.remove('hidden');
+})
+const notificationcloseBtn = document.querySelector(".notification-close-btn");
+notificationcloseBtn.addEventListener("click" , ()=>{ 
+   notificationDiv.classList.add("hidden");
+});
+ 
+
+function check_task_due_date() {
+    const task_name = document.querySelectorAll(".todo_task_name"); 
+
+    task_name.forEach((taskElement) => {
+        const text = taskElement.innerText;
+        
+        
+        const [taskName, dueDateText] = text.split("Due Date : ").map(str => str.trim()); 
+        console.log(taskName);
+        console.log(dueDateText); 
+
+        check_due_date(dueDateText , taskName);
+
+    });
+}
+
+
+
+export async function check_due_date( dueDate  , taskName) {
+    const notification_text = document.querySelector(".notification-text");
+    const previous_notification_text = notification_text.textContent;
+
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    const currentDate = new Date().toLocaleDateString('en-US', options);
+   console.log("current Date : " + currentDate);
+   if (currentDate === dueDate) {
+    console.log("Today is the due date of task " + taskName);
+
+    notification_text.textContent = previous_notification_text +  "\n" + "Today is the due date of task " + taskName;
+    new Notification("Task Reminder", {
+        body: "Time to complete your task" + "\t" + taskName,
+    });
+} 
+}
