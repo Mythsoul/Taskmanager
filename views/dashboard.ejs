@@ -1,20 +1,25 @@
+            
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Management Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/tailwind.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script type="module" src="/js/dashboard.js"></script>
     <script type="module" src="/js/timesetting.js"> </script>
     <script src="https://kit.fontawesome.com/60cc3418d0.js" crossorigin="anonymous"></script>
+    
     <style>
-       
+       .content{ 
+           margin-left: 100px;
+       }
     </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 min-h-screen transition-colors duration-300">
-    <div class="p-4 max-w-7xl mx-auto">
+  <div class="content p-4 max-w-7xl ml-[100px]">
+
         <div class="mb-4 animate-fadeIn bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 transition-all duration-300">
             <div class="flex items-center justify-between">
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Management Dashboard</h1>
@@ -24,15 +29,18 @@
                         <span id="notificationBadge" class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500 animate-pulse hidden"></span>
                     </button>
                     <button id="userMenuBtn" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors hover-scale">
-                        <img src="<%= user ? user.picture : 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>" alt="User" class="w-8 h-8 rounded-full">
+                        <img src="<%= user ? user.picture: 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>" alt="User" class="w-8 h-8 rounded-full">
                     </button>
                     <button id="darkModeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors hover-rotate">
-                        <i class="fas fa-moon text-gray-600 dark:text-gray-300 dark:hidden"></i>
-                        <i class="fas fa-sun text-gray-300 hidden dark:inline"></i>
+                        <i class="fas fa-moon text-gray-600 dark:text-gray-300 dark:hidden "></i>
                     </button>
                 </div>
             </div>
         </div>
+
+
+       
+
 
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <div class="animate-slideIn bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 transition-all duration-300 hover-scale">
@@ -114,16 +122,19 @@
                     </h3>
                     <% tasks.todo.forEach(task => { %>
                     <div class="task_div flex justify-between bg-white dark:bg-gray-800 p-3 mb-3 rounded-lg shadow-md items-center">
-                      <p class="text-base font-medium">
+                      <p class=" text-white todo_task_name text-base font-medium">
                         <% if (task.priority === 'high') { %>
-                          <i class="fas fa-exclamation-circle text-red-600"></i>
+                          <i class="fas fa-exclamation-circle text-red-600 mr-2"></i>
                         <% } else if (task.priority === 'medium') { %>
-                          <i class="fas fa-exclamation-circle text-yellow-500"></i>
+                          <i class="fas fa-exclamation-circle text-yellow-500 mr-2"></i>
                         <% } else { %>
-                          <i class="fas fa-exclamation-circle text-green-500"></i>
+                          <i class="fas fa-exclamation-circle text-green-500 mr-2"></i>
                         <% } %>
                         <%= task.task_name %>
+                        <br> Due Date : <%= task.due_date %>
                       </p>
+    
+                 
                       <div class="flex space-x-2 text-lg">
                         <button class="status-btn pending text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-600 transition duration-150 pad-2 mr-2">
                           <i class=" pending fas fa-hourglass-half"></i>
@@ -157,11 +168,13 @@
                     <h3 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-200">
                       <i class="fas fa-check-double mr-2"></i>Done
                     </h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400"> Note : Tasks Will be deleted in 1hr automatically</p>
                     <% tasks.done.forEach(task => { %>
                     <div class=" done_div bg-white flex justify-between bg-white dark:bg-gray-800 p-3 mb-3 rounded-lg shadow-md">
                       <p class="text-base font-medium text-gray-700 dark:text-gray-200"><%= task.task_name %></p>
                       <button class="delete-task-btn text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-600 transition duration-150" >
-                        <i class="delete-task-btn fas fa-check-circle"></i>
+                        <i class="delete-task-btn fa-solid fa-trash"></i>
+                        
                       </button>
                     </div>
                     <% }) %>
@@ -233,51 +246,63 @@
                     </div>
                 </div> -->
             </div>
+<style>
+
+#notificationDiv{
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 400px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(5px);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: right 0.5s ease, opacity 0.5s ease;
+}
+
+.fun-fact-sidebar {
+  position: absolute;
+  top: 300px;
+  right: 30px;
+  width: 400px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(5px);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: right 0.5s ease, opacity 0.5s ease;
+
+}
+.close-btn {
+    cursor: pointer;
+    font-weight: bold;
+    color: #4a4a4a;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+  }
+
+</style>
+            <div id="notificationDiv" class="hidden">
+              <h2 class="text-2xl font-semibold text-purple-800 mb-2">Your Notifications will appear here : D</h2>
+            <p id="notificationText" class="text-lg text-gray-800"></p>
+            <button id="notification-close-btn" class="notification-close-btn close-btn mt-4" >Close</button>
+            </div>
+
+            <div id="funFactSidebar" class="fun-facts fun-fact-sidebar">
+              <h2 class="text-2xl font-semibold text-purple-800 mb-2">Did you know?</h2>
+              <p id="funFactText" class="text-lg text-gray-800"><%= funfact %></p>
+</div>
         
+<script>
+        // document.getElementById('submitFeedback').addEventListener('click', () => {
+        //     const feedbackInput = document.getElementById('feedbackInput');
+        //     if (feedbackInput.value.trim()) {
+        //         const feedbackContainer = document.getElementById('feedbackContainer');
+        //         const feedbackItem = document.createElement('div');
+        //         feedbackItem.className = 'p-2 border border-gray-300 rounded-md';
+        //         feedbackItem.textContent = feedback
+</script>
 
-    <script>
-        document.getElementById('darkModeToggle').addEventListener('click', () => {
-            document.body.classList.toggle('dark');
-        });
 
-        document.getElementById('submitFeedback').addEventListener('click', () => {
-            const feedbackInput = document.getElementById('feedbackInput');
-            if (feedbackInput.value.trim()) {
-                const feedbackContainer = document.getElementById('feedbackContainer');
-                const feedbackItem = document.createElement('div');
-                feedbackItem.className = 'p-2 border border-gray-300 rounded-md';
-                feedbackItem.textContent = feedbackInput.value;
-                feedbackContainer.appendChild(feedbackItem);
-                feedbackInput.value = '';
-            }
-        });
-
-        
-        const tasks = {
-         
-        };
-        
-        document.getElementById('todoCount').textContent = tasks.todo.length;
-        document.getElementById('inProgressCount').textContent = tasks.pending.length;
-        document.getElementById('doneCount').textContent = tasks.done.length;
-
-        const todoProgress = (tasks.todo.length / (tasks.todo.length + tasks.pending.length + tasks.done.length)) * 100;
-        const inProgressProgress = (tasks.pending.length / (tasks.todo.length + tasks.pending.length + tasks.done.length)) * 100;
-        const doneProgress = (tasks.done.length / (tasks.todo.length + tasks.pending.length + tasks.done.length)) * 100;
-
-        document.getElementById('todoProgress').style.width = todoProgress + '%';
-        document.getElementById('inProgressProgress').style.width = inProgressProgress + '%';
-        document.getElementById('doneProgress').style.width = doneProgress + '%';
-
-        // Functionality for notification badge
-        const notificationBtn = document.getElementById('notificationBtn');
-        let notifications = 0;
-
-        notificationBtn.addEventListener('click', () => {
-            notifications++;
-            document.getElementById('notificationBadge').classList.remove('hidden');
-            document.getElementById('notificationBadge').textContent = notifications;
-        });
-    </script>
-</body>
-</html>
