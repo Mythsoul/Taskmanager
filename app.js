@@ -15,8 +15,9 @@ import {
   google_callback,
   renderlogout,
 } from "./src/routes/authRoutes.js";
-
+import { fetchFunFact } from "./src/models/fun.js";
 import connectPgSimple from "connect-pg-simple";
+import { render_homepage , render_dashboard} from "./src/routes/userRoutes.js";
 const app = express();
 const port = 3000;
 
@@ -24,10 +25,12 @@ dotenv.config();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static("public"));
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+app.use(express.static(path.join(__dirname, 'public')));
+
 const PgSession = connectPgSimple(session);
  try{ app.use(
   session({
@@ -57,9 +60,7 @@ function checkAuthenticated(req, res, next) {
   res.redirect("/login");
 }
 
-app.get("/", (req, res) => {
-  res.render("index");
-});
+app.get("/", render_homepage);
 
 app.get("/login", renderlogin);
 
@@ -68,30 +69,9 @@ app.get("/register", renderregister);
 app.get("/auth/google", google_auth);
 
 app.get(
-  "/auth/google/dashboard",
-  passport.authenticate("google", {
-    failureRedirect: "/login",
-    successRedirect: "/dashboard",
-  })
-);
+  "/auth/google/dashboard", google_callback)
 
-app.get("/dashboard", checkAuthenticated, async (req, res) => {
-  const user = req.user;
-  console.log(user);
-  try {
-    const tasks = await render_task(user.id);
-    
-    const tasks_suggestions = await generateTaskSuggestions(user.id); 
-    res.render("dashboard", {
-      user: user,
-      tasks: tasks,
-      tasks_suggestions: tasks_suggestions
-    });
-  } catch (err) {
-    console.error("Error loading dashboard:", err);
-    res.status(500).send("Failed to load dashboard");
-  }
-});
+app.get("/dashboard", checkAuthenticated, render_dashboard);
 app.route('/logout')
     .get (renderlogout)
 
@@ -104,7 +84,22 @@ app.post("/update-task-status", checkAuthenticated,  update_task_status);
 app.get("/api/user-tasks" , checkAuthenticated ,  api_render_tasks);
 app.get("/user-tasks", checkAuthenticated , render_tasks_page)
 app.post("/delete-task", checkAuthenticated,  delete_task);
-
+// app.get("/test" , checkAuthenticated , async(req, res) => {
+//   const user = req.user;
+//    try{
+//     const tasks = await render_task(user.id);
+    
+//     const tasks_suggestions = await generateTaskSuggestions(user.id); 
+//     res.render("testui", {
+//       user: user,
+//       tasks: tasks,
+//       tasks_suggestions: tasks_suggestions
+//     });
+//   } catch (err) {
+//     console.error("Error loading dashboard:", err);
+//     res.status(500).send("Failed to load dashboard");
+//   }
+// })
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
