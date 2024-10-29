@@ -1,186 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Management Dashboard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="css/dashboard.css">
-  <script type="module" src="/js/dashboard.js"></script>
-  <script type="module" src="/js/timesetting.js"> </script>
-  <script src="https://kit.fontawesome.com/60cc3418d0.js" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="module" src="/js/dashboard.js"></script>
+    <script type="module" src="/js/timesetting.js"> </script>
+    <script src="https://kit.fontawesome.com/60cc3418d0.js" crossorigin="anonymous"></script>
+    <style>
+       
+    </style>
 </head>
-<style>
-  .task_div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    transition: transform 0.2s, box-shadow 0.2s; /* Animation */
-  }
-
-  .task_div:hover {
-    transform: scale(1.02); /* Slightly enlarge on hover */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Hover shadow */
-  }
-
-  #todoColumn, #inProgressColumn, #doneColumn {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px; /* Increased gap for a more spacious feel */
-  }
-
-  /* Popup styles */
-  .popup {
-    display: none; /* Initially hidden */
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background-color: rgba(0, 0, 0, 0.85); /* Darker background */
-    color: white;
-    padding: 15px;
-    border-radius: 8px;
-    z-index: 1000;
-    transition: opacity 0.5s; /* Fade effect */
-  }
-
-  .popup.visible {
-    display: block;
-    opacity: 1; /* Show the popup */
-  }
-
-  .popup.hidden {
-    opacity: 0; /* Hide the popup */
-  }
-</style>
-<body class="bg-gray-100 dark:bg-gray-900 transition-all duration-300 text-gray-800 dark:text-gray-100">
-  <div class="container mx-auto py-8 px-6 md:px-10 lg:px-14 mt-10">
-    <header class="flex flex-wrap items-center justify-between mb-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg transition duration-300">
-      <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-100">Management Dashboard</h1>
-      <div class="flex items-center space-x-4 mt-4 md:mt-0">
-        <img src="<%= user ? user.picture : 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>"
-             alt="User Avatar" class="w-12 h-12 rounded-full border-2 border-gray-300 dark:border-gray-700 transition duration-300 hover:scale-105"> 
-        <span class="text-xl font-medium">Welcome, <%= user ? user.username : 'User' %></span>
-        <button class="toggle-button rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-300">
-          <i id="darkModeIcon" class="fa-solid fa-moon text-gray-600 dark:text-yellow-400"></i>
-        </button>
-      </div>
-    </header>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md col-span-full transition duration-300">
-        <h2 class="text-2xl font-semibold mb-4">Task Management</h2>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Manage your tasks effectively</p>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-          <div id="todoColumn" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-            <h3 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-200">
-              <i class="fas fa-tasks mr-2"></i>To Do
-            </h3>
-            <% tasks.todo.forEach(task => { %>
-            <div class="task_div flex justify-between bg-white dark:bg-gray-800 p-3 mb-3 rounded-lg shadow-md items-center">
-              <p class="text-base font-medium">
-                <% if (task.priority === 'high') { %>
-                  <i class="fas fa-exclamation-circle text-red-600"></i>
-                <% } else if (task.priority === 'medium') { %>
-                  <i class="fas fa-exclamation-circle text-yellow-500"></i>
-                <% } else { %>
-                  <i class="fas fa-exclamation-circle text-green-500"></i>
-                <% } %>
-                <%= task.task_name %>
-              </p>
-              <div class="flex space-x-2 text-lg">
-                <button class="status-btn pending text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-600 transition duration-150 pad-2 mr-2">
-                  <i class=" pending fas fa-hourglass-half"></i>
-                </button>
-                <button class="status-btn done text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-600 transition duration-150">
-                  <i class="done fas fa-check-circle"></i>
-                </button>
-              </div>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen transition-colors duration-300">
+    <div class="p-4 max-w-7xl mx-auto">
+        <div class="mb-4 animate-fadeIn bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 transition-all duration-300">
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Management Dashboard</h1>
+                <div class="flex items-center space-x-2">
+                    <button id="notificationBtn" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors relative hover-scale">
+                        <i class="fas fa-bell text-gray-600 dark:text-gray-300"></i>
+                        <span id="notificationBadge" class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500 animate-pulse hidden"></span>
+                    </button>
+                    <button id="userMenuBtn" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors hover-scale">
+                        <img src="<%= user ? user.picture : 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>" alt="User" class="w-8 h-8 rounded-full">
+                    </button>
+                    <button id="darkModeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors hover-rotate">
+                        <i class="fas fa-moon text-gray-600 dark:text-gray-300 dark:hidden"></i>
+                        <i class="fas fa-sun text-gray-300 hidden dark:inline"></i>
+                    </button>
+                </div>
             </div>
-            <% }) %>
-            <button id="add-task-btn" class="add-task-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150">
-              <i class="fas fa-plus mr-2"></i>Add Task
-            </button>
-          </div>
-
-          <div id="inProgressColumn" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-            <h3 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-200">
-              <i class="fas fa-spinner mr-2"></i>In Progress
-            </h3>
-            <% tasks.pending.forEach(task => { %>
-            <div class="task_div flex justify-between bg-white dark:bg-gray-800 p-3 mb-3 rounded-lg shadow-md items-center">
-              <p class="text-base font-medium"><%= task.task_name %></p>
-              <button class="status-btn done text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-600 transition duration-150">
-                <i class="fas fa-check-circle"></i>
-              </button>
-            </div>
-            <% }) %>
-          </div>
-
-          <div id="doneColumn" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-            <h3 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-200">
-              <i class="fas fa-check-double mr-2"></i>Done
-            </h3>
-            <% tasks.done.forEach(task => { %>
-            <div class=" done_div bg-white flex justify-between bg-white dark:bg-gray-800 p-3 mb-3 rounded-lg shadow-md">
-              <p class="text-base font-medium text-gray-700 dark:text-gray-200"><%= task.task_name %></p>
-              <button class="delete-task-btn text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-600 transition duration-150" >
-                <i class="delete-task-btn fas fa-check-circle"></i>
-              </button>
-            </div>
-            <% }) %>
-          </div>
         </div>
-      </div>
 
-      <dialog id="taskDialog" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-        <form id="taskForm" method="dialog">
-          <h2 class="text-2xl font-semibold mb-4">Add New Task</h2>
-          <div class="mb-4">
-            <label for="taskName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Task Name</label>
-            <input type="text" id="taskName" required class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
-          </div>
-          <div class="mb-4">
-            <label for="due-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Due Date</label>
-            <input type="date" id="due-date" required class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
-          </div>
-          <div class="mb-4">
-            <label for="priority" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Priority</label>
-            <select id="priority" class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
-          </div>
-          <div class="flex justify-end">
-            <button type="button" id="cancelBtn" class="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-150">
-              Cancel
-            </button>
-            <button type="submit" id="submitTask" class="ml-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150">
-              Add Task
-            </button>
-          </div>
-        </form>
-      </dialog>
-    </div>
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div class="animate-slideIn bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 transition-all duration-300 hover-scale">
+                <h2 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-white">
+                    <i class="fas fa-tasks mr-2 text-blue-500"></i>
+                    Task Overview
+                </h2>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600 dark:text-gray-300">To Do</span>
+                        <span id="todoCount" class="font-bold text-blue-500"><%= tasks.todo.length %></span>
+                    </div>
+                    <div class="bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div id="todoProgress" class="bg-blue-500 rounded-full h-2 w-0 transition-all duration-1000 ease-in-out"></div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600 dark:text-gray-300">In Progress</span>
+                        <span id="inProgressCount" class="font-bold text-yellow-500"><%= tasks.pending.length %></span>
+                    </div>
+                    <div class="bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div id="inProgressProgress" class="bg-yellow-500 rounded-full h-2 w-0 transition-all duration-1000 ease-in-out"></div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600 dark:text-gray-300">Done</span>
+                        <span id="doneCount" class="font-bold text-green-500"><%= tasks.done.length %></span>
+                    </div>
+                    <div class="bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div id="doneProgress" class="bg-green-500 rounded-full h-2 w-0 transition-all duration-1000 ease-in-out"></div>
+                    </div>
+                </div>
+            </div>
 
-    <!-- Popup for Fun Facts -->
-    <div id="funFactPopup" class="popup">
-      <p class="text-lg font-semibold mb-2">Did you know?</p>
-      <p id="funFactText" class="text-base font-medium"></p>
-    </div>
-  </div>
+            <div class="animate-slideIn bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 transition-all duration-300 hover-scale">
+                <h2 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-white">
+                    <i class="fas fa-chart-bar mr-2 text-purple-500"></i>
+                    Performance Metrics
+                </h2>
+                <div class="space-y-4">
+                    <div class="flex space-x-2">
+                        <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500">Daily</button>
+                        <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500">Weekly</button>
+                        <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500">Monthly</button>
+                    </div>
+                    <div class="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
+                        <i class="fas fa-chart-line text-green-500"></i>
+                        <span>Daily performance up by 12%</span>
+                    </div>
+                    <div id="performanceChart" class="h-40 bg-gray-100 dark:bg-gray-700 rounded-lg"></div>
+                </div>
+            </div>
 
+            <div class="animate-slideIn bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 transition-all duration-300 hover-scale">
+                <h2 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-white">
+                    <i class="fas fa-bolt mr-2 text-yellow-500"></i>
+                    Quick Actions
+                </h2>
+                <div class="grid grid-cols-2 gap-2">
+                    <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-500 hover-scale">
+                        <i class="fas fa-file-alt mr-2"></i>
+                        Create Report
+                    </button>
+                    <button class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-green-500 hover-scale">
+                        <i class="fas fa-calendar-alt mr-2"></i>
+                        Schedule Meeting
+                    </button>
+                    <button class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-yellow-500 hover-scale">
+                        <i class="fas fa-comment-alt mr-2"></i>
+                        Send Feedback
+                    </button>
+                    <button class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-purple-500 hover-scale">
+                        <i class="fas fa-user-plus mr-2"></i>
+                        Add Team Member
+                    </button>
+                </div>
+            </div>
+                <div id="todoColumn" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-200">
+                      <i class="fas fa-tasks mr-2"></i>To Do
+                    </h3>
+                    <% tasks.todo.forEach(task => { %>
+                    <div class="task_div flex justify-between bg-white dark:bg-gray-800 p-3 mb-3 rounded-lg shadow-md items-center">
+                      <p class="text-base font-medium">
+                        <% if (task.priority === 'high') { %>
+                          <i class="fas fa-exclamation-circle text-red-600"></i>
+                        <% } else if (task.priority === 'medium') { %>
+                          <i class="fas fa-exclamation-circle text-yellow-500"></i>
+                        <% } else { %>
+                          <i class="fas fa-exclamation-circle text-green-500"></i>
+                        <% } %>
+                        <%= task.task_name %>
+                      </p>
+                      <div class="flex space-x-2 text-lg">
+                        <button class="status-btn pending text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-600 transition duration-150 pad-2 mr-2">
+                          <i class=" pending fas fa-hourglass-half"></i>
+                        </button>
+                        <button class="status-btn done text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-600 transition duration-150">
+                          <i class="done fas fa-check-circle"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <% }) %>
+                    <button id="add-task-btn" class="add-task-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150">
+                      <i class="fas fa-plus mr-2"></i>Add Task
+                    </button>
+                  </div>
+        
+                  <div id="inProgressColumn" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-200">
+                      <i class="fas fa-spinner mr-2"></i>In Progress
+                    </h3>
+                    <% tasks.pending.forEach(task => { %>
+                    <div class="task_div flex justify-between bg-white dark:bg-gray-800 p-3 mb-3 rounded-lg shadow-md items-center">
+                      <p class="text-base font-medium"><%= task.task_name %></p>
+                      <button class="status-btn done text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-600 transition duration-150">
+                        <i class="fas fa-check-circle"></i>
+                      </button>
+                    </div>
+                    <% }) %>
+                  </div>
+        
+                  <div id="doneColumn" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-200">
+                      <i class="fas fa-check-double mr-2"></i>Done
+                    </h3>
+                    <% tasks.done.forEach(task => { %>
+                    <div class=" done_div bg-white flex justify-between bg-white dark:bg-gray-800 p-3 mb-3 rounded-lg shadow-md">
+                      <p class="text-base font-medium text-gray-700 dark:text-gray-200"><%= task.task_name %></p>
+                      <button class="delete-task-btn text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-600 transition duration-150" >
+                        <i class="delete-task-btn fas fa-check-circle"></i>
+                      </button>
+                    </div>
+                    <% }) %>
+                  </div>
+                </div>
+              </div>
+          
+              <dialog id="taskDialog" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+                <form id="taskForm" method="dialog">
+                  <h2 class="text-2xl font-semibold mb-4">Add New Task</h2>
+                  <div class="mb-4">
+                    <label for="taskName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Task Name</label>
+                    <input type="text" id="taskName" required class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
+                  </div>
+                  <div class="mb-4">
+                    <label for="due-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Due Date</label>
+                    <input type="date" id="due-date" required class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
+                  </div>
+                  <div class="mb-4">
+                    <label for="priority" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Priority</label>
+                    <select id="priority" class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                  </div>
+                  <div class="flex justify-end">
+                    <button type="button" id="cancelBtn" class="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-150">
+                      Cancel
+                    </button>
+                    <button type="submit" id="submitTask" class="ml-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150">
+                      Add Task
+                    </button>
+                  </div>
+                </form>
+              </dialog>
 
-</style>  
-  <script>
-   
-   </script>
+            <!-- <div class="animate-slideIn bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 transition-all duration-300 hover-scale">
+                <h2 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-white">
+                    <i class="fas fa-comments mr-2 text-blue-500"></i>
+                    User Feedback
+                </h2>
+                <div id="feedbackContainer" class="space-y-4">
+                    <! Feedback Items will be appended here -->
+                <!-- </div>
+                <input type="text" id="feedbackInput" class="mt-2 w-full p-2 border border-gray-300 rounded-lg" placeholder="Leave your feedback...">
+                <button id="submitFeedback" class="mt-2 w-full bg-blue-500 text-white rounded-md py-2 hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">Submit</button>
+            </div>
+
+            <div class="animate-slideIn bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 transition-all duration-300 hover-scale">
+                <h2 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-white">
+                    <i class="fas fa-cog mr-2 text-green-500"></i>
+                    Settings
+                </h2>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600 dark:text-gray-300">Notifications</span>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="toggle-checkbox" checked>
+                            <span class="ml-2 text-gray-600 dark:text-gray-300">Enabled</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600 dark:text-gray-300">Dark Mode</span>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="toggle-checkbox" id="darkModeSetting" checked>
+                            <span class="ml-2 text-gray-600 dark:text-gray-300">Enabled</span>
+                        </label>
+                    </div>
+                </div> -->
+            </div>
+        
+
+    <script>
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+        });
+
+        document.getElementById('submitFeedback').addEventListener('click', () => {
+            const feedbackInput = document.getElementById('feedbackInput');
+            if (feedbackInput.value.trim()) {
+                const feedbackContainer = document.getElementById('feedbackContainer');
+                const feedbackItem = document.createElement('div');
+                feedbackItem.className = 'p-2 border border-gray-300 rounded-md';
+                feedbackItem.textContent = feedbackInput.value;
+                feedbackContainer.appendChild(feedbackItem);
+                feedbackInput.value = '';
+            }
+        });
+
+        
+        const tasks = {
+         
+        };
+        
+        document.getElementById('todoCount').textContent = tasks.todo.length;
+        document.getElementById('inProgressCount').textContent = tasks.pending.length;
+        document.getElementById('doneCount').textContent = tasks.done.length;
+
+        const todoProgress = (tasks.todo.length / (tasks.todo.length + tasks.pending.length + tasks.done.length)) * 100;
+        const inProgressProgress = (tasks.pending.length / (tasks.todo.length + tasks.pending.length + tasks.done.length)) * 100;
+        const doneProgress = (tasks.done.length / (tasks.todo.length + tasks.pending.length + tasks.done.length)) * 100;
+
+        document.getElementById('todoProgress').style.width = todoProgress + '%';
+        document.getElementById('inProgressProgress').style.width = inProgressProgress + '%';
+        document.getElementById('doneProgress').style.width = doneProgress + '%';
+
+        // Functionality for notification badge
+        const notificationBtn = document.getElementById('notificationBtn');
+        let notifications = 0;
+
+        notificationBtn.addEventListener('click', () => {
+            notifications++;
+            document.getElementById('notificationBadge').classList.remove('hidden');
+            document.getElementById('notificationBadge').textContent = notifications;
+        });
+    </script>
 </body>
 </html>
