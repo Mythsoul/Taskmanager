@@ -1,0 +1,3 @@
+# Ignore ejs files in views directory
+views/**/dashboard.ejs
+
