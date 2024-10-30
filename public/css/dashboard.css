@@ -1,220 +1,216 @@
-
-body.dark-mode {
-    background-color: #1f2937; 
-    color: black; 
-  }
-  
-  button.switch {
-    cursor: pointer;
-    border: none;
-    outline: none;
-    transition: background-color 0.3s ease;
-  }
-  
-  button.switch:hover {
-    background-color: #e5e7eb; }
-  
-  .progress-bar {
-    height: 10px;
-    border-radius: 5px;
-    background-color: #10b981; 
-  }
- 
-.switch {
-  display: block;
-  --width-of-switch: 3.5em;
-  --height-of-switch: 2em;
-  /* size of sliding icon -- sun and moon */
-  --size-of-icon: 1.4em;
-  /* it is like a inline-padding of switch */
-  --slider-offset: 0.3em;
-  position: relative;
-  width: var(--width-of-switch);
-  height: var(--height-of-switch);
+/* Base responsive styles */
+.content {
+  width: 100%;
+  transition: all 0.3s ease;
 }
 
-/* Hide default HTML checkbox */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-/* The slider */
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #f4f4f5;
-  transition: .4s;
-  border-radius: 30px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: var(--size-of-icon,1.4em);
-  width: var(--size-of-icon,1.4em);
-  border-radius: 20px;
-  left: var(--slider-offset,0.3em);
-  top: 50%;
-  transform: translateY(-50%);
-  background: linear-gradient(40deg,#ff0080,#ff8c00 70%);
-  ;
- transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #303136;
-}
-
-input:checked + .slider:before {
-  left: calc(100% - (var(--size-of-icon,1.4em) + var(--slider-offset,0.3em)));
-  background: #303136;
- 
-  box-shadow: inset -3px -2px 5px -2px #8983f7, inset -10px -4px 0 0 #a3dafb;
-}
-
+/* Task card responsiveness */
 .task_div {
+  gap: 0.75rem;
+}
+
+.task_div p {
+  word-break: break-word;
+  max-width: 100%;
+}
+
+/* Performance metrics responsiveness */
+.performance-metrics-buttons {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-  transition: transform 0.2s, box-shadow 0.2s; /* Animation */
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
-.task_div:hover {
-  transform: scale(1.02); /* Slightly enlarge on hover */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Hover shadow */
-}
-
-#todoColumn, #inProgressColumn, #doneColumn {
-  display: flex;
-  flex-direction: column;
-}
-
-.grid {
+/* Quick actions grid responsiveness */
+.quick-actions-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px; /* Increased gap for a more spacious feel */
+  gap: 0.5rem;
 }
 
-/* Popup styles */
-.popup {
-  display: none; /* Initially hidden */
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background-color: rgba(0, 0, 0, 0.85); /* Darker background */
-  color: white;
-  padding: 15px;
-  border-radius: 8px;
-  z-index: 1000;
-  transition: opacity 0.5s; /* Fade effect */
+/* Dialog responsiveness */
+#taskDialog {
+  max-width: 95vw;
+  margin: 1rem auto;
 }
 
-.popup.visible {
-  display: block;
-  opacity: 1; /* Show the popup */
+/* Notification and Fun Fact sidebar responsiveness */
+#notificationDiv,
+#funFactSidebar {
+  max-width: calc(100vw - 2rem);
+  margin: 0 1rem;
 }
 
-.popup.hidden {
-  opacity: 0; /* Hide the popup */
-}
+/* Mobile First Media Queries */
+@media (max-width: 640px) {
+  .task_div {
+    padding: 1rem;
+  }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes slideIn {
-  from { transform: translateY(-20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
-}
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-.animate-fadeIn { animation: fadeIn 0.5s ease-out; }
-.animate-slideIn { animation: slideIn 0.5s ease-out; }
-.animate-pulse { animation: pulse 2s infinite; }
-.animate-bounce { animation: bounce 1s infinite; }
-.animate-spin { animation: spin 2s linear infinite; }
-.hover-scale { transition: transform 0.3s ease; }
-.hover-scale:hover { transform: scale(1.05); }
-.hover-rotate { transition: transform 0.3s ease; }
-.hover-rotate:hover { transform: rotate(15deg); }
+  .task_div .flex {
+    width: 100%;
+    justify-content: space-between;
+  }
 
+  .quick-actions button {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
 
-#notificationDiv{
-  position:absolute;
-  background-color: rgba(128, 128, 128, 0.144);
-  top: 20px;
-  right: 30px;
-  width: 400px; 
-  pad: 4;
-  margin-right: 4px;
-  margin-top: 4px;
-  text-align: center;
-  border: 2px ;
-  border-radius:5px ;
-}
-
-.fun-fact-sidebar {
-  position: absolute;
-  top: 60px;
-  right: 30px;
-  width: 500px;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(5px);
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  transition: right 0.5s ease, opacity 0.5s ease;
-  opacity: 0;
-}
-
-
-/* .close-btn {
-  cursor: pointer;
-  font-weight: bold;
-  color: #4a4a4a;
-  border: none;
-  background: transparent;
-  font-size: 16px;
-} */
-
-.animate-fade-in {
-  animation: fadeIn 1.2s ease-out forwards;
-  opacity: 0;
-}
-
-@keyframes fadeIn {
-  to {
-    opacity: 1;
+  #performanceChart {
+    height: 200px;
   }
 }
 
-.button-bounce {
-  transition: transform 0.3s, box-shadow 0.3s;
+/* Small devices (640px and up) */
+@media (min-width: 640px) {
+  .task_div {
+    align-items: center;
+  }
+
+  #notificationDiv,
+  #funFactSidebar {
+    max-width: 420px;
+    right: 1rem;
+  }
 }
 
-.button-bounce:hover {
-  transform: scale(1.1);
-  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.5);
+/* Medium devices (768px and up) */
+@media (min-width: 768px) {
+  .content {
+    padding: 2rem;
+  }
+
+  .task-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  #taskDialog {
+    max-width: 500px;
+  }
 }
 
-.text-glow {
-  color: rgba(255, 255, 255, 0.9);
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+/* Large devices (1024px and up) */
+@media (min-width: 1024px) {
+  .content {
+    padding: 2rem 4rem;
+  }
+
+  .task-columns {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  #notificationDiv,
+  #funFactSidebar {
+    max-width: 480px;
+    right: 2rem;
+  }
+}
+
+/* Extra large devices (1280px and up) */
+@media (min-width: 1280px) {
+  .content {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+}
+
+/* Dark mode specific adjustments */
+@media (prefers-color-scheme: dark) {
+  .task_div {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Animation adjustments for mobile */
+@media (max-width: 640px) {
+  .animate-slideIn {
+    animation-duration: 0.3s;
+  }
+
+  .hover-scale:hover {
+    transform: scale(1.02);
+  }
+}
+
+/* Print media query for better printing */
+@media print {
+  .hover-scale,
+  .hover-rotate {
+    transform: none !important;
+  }
+
+  .animate-fadeIn,
+  .animate-slideIn {
+    animation: none !important;
+  }
+
+  #notificationDiv,
+  #funFactSidebar,
+  #taskDialog {
+    display: none !important;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fadeIn,
+  .animate-slideIn,
+  .hover-scale,
+  .hover-rotate {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* Custom scrollbar for task columns */
+.task-column {
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+}
+
+.task-column::-webkit-scrollbar {
+  width: 6px;
+}
+
+.task-column::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.task-column::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.5);
+  border-radius: 3px;
+}
+
+/* Responsive form elements */
+@media (max-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+  }
+
+  .form-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-buttons button {
+    width: 100%;
+  }
+}
+
+/* Better touch targets for mobile */
+@media (max-width: 640px) {
+  button,
+  .status-btn,
+  .delete-task-btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.5rem;
+  }
 }

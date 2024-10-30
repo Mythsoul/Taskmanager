@@ -17,6 +17,10 @@ export const add_task = async (req, res) => {
     }
 
     try {
+      const response = await database.query("SELECT task_name FROM tasks WHERE user_id = $1 AND task_name = $2", [userId, taskName]);
+      'use strict'; if (response.rowCount > 0) {
+        return res.status(400).json({ message: "Task already exists" });
+      }
       const data = await database.query("SELECT COUNT(*) FROM tasks WHERE user_id = $1", [userId]);
       if (parseInt(data.rows[0].count, 10) >= 5) {
         return res.status(400).json({ message: "You can only add 5 tasks" });

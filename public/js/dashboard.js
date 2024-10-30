@@ -7,7 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const cancelBtn = document.getElementById("cancelBtn");
   const taskForm = document.getElementById("taskForm");
   const statusBtns = document.querySelectorAll(".status-btn"); 
-  
+ 
+
 
 
   addTaskBtn.addEventListener("click", () => {
@@ -68,8 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
     statusBtn.addEventListener("click", async (event) => {
       const taskDiv = event.target.closest(".task_div");
       if (!taskDiv) return;
-     const [taskName, dueDateText] = taskDiv.innerText.split("Due Date : ").map(str => str.trim()); 
-      console.log(taskName);
+     const [taskName, dueDateText] = taskDiv.innerText.split("Due Date: ").map(str => str.trim());
+    console.log(taskName);
       const status = event.target.classList.contains("pending") ? "pending" : "done";
   
       await updateTaskStatus(taskName, status);
@@ -80,7 +81,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function updateTaskStatus(taskName, status) {
       try {
+        console.log("Updating task status:", taskName , status);
           const response = await fetch("/update-task-status", {
+           
               method: "POST",
               headers: {
                   "Content-Type": "application/json",
@@ -172,28 +175,77 @@ change_background();
  setTimeout(() => {
      funfact_div.attributes.style.value = "display: none;";
 
- } , 3000)
-
+ } , 10000); 
  const notificationBtn = document.getElementById('notificationBtn');
  const notificationDiv = document.getElementById('notificationDiv');
-
- notificationBtn.addEventListener('hover', () => {
-    notificationDiv.classList.remove('hidden');
-    setTimeout(() => {
-        notificationDiv.classList.add('hidden');
-    } , 2000)
- });
-
-notificationBtn.addEventListener("click" ,  ()=>{ 
-    notificationDiv.classList.remove('hidden');
-})
-const notificationcloseBtn = document.querySelector(".notification-close-btn");
-notificationcloseBtn.addEventListener("click" , ()=>{ 
-   notificationDiv.classList.add("hidden");
-});
+ const notificationCloseBtn = document.getElementById('notification-close-btn');
+ const notificationBadge = document.getElementById('notificationBadge');
  
 
-function check_task_due_date() {
+ notificationBtn.addEventListener('click', () => {
+    notificationDiv.classList.toggle('hidden');
+    notificationBadge.classList.add('hidden');
+});
+
+notificationCloseBtn.addEventListener('click', () => {
+    notificationDiv.classList.add('hidden');
+});
+
+const darkModeToggle = document.getElementById('darkModeToggle');
+  
+const funFactSidebar = document.getElementById('funFactSidebar');
+const funFactCloseBtn = document.getElementById('funfact-close-btn');
+const addTaskBtn = document.getElementById('add-task-btn');
+const taskDialog = document.getElementById('taskDialog');
+const taskForm = document.getElementById('taskForm');
+const cancelBtn = document.getElementById('cancelBtn');
+
+
+darkModeToggle.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+});
+
+
+
+
+
+funFactCloseBtn.addEventListener('click', () => {
+    funFactSidebar.classList.add('hidden');
+});
+
+addTaskBtn.addEventListener('click', () => {
+    taskDialog.showModal();
+});
+
+cancelBtn.addEventListener('click', () => {
+    taskDialog.close();
+});
+
+
+
+function animateProgressBars() {
+    const statuses = ['todo', 'pending', 'done'];
+    const total = statuses.reduce((sum, status) => sum + parseInt(document.getElementById(`${status}Count`).textContent), 0);
+
+    statuses.forEach(status => {
+        const count = parseInt(document.getElementById(`${status}Count`).textContent);
+        const percentage = (count / total) * 100;
+        document.getElementById(`${status}Progress`).style.width = `${percentage}%`;
+    });
+}
+
+
+animateProgressBars();
+
+
+function showNotification(message) {
+    const notificationText = document.getElementById('notificationText');
+    notificationText.textContent = message;
+    notificationDiv.classList.remove('hidden');
+    notificationBadge.classList.remove('hidden');
+};
+
+ function check_task_due_date() {
     const task_name = document.querySelectorAll(".todo_task_name"); 
 
     task_name.forEach((taskElement) => {
@@ -211,7 +263,7 @@ function check_task_due_date() {
 
 
 
-export async function check_due_date( dueDate  , taskName) {
+ async function check_due_date( dueDate  , taskName) {
     const notification_text = document.querySelector(".notification-text");
     const previous_notification_text = notification_text.textContent;
 
