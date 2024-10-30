@@ -1,3 +1,4 @@
 # Ignore ejs files in views directory
 views/**/dashboard.ejs
 views/**/index.ejs
+views/**/login.ejs
