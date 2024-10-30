@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
-  "scripts": {
-    "build:css": "tailwindcss -i ./public/css/styles.css -o ./public/css/tailwind.css --watch",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
-  },
+
+
+"scripts": {
+  "build": "npm i", 
+  "css": "tailwindcss -i ./public/css/styles.css -o ./public/css/tailwind.css --watch",
+  "start": "node app.js"
+},
+
   "keywords": [],
-  "author": "",
+  "author": "Mythsoul",
   "license": "ISC",
   "description": "",
   "dependencies": {

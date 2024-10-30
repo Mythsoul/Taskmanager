@@ -4,7 +4,7 @@ import { render_task , generateTaskSuggestions } from "../models/Task.js";
 
 export const render_homepage = async(req ,res)=>{ 
         const funfact = await fetchFunFact(); 
-        res.render("index" , {funfact : funfact});
+        res.render("index.ejs" , {funfact : funfact});
     }
 
 export const render_dashboard = async(req , res)=>{ 

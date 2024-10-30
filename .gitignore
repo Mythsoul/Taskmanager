@@ -90,3 +90,5 @@ docs/
 #ignore tailwind css file 
 tailwind.css
 
+
+.vercel
