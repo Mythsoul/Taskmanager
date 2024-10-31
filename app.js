@@ -18,6 +18,7 @@ import {
 import { fetchFunFact } from "./src/models/fun.js";
 import connectPgSimple from "connect-pg-simple";
 import { render_homepage , render_dashboard} from "./src/routes/userRoutes.js";
+import { add_report } from "./src/models/quick-action.js";
 const app = express();
 const port = 3000;
 
@@ -84,6 +85,9 @@ app.post("/update-task-status", checkAuthenticated,  update_task_status);
 app.get("/api/user-tasks" , checkAuthenticated ,  api_render_tasks);
 app.get("/user-tasks", checkAuthenticated , render_tasks_page)
 app.post("/delete-task", checkAuthenticated,  delete_task);
+
+app.post("/createreport" , checkAuthenticated , add_report);
+
 // app.get("/test" , checkAuthenticated , async(req, res) => {
 //   const user = req.user;
 //    try{
