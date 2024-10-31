@@ -1,228 +1,88 @@
-/* Base responsive styles */
-.content {
-  width: 100%;
-  transition: all 0.3s ease;
+:root {
+  --bg-dark: #121212;
+  --bg-light: #ffffff;
+  --text-dark: #ffffff;
+  --text-light: #000000;
+  --box-dark: #1e1e1e;
+  --box-light: #f0f0f0;
+  --box-hover-dark: #2a2a2a;
+  --box-hover-light: #e0e0e0;
 }
 
-/* Task card responsiveness */
-.task_div {
-  gap: 0.75rem;
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-dark);
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.task_div p {
-  word-break: break-word;
-  max-width: 100%;
+body.light-mode {
+  background-color: var(--bg-light);
+  color: var(--text-light);
 }
 
-/* Performance metrics responsiveness */
-.performance-metrics-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+.box {
+  background-color: var(--box-dark);
+  transition: background-color 0.3s;
 }
 
-/* Quick actions grid responsiveness */
-.quick-actions-grid {
-  display: grid;
-  gap: 0.5rem;
+body.light-mode .box {
+  background-color: var(--box-light);
 }
 
-/* Dialog responsiveness */
-#taskDialog {
-  max-width: 95vw;
-  margin: 1rem auto;
+.box:hover {
+  background-color: var(--box-hover-dark);
 }
 
-/* Notification and Fun Fact sidebar responsiveness */
-#notificationDiv,
-#funFactSidebar {
-  max-width: calc(100vw - 2rem);
-  margin: 0 1rem;
+body.light-mode .box:hover {
+  background-color: var(--box-hover-light);
 }
 
-/* Mobile First Media Queries */
-@media (max-width: 640px) {
-  .task_div {
-    padding: 1rem;
-  }
-
-  .task_div .flex {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .quick-actions button {
-    padding: 0.75rem;
-    font-size: 0.875rem;
-  }
-
-  #performanceChart {
-    height: 200px;
-  }
-  .user-profile {
-    width: 40px;
-    height: 40px;
-  }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-/* Small devices (640px and up) */
-@media (min-width: 640px) {
-  .task_div {
-    align-items: center;
-  }
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
 
-  #notificationDiv,
-  #funFactSidebar {
-    max-width: 420px;
-    right: 1rem;
-  }
-  .user-profile {
-    width: 50px;
-    height: 50px;
+.animate-fadeIn { animation: fadeIn 0.5s ease-out; }
+.animate-slideIn { animation: slideIn 0.5s ease-out; }
+
+.hover-scale { transition: transform 0.3s ease-in-out; }
+.hover-scale:hover { transform: scale(1.05); }
+
+.hover-rotate { transition: transform 0.3s ease-in-out; }
+.hover-rotate:hover { transform: rotate(15deg); }
+
+#notificationDiv, #funFactSidebar {
+  transition: right 0.5s ease, opacity 0.5s ease;
+}
+
+@media only screen and (min-width: 768px) {
+  #notificationDiv, #funFactSidebar {
+      width: 400px;
   }
 }
 
-/* Medium devices (768px and up) */
-@media (min-width: 768px) {
-  .content {
-    padding: 2rem;
-  }
-
-  .task-columns {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-  }
-
-  #taskDialog {
-    max-width: 500px;
-  }
-  .user-profile {
-    width: 60px;
-    height: 60px;
-  }
-}
-
-/* Large devices (1024px and up) */
-@media (min-width: 1024px) {
-  .content {
-    padding: 2rem 4rem;
-  }
-
-  .task-columns {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  #notificationDiv,
-  #funFactSidebar {
-    max-width: 480px;
-    right: 2rem;
-  }
-}
-
-/* Extra large devices (1280px and up) */
-@media (min-width: 1280px) {
-  .content {
-    max-width: 1280px;
-    margin: 0 auto;
-  }
-}
-
-/* Dark mode specific adjustments */
-@media (prefers-color-scheme: dark) {
-  .task_div {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-}
-
-/* Animation adjustments for mobile */
-@media (max-width: 640px) {
-  .animate-slideIn {
-    animation-duration: 0.3s;
-  }
-
-  .hover-scale:hover {
-    transform: scale(1.02);
-  }
-}
-
-/* Print media query for better printing */
-@media print {
-  .hover-scale,
-  .hover-rotate {
-    transform: none !important;
-  }
-
-  .animate-fadeIn,
-  .animate-slideIn {
-    animation: none !important;
-  }
-
-  #notificationDiv,
-  #funFactSidebar,
-  #taskDialog {
-    display: none !important;
-  }
-}
-
-/* Accessibility improvements */
-@media (prefers-reduced-motion: reduce) {
-  .animate-fadeIn,
-  .animate-slideIn,
-  .hover-scale,
-  .hover-rotate {
-    animation: none !important;
-    transition: none !important;
-    transform: none !important;
-  }
-}
-
-/* Custom scrollbar for task columns */
-.task-column {
-  max-height: calc(100vh - 300px);
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
-}
-
-.task-column::-webkit-scrollbar {
-  width: 6px;
-}
-
-.task-column::-webkit-scrollbar-track {
+.close-btn {
+  cursor: pointer;
+  font-weight: bold;
+  border: none;
   background: transparent;
+  font-size: 16px;
 }
 
-.task-column::-webkit-scrollbar-thumb {
-  background-color: rgba(156, 163, 175, 0.5);
-  border-radius: 3px;
+.user-profile {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
 }
 
-/* Responsive form elements */
 @media (max-width: 640px) {
-  input,
-  select,
-  textarea {
-    font-size: 16px !important; /* Prevents zoom on iOS */
-  }
-
-  .form-buttons {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .form-buttons button {
-    width: 100%;
-  }
-}
-
-/* Better touch targets for mobile */
-@media (max-width: 640px) {
-  button,
-  .status-btn,
-  .delete-task-btn {
-    min-height: 44px;
-    min-width: 44px;
-    padding: 0.5rem;
+  .user-profile {
+      width: 24px;
+      height: 24px;
   }
 }
