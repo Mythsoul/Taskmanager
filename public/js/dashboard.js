@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const notificationText = document.getElementById("notificationText");
     const notificationBadge = document.getElementById("notificationBadge");
     const notificationCloseBtn = document.getElementById("notification-close-btn");
+    const reportForm = document.getElementById("report_form");  // Moved inside DOMContentLoaded
+
     let notifications = [];
 
     // Notification button functionality
@@ -23,22 +25,18 @@ document.addEventListener("DOMContentLoaded", () => {
         notificationDiv.classList.add("hidden");
     });
 
-    // Add a notification
-   // Add a notification
-function addNotification(message) {
-    const previousNotification = notificationText.textContent; // Get previous notifications
-    console.log("previous notification: " + previousNotification); // Log previous notifications
+    function addNotification(message) {
+        const previousNotification = notificationText.textContent; 
+        console.log("previous notification: " + previousNotification); 
 
-    // Check if there is a previous notification and append the new message
-    if (previousNotification) {
-        notificationText.textContent = `${previousNotification}\n${message}`;
-    } else {
-        notificationText.textContent = message; // If no previous notifications, set the current message
+        if (previousNotification) {
+            notificationText.textContent = `${previousNotification}\n${message}`;
+        } else {
+            notificationText.textContent = message;
+        }
+        
+        notificationBadge.classList.remove("hidden");
     }
-    
-    notificationBadge.classList.remove("hidden"); // Show notification badge
-}
-
 
     // Fun fact functionality
     funFactCloseBtn.addEventListener('click', () => {
@@ -51,6 +49,17 @@ function addNotification(message) {
 
     cancelBtn.addEventListener("click", () => {
         dialog.close();
+    });
+
+    const report_dialog = document.getElementById("add_report_dialog");
+    const add_report_btn = document.getElementById('add_report_btn');
+    const close_report_dialog = document.getElementById('close_report_dialog');
+
+    add_report_btn.addEventListener('click', () => {
+        report_dialog.showModal();
+    });
+    close_report_dialog.addEventListener('click', () => {
+        report_dialog.close();
     });
 
     const addTask = async (e) => {
@@ -185,7 +194,6 @@ function addNotification(message) {
     requestNotificationPermission();
 
     function showNotification(message) {
-        
         notificationText.textContent = message;
         notificationDiv.classList.remove('hidden');
         notificationBadge.classList.remove('hidden');
@@ -193,22 +201,19 @@ function addNotification(message) {
 
     async function checkTaskDueDate() {
         const tasks = document.querySelectorAll(".todo_task_name");
-        const currentDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
-       
-            const taskName = tasks.innerText.trim();
-            
-            const dueDate = tasks.getAttribute("data-due-date");
+        tasks.forEach((task) => {
+            const taskName = task.innerText.trim();
+            const dueDate = task.getAttribute("data-due-date");
             checkDueDate(dueDate, taskName);
-  
+        });
     }
 
     async function checkDueDate(dueDate, taskName) {
-        console.log(taskName);
         const currentDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
         if (currentDate === dueDate) {
-            showNotification( `Today is the due date for task: ${taskName}`);
+            showNotification(`Today is the due date for task: ${taskName}`);
             new Notification("Task Reminder", {
                 body: `Time to complete your task: ${taskName}`,
             });
@@ -216,24 +221,39 @@ function addNotification(message) {
     }
 
     checkTaskDueDate();
+
+    async function createReport(event) {
+        event.preventDefault(); 
+        
+        const reportName = document.getElementById("report_name").value.trim();
+        const reportDescription = document.getElementById("report_description").value.trim();
+        console.log("report name : " , reportName + "\n" + "report description : " + reportDescription);
+
+        if (!reportName || !reportDescription) {
+            alert("Report name and description are required.");
+            return;
+        }
+
+        try {
+            const response = await fetch("/createreport", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ report_name: reportName, report_description: reportDescription }),
+            });
+
+            if (response.ok) {
+                const message = await response.json();
+                alert(message.messsage);
+            }else{ 
+                const error = await response.json();
+                alert(`Failed to create report: ${error.message}`);
+            }
+        } catch (error) {
+            console.error("Error creating report:", error);
+        }
+    }
+
+    reportForm.addEventListener("submit", createReport);
 });
-
-function animateProgressBars() {
-    const statuses = ['todo', 'pending', 'done'];
-    const totalElement = document.getElementById(`totalCount-${statuses[0]}`);
-  
-    if (!totalElement) return; // Exit if the element doesn't exist
-
-    const total = parseInt(totalElement.textContent) || 0;
-
-    statuses.forEach(status => {
-        const countElement = document.getElementById(`${status}Count`);
-        if (!countElement) return; // Exit if the element doesn't exist
-
-        const count = parseInt(countElement.textContent) || 0;
-        const percentage = total > 0 ? (count / total) * 100 : 0;
-        document.getElementById(`${status}Progress`).style.width = `${percentage}%`;
-    });
-}
-
-animateProgressBars();
