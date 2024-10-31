@@ -34,3 +34,10 @@ ALTER TABLE "sessions" ADD CONSTRAINT "sessions_pkey" PRIMARY KEY ("sid") NOT DE
 CREATE INDEX "IDX_session_expire" ON "sessions" ("expire");
 
 -- u can find this in connectpg simple / tables.sql file 
+
+create table reports (
+    id serial primary key, 
+    user_id varchar(255) not null, 
+    report_title varchar(255) not null, 
+    report_description text not null 
+)
