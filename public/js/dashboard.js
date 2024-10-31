@@ -256,4 +256,57 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     reportForm.addEventListener("submit", createReport);
+   
+    async function scheduleMeeting(event) {
+        
+        const scheduleMeetingDialog = document.getElementById("scheduleMeetingDialog");
+        const scheduleMeetingBtn = document.getElementById("scheduleMeetingBtn");
+        const scheduleMeetingForm = document.getElementById("scheduleMeetingForm");
+        const cancelBtn = document.getElementById("cancelBtn");
+    
+        scheduleMeetingBtn.addEventListener("click", () => {
+            scheduleMeetingDialog.showModal();
+        });
+    
+        cancelBtn.addEventListener("click", () => {
+            scheduleMeetingDialog.close();
+        });
+    
+        scheduleMeetingForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+    
+            const meetingTitle = document.getElementById("meetingTitle").value;
+            const meetingDate = document.getElementById("meetingDate").value;
+            const meetingTime = document.getElementById("meetingTime").value;
+            const participants = document.getElementById("participants").value;
+    
+            try {
+                const response = await fetch("/scheduleMeeting", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        title: meetingTitle,
+                        date: meetingDate,
+                        time: meetingTime,
+                        participants: participants.split(",").map(email => email.trim()),
+                    }),
+                });
+    
+                if (response.ok) {
+                    alert("Meeting scheduled successfully!");
+                    scheduleMeetingDialog.close();
+                } else {
+                    const error = await response.json();
+                    alert(`Failed to schedule meeting: ${error.message}`);
+                }
+            } catch (error) {
+                console.error("Error scheduling meeting:", error);
+                alert("An error occurred while scheduling the meeting.");
+            }
+        });
+    }
+
+scheduleMeeting(event);
 });

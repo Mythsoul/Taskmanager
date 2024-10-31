@@ -18,7 +18,7 @@ import {
 import { fetchFunFact } from "./src/models/fun.js";
 import connectPgSimple from "connect-pg-simple";
 import { render_homepage , render_dashboard} from "./src/routes/userRoutes.js";
-import { add_report } from "./src/models/quick-action.js";
+import { add_report , scheduleMeeting } from "./src/models/quick-action.js";
 const app = express();
 const port = 3000;
 
@@ -87,6 +87,8 @@ app.get("/user-tasks", checkAuthenticated , render_tasks_page)
 app.post("/delete-task", checkAuthenticated,  delete_task);
 
 app.post("/createreport" , checkAuthenticated , add_report);
+
+app.post("/scheduleMeeting" , checkAuthenticated , scheduleMeeting);
 
 // app.get("/test" , checkAuthenticated , async(req, res) => {
 //   const user = req.user;

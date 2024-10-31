@@ -85,7 +85,7 @@
                         <i class="fas fa-file-alt mr-1 sm:mr-2"></i>
                         <span id="add_report_btn" class="text-xs sm:text-sm">Create Report</span>
                     </button>
-                    <button class="px-2 py-1 sm:px-4 sm:py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-green-500 hover-scale">
+                    <button id="scheduleMeetingBtn" class="px-2 py-1 sm:px-4 sm:py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-green-500 hover-scale">
                         <i class="fas fa-calendar-alt mr-1 sm:mr-2"></i>
                         <span class="text-xs sm:text-sm">Schedule Meeting</span>
                     </button>
@@ -117,6 +117,31 @@
                     <div class="flex justify-end">
                         <button id="close_report_dialog" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 mr-3">Cancel</button>
                         <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">Submit</button>
+                    </div>
+                </form>
+            </dialog>
+
+            <dialog id="scheduleMeetingDialog" class="bg-gray-800 text-white rounded-lg shadow-lg p-6">
+                <form id="scheduleMeetingForm" method="dialog" class="space-y-4">
+                    <div class="flex flex-col">
+                        <label for="meetingTitle" class="text-sm font-bold mb-1">Meeting Title:</label>
+                        <input type="text" id="meetingTitle" required class="border rounded-lg p-2 w-full bg-gray-900 text-white" />
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="meetingDate" class="text-sm font-bold mb-1">Date:</label>
+                        <input type="date" id="meetingDate" required class="border rounded-lg p-2 w-full bg-gray-900 text-white" />
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="meetingTime" class="text-sm font-bold mb-1">Time:</label>
+                        <input type="time" id="meetingTime" required class="border rounded-lg p-2 w-full bg-gray-900 text-white" />
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="participants" class="text-sm font-bold mb-1">Participants:</label>
+                        <input type="text" id="participants" placeholder="Comma-separated emails" required class="border rounded-lg p-2 w-full bg-gray-900 text-white" />
+                    </div>
+                    <div class="flex justify-end">
+                        <button id="cancelBtn" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 mr-3">Cancel</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">Schedule</button>
                     </div>
                 </form>
             </dialog>
