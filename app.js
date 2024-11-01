@@ -6,15 +6,15 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { database } from "./src/config/db.js";
 import { fileURLToPath } from "url";
-import session from "express-session";
+import session from "express-session" ; 
 import { fetchFunFact } from "./src/models/fun.js";
 import connectPgSimple from "connect-pg-simple";
 import { render_homepage , render_dashboard} from "./src/routes/userRoutes.js";
 import { add_report , scheduleMeeting } from "./src/models/quick-action.js";
-
 import authRoutes from "./src/routes/authRoutes.js";
-import { add_task, delete_task, update_task_status,  api_render_tasks  ,render_tasks_page } from "./src/models/Task.js";
-// import taskRoutes from "./src/routes/taskRoutes.js";
+import taskRoutes from "./src/routes/taskRoutes.js";
+import { ensureAuthenticated } from "./src/middlewares/authMiddleware.js";
+
 const app = express();
 const port = 3000;
 
@@ -44,53 +44,31 @@ const PgSession = connectPgSimple(session);
 }catch(err){console.log(err);}
 
 
+// Passport Stuff : 
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.set("view engine", "ejs");
 
-function checkAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect("/login");
-}
 
+// User Routes : 
 app.get("/", render_homepage);
+app.get("/dashboard", ensureAuthenticated,  render_dashboard);
+
+// Task Routes :
+app.use(taskRoutes);
+
+// Auth Routes :
 app.use(authRoutes);
-app.get("/dashboard", checkAuthenticated, render_dashboard);
 
-  
+// Quick Action Routes : 
 
-app.post("/add-task", checkAuthenticated ,  add_task);
+app.post("/createreport" , ensureAuthenticated , add_report);
 
-app.post("/update-task-status", checkAuthenticated,  update_task_status);
+app.post("/scheduleMeeting" , ensureAuthenticated , scheduleMeeting);
 
-app.get("/api/user-tasks" , checkAuthenticated ,  api_render_tasks);
-app.get("/user-tasks", checkAuthenticated , render_tasks_page)
-app.post("/delete-task", checkAuthenticated,  delete_task);
 
-app.post("/createreport" , checkAuthenticated , add_report);
-
-app.post("/scheduleMeeting" , checkAuthenticated , scheduleMeeting);
-
-// app.get("/test" , checkAuthenticated , async(req, res) => {
-//   const user = req.user;
-//    try{
-//     const tasks = await render_task(user.id);
-    
-//     const tasks_suggestions = await generateTaskSuggestions(user.id); 
-//     res.render("testui", {
-//       user: user,
-//       tasks: tasks,
-//       tasks_suggestions: tasks_suggestions
-//     });
-//   } catch (err) {
-//     console.error("Error loading dashboard:", err);
-//     res.status(500).send("Failed to load dashboard");
-//   }
-// })
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
