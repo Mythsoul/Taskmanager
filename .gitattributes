@@ -1,3 +1,4 @@
 # Ignore ejs files in views directory
-src/views/dashboard.ejs linguist-vendored
-src/views/index.ejs linguist-vendored
+views/dashboard.ejs linguist-vendored
+views/index.ejs linguist-vendored
+ 
