@@ -102,7 +102,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         dialog.close();
     };
-
     taskForm.addEventListener("submit", addTask);
 
     statusBtns.forEach((statusBtn) => {
