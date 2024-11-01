@@ -8,7 +8,7 @@
 "scripts": {
   "build": "npm i", 
   "css": "tailwindcss -i ./public/css/styles.css -o ./public/css/tailwind.css --watch",
-  "start": "node app.js"
+  "start": "nodemon app.js"
 },
 
   "keywords": [],

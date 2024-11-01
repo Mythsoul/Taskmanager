@@ -7,18 +7,14 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { database } from "./src/config/db.js";
 import { fileURLToPath } from "url";
 import session from "express-session";
-import { add_task, delete_task, update_task_status, render_task , api_render_tasks  ,render_tasks_page , generateTaskSuggestions} from "./src/models/Task.js";
-import {
-  renderlogin,
-  renderregister,
-  google_auth,
-  google_callback,
-  renderlogout,
-} from "./src/routes/authRoutes.js";
 import { fetchFunFact } from "./src/models/fun.js";
 import connectPgSimple from "connect-pg-simple";
 import { render_homepage , render_dashboard} from "./src/routes/userRoutes.js";
 import { add_report , scheduleMeeting } from "./src/models/quick-action.js";
+
+import authRoutes from "./src/routes/authRoutes.js";
+import { add_task, delete_task, update_task_status,  api_render_tasks  ,render_tasks_page } from "./src/models/Task.js";
+// import taskRoutes from "./src/routes/taskRoutes.js";
 const app = express();
 const port = 3000;
 
@@ -62,19 +58,8 @@ function checkAuthenticated(req, res, next) {
 }
 
 app.get("/", render_homepage);
-
-app.get("/login", renderlogin);
-
-app.get("/register", renderregister);
-
-app.get("/auth/google", google_auth);
-
-app.get(
-  "/auth/google/dashboard", google_callback)
-
+app.use(authRoutes);
 app.get("/dashboard", checkAuthenticated, render_dashboard);
-app.route('/logout')
-    .get (renderlogout)
 
   
 
