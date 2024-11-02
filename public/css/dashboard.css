@@ -1,40 +1,26 @@
-:root {
-  --bg-dark: #121212;
-  --bg-light: #ffffff;
-  --text-dark: #ffffff;
-  --text-light: #000000;
-  --box-dark: #1e1e1e;
-  --box-light: #f0f0f0;
-  --box-hover-dark: #2a2a2a;
-  --box-hover-light: #e0e0e0;
+/* Add these custom styles to your existing CSS */
+.hover-scale {
+  transition: transform 0.3s ease;
 }
 
-body {
-  background-color: var(--bg-dark);
-  color: var(--text-dark);
-  transition: background-color 0.3s, color 0.3s;
+.hover-scale:hover {
+  transform: scale(1.1);
 }
 
-body.light-mode {
-  background-color: var(--bg-light);
-  color: var(--text-light);
+.hover-rotate {
+  transition: transform 0.3s ease;
 }
 
-.box {
-  background-color: var(--box-dark);
-  transition: background-color 0.3s;
+.hover-rotate:hover {
+  transform: rotate(15deg);
 }
 
-body.light-mode .box {
-  background-color: var(--box-light);
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in-out;
 }
 
-.box:hover {
-  background-color: var(--box-hover-dark);
-}
-
-body.light-mode .box:hover {
-  background-color: var(--box-hover-light);
+.animate-slideIn {
+  animation: slideIn 0.5s ease-in-out;
 }
 
 @keyframes fadeIn {
@@ -47,42 +33,4 @@ body.light-mode .box:hover {
   to { transform: translateY(0); opacity: 1; }
 }
 
-.animate-fadeIn { animation: fadeIn 0.5s ease-out; }
-.animate-slideIn { animation: slideIn 0.5s ease-out; }
-
-.hover-scale { transition: transform 0.3s ease-in-out; }
-.hover-scale:hover { transform: scale(1.05); }
-
-.hover-rotate { transition: transform 0.3s ease-in-out; }
-.hover-rotate:hover { transform: rotate(15deg); }
-
-#notificationDiv, #funFactSidebar {
-  transition: right 0.5s ease, opacity 0.5s ease;
-}
-
-@media only screen and (min-width: 768px) {
-  #notificationDiv, #funFactSidebar {
-      width: 400px;
-  }
-}
-
-.close-btn {
-  cursor: pointer;
-  font-weight: bold;
-  border: none;
-  background: transparent;
-  font-size: 16px;
-}
-
-.user-profile {
-  width: 32px;
-  height: 32px;
-  object-fit: cover;
-}
-
-@media (max-width: 640px) {
-  .user-profile {
-      width: 24px;
-      height: 24px;
-  }
-}
+/* Add more custom styles as needed */

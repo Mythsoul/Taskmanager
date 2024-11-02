@@ -38,9 +38,10 @@ CREATE INDEX "IDX_session_expire" ON "sessions" ("expire");
 --  reports table quer
 create table reports (
     id serial primary key, 
+    report_id SERIAL UNIQUE NOT NULL,
     user_id varchar(255) not null, 
     report_title varchar(255) not null, 
-    report_description text not null 
+    report_description text not null
 )
 
 --schedule_meeting table query 
@@ -54,4 +55,6 @@ CREATE TABLE schedule_meetings (
     participants TEXT[] NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
 

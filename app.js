@@ -9,12 +9,12 @@ import { fileURLToPath } from "url";
 import session from "express-session" ; 
 import { fetchFunFact } from "./src/models/fun.js";
 import connectPgSimple from "connect-pg-simple";
-import { render_homepage , render_dashboard} from "./src/routes/userRoutes.js";
+import userRoutes from "./src/routes/userRoutes.js";
 import { add_report , scheduleMeeting } from "./src/models/quick-action.js";
 import authRoutes from "./src/routes/authRoutes.js";
 import taskRoutes from "./src/routes/taskRoutes.js";
 import { ensureAuthenticated } from "./src/middlewares/authMiddleware.js";
-
+import reportRoutes from "./src/routes/reportRoutes.js";
 const app = express();
 const port = 3000;
 
@@ -49,22 +49,22 @@ const PgSession = connectPgSimple(session);
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 app.set("view engine", "ejs");
 
 
-// User Routes : 
-app.get("/", render_homepage);
-app.get("/dashboard", ensureAuthenticated,  render_dashboard);
+// User Routes :
 
+app.use(userRoutes);
 // Task Routes :
 app.use(taskRoutes);
 
 // Auth Routes :
 app.use(authRoutes);
 
-// Quick Action Routes : 
+// Report routes 
 
-app.post("/createreport" , ensureAuthenticated , add_report);
+app.use(reportRoutes);
 
 app.post("/scheduleMeeting" , ensureAuthenticated , scheduleMeeting);
 

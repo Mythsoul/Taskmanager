@@ -5,13 +5,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const taskForm = document.getElementById("taskForm");
     const statusBtns = document.querySelectorAll(".status-btn");
     const funFactCloseBtn = document.getElementById('funfact-close-btn');
-    const funFactSidebar = document.getElementById('funFactSidebar');
+    const funFactSidebar = document.getElementById('funFactPopup');
     const notificationBtn = document.getElementById("notificationBtn");
     const notificationDiv = document.getElementById("notificationDiv");
     const notificationText = document.getElementById("notificationText");
-    const notificationBadge = document.getElementById("notificationBadge");
+    // const notificationBadge = document.getElementById("notificationBadge");
     const notificationCloseBtn = document.getElementById("notification-close-btn");
     const reportForm = document.getElementById("report_form");  // Moved inside DOMContentLoaded
+   
+    const report_dialog = document.getElementById("add_report_dialog");
+    const add_report_btn = document.getElementById('add_report_btn');
+    const close_report_dialog = document.getElementById('close_report_dialog');
+    const userMenuBtn = document.getElementById('userMenuBtn');
+    const userMenu = document.getElementById('userMenu');
+   
+   
+    userMenuBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        userMenu.classList.toggle('hidden');
+    });
+
 
     let notifications = [];
 
@@ -35,8 +48,21 @@ document.addEventListener("DOMContentLoaded", () => {
             notificationText.textContent = message;
         }
         
-        notificationBadge.classList.remove("hidden");
     }
+    async function showFunFact() {
+        document.addEventListener("DOMContentLoaded", () => {
+            const funFactCloseBtn = document.getElementById('funfact-close-btn');
+            const funFactSidebar = document.getElementById('funFactPopup');
+            funFactSidebar.classList.remove('hidden');
+            setTimeout(() => {
+                funFactSidebar.classList.add('hidden');
+            }, 5000);
+        })
+       
+        
+    } 
+
+    showFunFact(); 
 
     // Fun fact functionality
     funFactCloseBtn.addEventListener('click', () => {
@@ -50,10 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
     cancelBtn.addEventListener("click", () => {
         dialog.close();
     });
-
-    const report_dialog = document.getElementById("add_report_dialog");
-    const add_report_btn = document.getElementById('add_report_btn');
-    const close_report_dialog = document.getElementById('close_report_dialog');
 
     add_report_btn.addEventListener('click', () => {
         report_dialog.showModal();
@@ -180,17 +202,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
     deleteTasks();
 
-    function requestNotificationPermission() {
-        Notification.requestPermission().then((result) => {
-            if (result === "granted") {
-                console.log("Notification permission granted");
-            } else if (result === "denied") {
-                alert("You've blocked notifications. Please enable them in your browser settings to receive task reminders.");
-            }
-        });
-    }
 
-    requestNotificationPermission();
+
+    
 
     function showNotification(message) {
         notificationText.textContent = message;
@@ -256,6 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     reportForm.addEventListener("submit", createReport);
    
+
     async function scheduleMeeting(event) {
         
         const scheduleMeetingDialog = document.getElementById("scheduleMeetingDialog");
@@ -308,4 +323,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 scheduleMeeting(event);
-});
+
+const reportDropdown = document.querySelectorAll(".report-dropdown");
+reportDropdown.forEach((dropdown) => {
+    dropdown.addEventListener("click", () => {
+        const dropdownContent = dropdown.nextElementSibling;
+        if (dropdownContent.classList.contains("hidden")) {
+            dropdownContent.classList.remove("hidden");
+        } else {
+            dropdownContent.classList.add("hidden");
+        }
+    });
+})}); 
