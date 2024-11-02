@@ -66,6 +66,22 @@ export const add_report = async (req, res) => {
 };
 
 export const update_report = async (req , res) => {
+    const user_id = req.user.id;
+   const { report_title, report_description , report_id} = req.body;
+   console.log(req.body);
+    try {
+    const result = await db.query(
+        "UPDATE reports SET report_title = $1, report_description = $2 WHERE report_id = $3 and user_id = $4 RETURNING *",
+        [report_title, report_description, report_id , user_id]
+    );
 
-;
-}
+    if (result.rowCount > 0) {
+        return res.status(200).json({ message: "Report updated successfully." });
+    } else {
+        return res.status(404).json({ message: "Report not found." });
+    }   
+ } catch (err) {    
+    console.error("Error in update_report:", err);  
+    return res.status(500).json({ message: "Internal server error" });
+ }
+}; 

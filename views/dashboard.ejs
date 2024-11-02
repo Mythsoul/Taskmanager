@@ -214,12 +214,12 @@
                     <% reports.forEach((report)=> { %>
                         <div class="report-item mb-2 p-3 bg-gray-100 dark:bg-gray-700 rounded-md space-y-2 ">
                             <button class="report-dropdown  flex justify-between items-center">
-                                <span ><i class="fas fa-file-alt mr-2"></i>
+                                <span >
+                                    <i class="fas fa-file-alt mr-2"></i>
                                     <%= report.report_title %>
                                     <p class="text-xs">View Details..</p>
                                 </span>
-                                
-                                <i class=" ml-8 fa-chevron-down transition-transform duration-300"></i>
+                                <i class=" ml-10 fa-solid fa-caret-down"></i>
                             </button>
                             <div
                                 class="report-dropdown-content hidden mt-2 p-4 bg-gray-100 dark:bg-gray-700 rounded-md">
@@ -228,8 +228,7 @@
                                 </p>
                                 <div class="flex space-x-2">
                                     <button
-                                        class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                        <i class="fas fa-edit mr-1"></i>Edit
+                                        id="update_report" data-report-id="<%= report.report_id %>" class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"> <i class="fas fa-edit mr-1"></i>Edit
                                     </button>
                                     <button
                                         class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500">
@@ -245,7 +244,6 @@
                             </button>
                 </div>
             </div>
-
 
             <div
                 class="animate-slideIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 w-50 transition-all duration-300 ">
@@ -397,7 +395,31 @@
 </div>
     </div>
 
+
+     <dialog id="updateReportDialog" class="bg-gray-800 text-white rounded-lg shadow-lg p-6">
+        <h1 class="text-lg font-semibold mb-3 text-blue-500">Update Report</h1>
+            <form id="updateReportForm" method="dialog" class="space-y-4">
+                <div class="flex flex-col">
+                    <label for="reportTitle" class="text-sm font-bold mb-1">Report Title:</label>
+                    <input type="text" id="updatereportTitle" required
+                        class="border rounded-lg p-2 w-full bg-gray-900 text-white">
+                </div>
+                <div class="flex flex-col">
+                    <label for="reportDescription" class="text-sm font-bold mb-1">Report Description:</label>
+                    <input type="text" id="updatereportDescription" required
+                        class="border rounded-lg p-2 w-full bg-gray-900 text-white">
+                </div>
+                <div class="flex justify-end">
+                    <button id="cancel_report_update"
+                        class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 mr-3">Cancel</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">Update</button>
+                </div>
+            </form>
+        </dialog>
+    
             
+        
 </body>
 
 </html>

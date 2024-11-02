@@ -12,18 +12,23 @@ document.addEventListener("DOMContentLoaded", () => {
     // const notificationBadge = document.getElementById("notificationBadge");
     const notificationCloseBtn = document.getElementById("notification-close-btn");
     const reportForm = document.getElementById("report_form");  // Moved inside DOMContentLoaded
-   
+
     const report_dialog = document.getElementById("add_report_dialog");
     const add_report_btn = document.getElementById('add_report_btn');
     const close_report_dialog = document.getElementById('close_report_dialog');
     const userMenuBtn = document.getElementById('userMenuBtn');
     const userMenu = document.getElementById('userMenu');
-   
-   
+
+    const update_report = document.getElementById("update_report");
+    const update_report_dailog = document.getElementById("updateReportDialog");
+    const cancel_report_update = document.getElementById("cancel_report_update");
+    const report_update_form = document.getElementById("updateReportForm");
+
     userMenuBtn.addEventListener('click', function (e) {
         e.stopPropagation();
         userMenu.classList.toggle('hidden');
     });
+
 
 
     let notifications = [];
@@ -39,15 +44,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function addNotification(message) {
-        const previousNotification = notificationText.textContent; 
-        console.log("previous notification: " + previousNotification); 
+        const previousNotification = notificationText.textContent;
+        console.log("previous notification: " + previousNotification);
 
         if (previousNotification) {
             notificationText.textContent = `${previousNotification}\n${message}`;
         } else {
             notificationText.textContent = message;
         }
-        
+
     }
     async function showFunFact() {
         document.addEventListener("DOMContentLoaded", () => {
@@ -58,11 +63,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 funFactSidebar.classList.add('hidden');
             }, 5000);
         })
-       
-        
-    } 
 
-    showFunFact(); 
+
+    }
+
+    showFunFact();
 
     // Fun fact functionality
     funFactCloseBtn.addEventListener('click', () => {
@@ -166,17 +171,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function deleteTasks() {
         const deleteTaskBtns = document.querySelectorAll('.delete-task-btn');
-    
+
         deleteTaskBtns.forEach((btn) => {
             btn.addEventListener("click", async (event) => {
                 const taskDiv = event.target.closest(".done_div");
                 if (!taskDiv) return;
-    
+
                 const taskNameElement = taskDiv.querySelector("p");
                 if (!taskNameElement) return;
-    
+
                 const taskName = taskNameElement.textContent.trim();
-    
+
                 try {
                     const response = await fetch("/delete-task", {
                         method: "POST",
@@ -185,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         },
                         body: JSON.stringify({ taskName }),
                     });
-    
+
                     if (response.ok) {
                         taskDiv.remove();
                         showNotification(`Deleted task: ${taskName}`);
@@ -199,12 +204,12 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     }
-    
+
     deleteTasks();
 
 
 
-    
+
 
     function showNotification(message) {
         notificationText.textContent = message;
@@ -236,11 +241,11 @@ document.addEventListener("DOMContentLoaded", () => {
     checkTaskDueDate();
 
     async function createReport(event) {
-        event.preventDefault(); 
-        
+        event.preventDefault();
+
         const reportName = document.getElementById("report_name").value.trim();
         const reportDescription = document.getElementById("report_description").value.trim();
-        console.log("report name : " , reportName + "\n" + "report description : " + reportDescription);
+        console.log("report name : ", reportName + "\n" + "report description : " + reportDescription);
 
         if (!reportName || !reportDescription) {
             alert("Report name and description are required.");
@@ -259,7 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (response.ok) {
                 const message = await response.json();
                 alert(message.messsage);
-            }else{ 
+            } else {
                 const error = await response.json();
                 alert(`Failed to create report: ${error.message}`);
             }
@@ -269,31 +274,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     reportForm.addEventListener("submit", createReport);
-   
+
 
     async function scheduleMeeting(event) {
-        
+
         const scheduleMeetingDialog = document.getElementById("scheduleMeetingDialog");
         const scheduleMeetingBtn = document.getElementById("scheduleMeetingBtn");
         const scheduleMeetingForm = document.getElementById("scheduleMeetingForm");
         const cancelBtn = document.getElementById("cancelBtn");
-    
+
         scheduleMeetingBtn.addEventListener("click", () => {
             scheduleMeetingDialog.showModal();
         });
-    
+
         cancelBtn.addEventListener("click", () => {
             scheduleMeetingDialog.close();
         });
-    
+
         scheduleMeetingForm.addEventListener("submit", async (event) => {
             event.preventDefault();
-    
+
             const meetingTitle = document.getElementById("meetingTitle").value;
             const meetingDate = document.getElementById("meetingDate").value;
             const meetingTime = document.getElementById("meetingTime").value;
             const participants = document.getElementById("participants").value;
-    
+
             try {
                 const response = await fetch("/scheduleMeeting", {
                     method: "POST",
@@ -307,7 +312,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         participants: participants.split(",").map(email => email.trim()),
                     }),
                 });
-    
+
                 if (response.ok) {
                     alert("Meeting scheduled successfully!");
                     scheduleMeetingDialog.close();
@@ -322,7 +327,55 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-scheduleMeeting(event);
+    scheduleMeeting(event);
+
+    let report_id = null;  
+
+    
+    update_report.addEventListener("click", (event) => {
+        report_id = event.target.getAttribute("data-report-id"); 
+        update_report_dailog.showModal();
+    });
+
+    
+    cancel_report_update.addEventListener("click", () => {
+        update_report_dailog.close();
+    });
+
+ 
+    report_update_form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const reportTitle = document.getElementById("updatereportTitle").value;
+        const reportDescription = document.getElementById("updatereportDescription").value;
+
+        
+        try {
+            const response = await fetch(`/updatereport`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    report_id,
+                    report_title: reportTitle,
+                    report_description: reportDescription
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert("Report updated successfully");
+                update_report_dailog.close();
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            console.error("Error updating report:", error);
+            alert("Failed to update report");
+        }
+    });
+
+
 
 const reportDropdown = document.querySelectorAll(".report-dropdown");
 reportDropdown.forEach((dropdown) => {
@@ -334,4 +387,6 @@ reportDropdown.forEach((dropdown) => {
             dropdownContent.classList.add("hidden");
         }
     });
+
+
 })}); 
