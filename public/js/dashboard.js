@@ -14,12 +14,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const reportForm = document.getElementById("report_form");  // Moved inside DOMContentLoaded
 
     const report_dialog = document.getElementById("add_report_dialog");
-    const add_report_btn = document.getElementById('add_report_btn');
+    const add_report_btn = document.querySelectorAll('#add_report_btn');
     const close_report_dialog = document.getElementById('close_report_dialog');
     const userMenuBtn = document.getElementById('userMenuBtn');
     const userMenu = document.getElementById('userMenu');
 
-    const update_report = document.getElementById("update_report");
+    const update_report = document.querySelectorAll("#update_report");
     const update_report_dailog = document.getElementById("updateReportDialog");
     const cancel_report_update = document.getElementById("cancel_report_update");
     const report_update_form = document.getElementById("updateReportForm");
@@ -82,9 +82,9 @@ document.addEventListener("DOMContentLoaded", () => {
         dialog.close();
     });
 
-    add_report_btn.addEventListener('click', () => {
+    add_report_btn.forEach(btn => btn.addEventListener('click', () => {
         report_dialog.showModal();
-    });
+    }));
     close_report_dialog.addEventListener('click', () => {
         report_dialog.close();
     });
@@ -332,10 +332,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let report_id = null;  
 
     
-    update_report.addEventListener("click", (event) => {
+    update_report.forEach((btn) => btn.addEventListener("click", (event) => {
         report_id = event.target.getAttribute("data-report-id"); 
         update_report_dailog.showModal();
-    });
+    }));
 
     
     cancel_report_update.addEventListener("click", () => {
