@@ -28,7 +28,64 @@ document.addEventListener("DOMContentLoaded", () => {
         e.stopPropagation();
         userMenu.classList.toggle('hidden');
     });
+    const add_feedback_btn = document.getElementById('add_feedback_btn');
+    const feedbackDialog = document.getElementById('sendfeedbackDialog');
+    const feedbackForm = document.getElementById('feedbackForm');
+    const sendFeedbackBtn = document.getElementById('sendFeedbackBtn');
+    const closeFeedbackDialog = document.getElementById('closeFeedbackDialog');
+    add_feedback_btn.addEventListener('click', () => {
+        feedbackDialog.showModal();
+    })
+    feedbackForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const feedback = document.getElementById('feedback').value;
+        const feedbackemail = document.getElementById('feedbackemail').value;
+        const webhookURL = 'https://discord.com/api/webhooks/1302446050908569642/RXlloCNNDn70Css7DqwpF7ic7-NXhY1OoeYgVEaEeRcw0YMCUk6zmWOKub_vwZ9y5oWT';
+        console.log("Feedback: " + feedback + " Email: " + feedbackemail);
+        const embed = {
+            title: "New Message Received",
+            color: 0x0099ff,
+            fields: [
+                {
+                    name: "Message",
+                    value: feedback,
+                    inline: true
+                } , 
+                { 
+                    name : "Email",
+                    value : feedbackemail || 'No email provided', 
+                    inline : false
+                }
+            ]
+        };
 
+        const requestData = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ embeds: [embed] })
+        };
+
+        fetch(webhookURL, requestData)
+            .then(response => {
+                if (response.ok) {
+                    console.log('Message sent successfully');
+                    alert('Message has been sent! Please expect a reply on your email soon!');
+                    feedbackDialog.close();
+                } else {
+                    console.error('Failed to send message');
+                    alert('Failed to send message. Developers have been informed!');
+                }
+            })
+            .catch(error => {
+                console.error('Error sending message:', error);
+                alert('Failed to send message. Please try again later.');
+            });
+    });
+    closeFeedbackDialog.addEventListener('click', () => {
+        feedbackDialog.close();
+    });
 
 
     let notifications = [];
@@ -143,6 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     async function updateTaskStatus(taskName, status) {
+        console.log(`Updating task status of : ${taskName} to ${status} `);
         try {
             const response = await fetch("/update-task-status", {
                 method: "POST",
@@ -279,13 +337,13 @@ document.addEventListener("DOMContentLoaded", () => {
     async function scheduleMeeting(event) {
 
         const scheduleMeetingDialog = document.getElementById("scheduleMeetingDialog");
-        const scheduleMeetingBtn = document.getElementById("scheduleMeetingBtn");
+        const scheduleMeetingBtn = document.querySelectorAll("#scheduleMeetingBtn");
         const scheduleMeetingForm = document.getElementById("scheduleMeetingForm");
         const cancelBtn = document.getElementById("cancelBtn");
 
-        scheduleMeetingBtn.addEventListener("click", () => {
+        scheduleMeetingBtn.forEach(btn => btn.addEventListener("click", () => {
             scheduleMeetingDialog.showModal();
-        });
+        }));
 
         cancelBtn.addEventListener("click", () => {
             scheduleMeetingDialog.close();
