@@ -33,4 +33,9 @@
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* Add more custom styles as needed */
+
+
+.dashboard-content {
+  margin-left: 250px; 
+  padding: 20px;
+}

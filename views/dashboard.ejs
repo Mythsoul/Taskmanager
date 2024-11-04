@@ -8,82 +8,70 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/dashboard.css">
-    <script src="/js/dashboard.js"></script>
+    <script src="/js/dashboard.js" defer></script>
 </head>
 
 <body class="min-h-screen transition-colors text-gray-800 dark:text-gray-100 bg-gray-100 dark:bg-gray-900">
-    <div class="content p-4 max-w-7xl mx-auto md:ml-[100px]">
-        <div
-            class="mb-6 animate-fadeIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300">
-            <div class="flex flex-col sm:flex-row items-center justify-between">
-                <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">Management Dashboard</h1>
+<%-include('partials/sidebar.ejs')%>
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-10"></div>
+
+    <div id="content" class="content p-4 max-w-7xl mx-auto transition-all duration-300">
+        <!-- Main Dashboard Header -->
+        <header class="mb-6 animate-fadeIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition duration-300">
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl sm:text-3xl font-bold">Management Dashboard</h1>
                 <div class="flex items-center space-x-4">
-                    <button id="notificationBtn"
-                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors relative hover-scale">
+                    <button id="notificationBtn" class="relative p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-transform hover:scale-105">
                         <i class="fas fa-bell text-gray-600 dark:text-gray-300"></i>
-                        <span id="notificationBadge"
-                            class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500 animate-pulse hidden"></span>
+                        <span id="notificationBadge" class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500 animate-pulse hidden"></span>
                     </button>
                     <div class="relative">
-                        <button id="userMenuBtn"
-                            class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors hover-scale">
-                            <img src="<%= user ? user.picture : 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>"
-                                alt="User" class="user-profile rounded-full w-10 h-10">
+                        <button id="userMenuBtn" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-transform hover:scale-105">
+                            <img src="<%= user ? user.picture : 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>" alt="User" class="rounded-full w-10 h-10">
                         </button>
-                        <div id="userMenu"
-                            class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 hidden">
-                            <a href="/dashboard"
-                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 hidden">
+                            <a href="/dashboard" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <i class="fas fa-user mr-2"></i>Profile
                             </a>
-                            <a href="/dashboard/settings"
-                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <a href="/dashboard/settings" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <i class="fas fa-cog mr-2"></i>Settings
                             </a>
-                            <a href="/logout"
-                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <i class="fas fa-sign-out-alt mr-2"></i>Logout
                             </a>
                         </div>
                     </div>
-                    <button id="darkModeToggle"
-                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors hover-rotate">
+                    <button id="darkModeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-transform hover:rotate-45">
                         <i class="fas fa-sun text-gray-600 dark:text-gray-300"></i>
                     </button>
                 </div>
             </div>
-        </div>
+        </header>
 
+        <!-- Dashboard Content Section -->
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <div
-                class="animate-slideIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300 hover-scale">
+            <!-- Example of Reusable Card Component -->
+            <div class="box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-transform duration-300 hover:scale-105">
                 <h2 class="text-lg sm:text-xl font-semibold mb-4 flex items-center">
-                    <i class="fas fa-tasks mr-2 text-blue-500"></i>
-                    User overview
+                    <i class="fas fa-tasks mr-2 text-blue-500"></i> User Overview
                 </h2>
                 <div class="space-y-4">
-                    <p><i class="fas fa-clipboard-list mr-2 text-green-500"></i>Todo Tasks: <%= tasks.todo.length %>
-                    </p>
-                    <p><i class="fas fa-file-alt mr-2 text-yellow-500"></i>Reports: <%= reports.length %>
-                    </p>
+                    <p><i class="fas fa-clipboard-list mr-2 text-green-500"></i>Todo Tasks: <%= tasks.todo.length %></p>
+                    <p><i class="fas fa-file-alt mr-2 text-yellow-500"></i>Reports: <%= reports.length %></p>
                     <p><i class="fas fa-users mr-2 text-purple-500"></i>Meetings: 4</p>
                 </div>
             </div>
 
-            <div
-                class="animate-slideIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300 hover-scale">
+            <!-- Performance Metrics Card -->
+            <div class="box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-transform duration-300 hover:scale-105">
                 <h2 class="text-lg sm:text-xl font-semibold mb-4 flex items-center">
-                    <i class="fas fa-chart-bar mr-2 text-purple-500"></i>
-                    Performance Metrics
+                    <i class="fas fa-chart-bar mr-2 text-purple-500"></i> Performance Metrics
                 </h2>
                 <div class="space-y-4">
                     <div class="flex flex-wrap gap-2">
-                        <button
-                            class="px-3 py-1 sm:px-4 sm:py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500">Daily</button>
-                        <button
-                            class="px-3 py-1 sm:px-4 sm:py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500">Weekly</button>
-                        <button
-                            class="px-3 py-1 sm:px-4 sm:py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500">Monthly</button>
+                        <button class="px-3 py-1 sm:px-4 sm:py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors focus:ring focus:ring-purple-500">Daily</button>
+                        <button class="px-3 py-1 sm:px-4 sm:py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors focus:ring focus:ring-purple-500">Weekly</button>
+                        <button class="px-3 py-1 sm:px-4 sm:py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors focus:ring focus:ring-purple-500">Monthly</button>
                     </div>
                     <div class="flex items-center space-x-2">
                         <i class="fas fa-chart-line text-green-500"></i>
@@ -93,77 +81,64 @@
                 </div>
             </div>
 
-            <div
-                class="animate-slideIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300 hover-scale">
+            <!-- Quick Actions Card -->
+            <div class="box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-transform duration-300 hover:scale-105">
                 <h2 class="text-lg sm:text-xl font-semibold mb-4 flex items-center">
-                    <i class="fas fa-bolt mr-2 text-yellow-500"></i>
-                    Quick Actions
+                    <i class="fas fa-bolt mr-2 text-yellow-500"></i> Quick Actions
                 </h2>
                 <div class="grid grid-cols-2 gap-2">
-                    <button id="add_report_btn"
-                        class="px-2 py-1 sm:px-4 sm:py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-500 hover-scale">
-                        <i class="fas fa-file-alt mr-1 sm:mr-2"></i>
-                        <span class="text-xs sm:text-sm">Create Report</span>
+                    <button id="add_report_btn" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors focus:ring focus:ring-blue-500 flex items-center justify-center hover:scale-105">
+                        <i class="fas fa-file-alt mr-2"></i> Create Report
                     </button>
-                    <button id="scheduleMeetingBtn"
-                        class="px-2 py-1 sm:px-4 sm:py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-green-500 hover-scale">
-                        <i class="fas fa-calendar-alt mr-1 sm:mr-2"></i>
-                        <span class="text-xs sm:text-sm">Schedule Meeting</span>
+                    <button id="scheduleMeetingBtn" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors focus:ring focus:ring-green-500 flex items-center justify-center hover:scale-105">
+                        <i class="fas fa-calendar-alt mr-2"></i> Schedule Meeting
                     </button>
-                    <button id="add_feedback_btn"
-                        class="px-2 py-1 sm:px-4 sm:py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-yellow-500 hover-scale">
-                        <i class="fas fa-comment-alt mr-1 sm:mr-2"></i>
-                        <span class="text-xs sm:text-sm">Send Feedback</span>
+                    <button id="add_feedback_btn" class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors focus:ring focus:ring-yellow-500 flex items-center justify-center hover:scale-105">
+                        <i class="fas fa-comment-alt mr-2"></i> Send Feedback
                     </button>
-                    <button
-                        class="px-2 py-1 sm:px-4 sm:py-2 bg-gray-600 text-white rounded-md flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-purple-500 hover-scale" disabled>
-                        <i class="fas fa-user-plus mr-1 sm:mr-2"></i>
-                        <span class="text-xs sm:text-sm">Add Team Member</span>
+                    <button class="bg-gray-600 text-white px-4 py-2 rounded-md flex items-center justify-center focus:ring focus:ring-purple-500 hover:scale-105" disabled>
+                        <i class="fas fa-user-plus mr-2"></i> Add Team Member
                     </button>
                 </div>
             </div>
         </div>
 
+        <!-- Task Columns (To Do, In Progress, Done) -->
         <div class="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-
+            <!-- To Do Column -->
             <div id="todoColumn" class="box p-6 rounded-lg bg-white dark:bg-gray-800 shadow-md">
                 <h3 class="text-lg font-semibold mb-3 flex items-center">
                     <i class="fas fa-tasks mr-2 text-blue-500"></i>To Do
                 </h3>
                 <p class="text-sm mb-3">You can add up to 5 tasks</p>
-                <% tasks.todo.forEach(task=> { %>
-                    <div
-                        class="task_div flex justify-between box p-3 mb-3 rounded-lg shadow-md items-center hover-scale bg-gray-100 dark:bg-gray-700">
+                <% tasks.todo.forEach(task => { %>
+                    <div class="task_div flex justify-between p-3 mb-3 rounded-lg shadow-md items-center hover:bg-gray-100 dark:hover:bg-gray-700">
                         <p class="text-sm sm:text-base font-medium">
-                            <% if (task.priority==='high' ) { %>
+                            <% if (task.priority === 'high') { %>
                                 <i class="fas fa-exclamation-circle text-red-600 mr-2"></i>
-                                <% } else if (task.priority==='medium' ) { %>
-                                    <i class="fas fa-exclamation-circle text-yellow-500 mr-2"></i>
-                                    <% } else { %>
-                                        <i class="fas fa-exclamation-circle text-green-500 mr-2"></i>
-                                        <% } %>
-                                            <span class="todo_task_name">
-                                                <%= task.task_name %>
-                                            </span>
-                                            <br> <span class="due_date_todo text-xs sm:text-sm">Due Date: <%=
-                                                    task.due_date %></span>
+                            <% } else if (task.priority === 'medium') { %>
+                                <i class="fas fa-exclamation-circle text-yellow-500 mr-2"></i>
+                            <% } else { %>
+                                <i class="fas fa-exclamation-circle text-green-500 mr-2"></i>
+                            <% } %>
+                            <span><%= task.task_name %></span><br>
+                            <span class="text-xs sm:text-sm">Due Date: <%= task.due_date %></span>
                         </p>
                         <div class="flex space-x-2 text-lg">
-                            <button
-                                class="status-btn pending text-blue-400 hover:text-blue-600 transition duration-150 pad-2 mr-2">
-                                <i class=" fas fa-hourglass-half"></i>
+                            <button class="status-btn pending text-blue-400 hover:text-blue-600 transition duration-150">
+                                <i class="fas fa-hourglass-half"></i>
                             </button>
                             <button class="status-btn done text-green-400 hover:text-green-600 transition duration-150">
-                                <i class="done fas fa-check-circle"></i>
+                                <i class="fas fa-check-circle"></i>
                             </button>
                         </div>
                     </div>
-                    <% }) %>
-                        <button id="add-task-btn"
-                            class="add-task-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150 hover-scale w-full">
-                            <i class="fas fa-plus mr-2"></i>Add Task
-                        </button>
+                <% }) %>
+                <button id="add-task-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150 w-full">
+                    <i class="fas fa-plus mr-2"></i> Add Task
+                </button>
             </div>
+ 
 
             <div id="inProgressColumn" class="box p-6 rounded-lg bg-white dark:bg-gray-800 shadow-md">
                 <h3 class="text-lg font-semibold mb-3 flex items-center">
