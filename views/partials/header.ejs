@@ -19,21 +19,7 @@
                             <img src="<%= user ? user.picture : 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>"
                                 alt="User" class="user-profile rounded-full w-10 h-10">
                         </button>
-                        <div id="userMenu"
-                            class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 hidden">
-                            <a href="/dashboard"
-                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <i class="fas fa-user mr-2"></i>Profile
-                            </a>
-                            <a href="/dashboard/settings"
-                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <i class="fas fa-cog mr-2"></i>Settings
-                            </a>
-                            <a href="/logout"
-                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                            </a>
-                        </div>
+                     
                     </div>
                     <button id="darkModeToggle"
                         class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors hover-rotate">

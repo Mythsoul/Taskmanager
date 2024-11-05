@@ -1,12 +1,45 @@
 
 document.addEventListener("DOMContentLoaded", async () => {
+  const add_task_btn = document.getElementById("add_task_btn");
+  const add_task_dialog = document.getElementById("taskDialog");
+ const add_task_form = document.getElementById("taskForm");
+ const cancel_form_submission = document.getElementById("cancelBtn");
+ add_task_btn.addEventListener("click" , async() => {
+  add_task_dialog.showModal();  
+ }); 
+ cancel_form_submission.addEventListener("click" , async() => {
+  add_task_dialog.close();
+
+ }) ; 
+ add_task_form.addEventListener("submit" , async()=>{ 
+  const task_name = document.getElementById("taskName").value;
+  const due_date = document.getElementById("due-date").value;
+  const priority = document.getElementById("priority").value;
+  const task = {
+    taskName : task_name,
+    due_date,
+    priority
+  };
+  const response = await fetch("/add-task", {
+    method: "POST", 
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(task)
+  });
+  if (response.ok) {
+    alert("Task added successfully");
+  } else {
+    alert("Failed to add task");
+  }
+ }); 
 
     async function get_tasks() {
         try {
             const response = await fetch("/api/user-tasks");
             const result = await response.json();
             const data = result.tasks;
-            console.log(data ?? "No data found");
+          
 
             const tasks_div = document.querySelector(".user-tasks");
             const template = document.querySelector("#task-template");
@@ -45,7 +78,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     get_tasks();
     async function update_task_status(taskName, status) {
         try {
-          const response = await fetch("/update-task-status", {
+          const response = await fetch("/update-task-status",{
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -58,45 +91,45 @@ document.addEventListener("DOMContentLoaded", async () => {
           } else {
             alert("Failed to update task status");
           }
-        } catch (error) {
+         } catch (error) {
           console.error("Error updating task status:", error);
           alert("An error occurred while updating the task status.");
         }
       }
     
-      const add_task_btn = document.getElementById("add_task_btn");
-      const add_task_dialog = document.getElementById("taskDialog");
-     const add_task_form = document.getElementById("taskForm");
-     const cancel_form_submission = document.getElementById("cancelBtn");
-     add_task_btn.addEventListener("click" , async() => {
-      add_task_dialog.showModal();  
-     }); 
-     cancel_form_submission.addEventListener("click" , async() => {
-      add_task_dialog.close();
+    });
 
-     }) ; 
-     add_task_form.addEventListener("submit" , async()=>{ 
+
+
+    const update_task_dialog = document.getElementById("updatetaskDialog");
+    const update_task_form = document.getElementById("updateTaskForm");
+    const update_task_btn = document.querySelectorAll(".update-task-btn");
+    update_task_btn.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        update_task_dialog.showModal();
+      });
+    update_task_form.addEventListener("submit", async () => {
       const task_name = document.getElementById("taskName").value;
       const due_date = document.getElementById("due-date").value;
       const priority = document.getElementById("priority").value;
+      const task_id = btn.getAttribute("data-task-id");
       const task = {
-        task_name,
+        taskName: task_name,
         due_date,
-        priority
+        priority,
+        task_id
       };
-      const response = await fetch("/add-task", {
-        method: "POST", 
+      const response = await fetch("/update-task", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(task)
       });
       if (response.ok) {
-        alert("Task added successfully");
+        alert("Task updated successfully");
       } else {
-        alert("Failed to add task");
+        alert("Failed to update task");
       }
-     })
-    });
-
-
+    })
+  }); 

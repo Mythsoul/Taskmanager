@@ -12,6 +12,7 @@ CREATE TABLE users
 CREATE TABLE tasks
 (
     id SERIAL PRIMARY KEY,
+    task_id SERIAL UNIQUE NOT NULL,
     user_id VARCHAR(255) NOT NULL,
     task_name VARCHAR(255) NOT NULL,
     due_date DATE NOT NULL,

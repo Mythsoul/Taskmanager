@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault();
         const feedback = document.getElementById('feedback').value;
         const feedbackemail = document.getElementById('feedbackemail').value;
-        const webhookURL = 'https://discord.com/api/webhooks/1302446050908569642/RXlloCNNDn70Css7DqwpF7ic7-NXhY1OoeYgVEaEeRcw0YMCUk6zmWOKub_vwZ9y5oWT';
+        const webhookURL = 'https://discord.com/api/webhooks/1302446050908569642/RXlloCNNDn70Css7DqwpF7ic7-NXhY1OoeYgVEaEeRcw0YMCUk6zmWOKub_vwZ9y5oWT ' // Example purpose only;
         console.log("Feedback: " + feedback + " Email: " + feedbackemail);
         const embed = {
             title: "New Message Received",

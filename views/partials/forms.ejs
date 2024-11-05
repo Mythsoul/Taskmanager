@@ -157,3 +157,40 @@
     </div>
 </form>
 </dialog>
+
+
+
+<dialog id="updatetaskDialog" class="box p-6 rounded-lg shadow-lg">
+    <form id="updatetaskForm" method="dialog">
+        <h2 class="text-xl sm:text-2xl font-semibold mb-4">Update Task</h2>
+        <div class="mb-4">
+            <label for="udtaskName" class="block text-sm font-medium">Task Name</label>
+            <input type="text" id="udtaskName" required
+                class="mt-1 p-2 block w-full border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-700">
+        </div>
+        <div class="mb-4">
+            <label for="uddue-date" class="block text-sm font-medium">Due Date</label>
+            <input type="date" id="uddue-date" required
+                class="mt-1 p-2 block w-full border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-700">
+        </div>
+        <div class="mb-4">
+            <label for="udpriority" class="block text-sm font-medium">Priority</label>
+            <select id="udpriority"
+                class="mt-1 p-2 block w-full border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-700">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+        </div>
+        <div class="flex justify-end">
+            <button type="button" id="cancelBtn"
+                class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition duration-150">
+                Cancel
+            </button>
+            <button type="submit" id="submitTask"
+                class="ml-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150">
+                Update Task
+            </button>
+        </div>
+    </form>
+</dialog>

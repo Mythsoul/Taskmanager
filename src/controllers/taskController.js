@@ -4,6 +4,7 @@ import passport from "../config/passport.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import { render_task } from "../models/Task.js";
+
 dotenv.config();
 
 export const add_task = async (req, res) => {
@@ -139,3 +140,14 @@ export const add_task = async (req, res) => {
         res.status(500).send("Failed to load dashboard");
     }
   };
+
+
+ export const update_task = async (req , res)=>{ 
+    const {taskName , due_date , priority , task_id} = req.body;
+    const userId = req.user.id;
+    try{ 
+      const response = await database.query("Update tasks set task_name=$1 , due_date=$2 , priority=$3 where user_id=$4 and task_id = $5" , [taskName , due_date , priority , userId , task_id]);
+    }catch(err){ 
+        throw err ; 
+    }
+ }

@@ -67,7 +67,7 @@ export const add_report = async (req, res) => {
 
 export const update_report = async (req , res) => {
     const user_id = req.user.id;
-   const { report_title, report_description , report_id} = req.body;
+const { report_title, report_description , report_id} = req.body;
    console.log(req.body);
     try {
     const result = await db.query(
