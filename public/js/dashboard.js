@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    introJs().start();
     const dialog = document.getElementById("taskDialog");
     const addTaskBtn = document.querySelector(".add-task-btn");
     const cancelBtn = document.getElementById("cancelBtn");

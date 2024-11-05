@@ -1,0 +1,159 @@
+
+<dialog id="sendfeedbackDialog" class="box p-6 rounded-lg shadow-lg">
+    <h3 class="text-lg font-semibold mb-3 text-blue-500">
+        <i class="fas fa-comments mr-2"></i> Send Feedback
+    </h3>
+    <form id="feedbackForm" method="dialog">
+        <div class="mb-4">
+            <label for="feedback" class="block text-sm font-medium">Feedback</label>
+            <textarea id="feedback" required
+                class="mt-1 p-2 block w-full border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-700"></textarea>
+        </div>
+        <div class="mb-4">
+            <label for="feedbackemail" class="block text-sm font-medium">Email</label>
+            <input type="email" id="feedbackemail" 
+                class="mt-1 p-2 block w-full border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-700" placeholder="OPTIONAL">
+            </div>
+        <div class="flex justify-end">
+            <button id="sendFeedbackBtn" type="submit"
+                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
+                Send
+            </button>
+            <button id="closeFeedbackDialog"
+                class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 ml-3">Cancel</button>
+        </div>
+    </form>
+</dialog>
+<script>
+  
+</script>
+
+
+<dialog id="taskDialog" class="box p-6 rounded-lg shadow-lg">
+    <form id="taskForm" method="dialog">
+        <h2 class="text-xl sm:text-2xl font-semibold mb-4">Add New Task</h2>
+        <div class="mb-4">
+            <label for="taskName" class="block text-sm font-medium">Task Name</label>
+            <input type="text" id="taskName" required
+                class="mt-1 p-2 block w-full border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-700">
+        </div>
+        <div class="mb-4">
+            <label for="due-date" class="block text-sm font-medium">Due Date</label>
+            <input type="date" id="due-date" required
+                class="mt-1 p-2 block w-full border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-700">
+        </div>
+        <div class="mb-4">
+            <label for="priority" class="block text-sm font-medium">Priority</label>
+            <select id="priority"
+                class="mt-1 p-2 block w-full border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-700">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+        </div>
+        <div class="flex justify-end">
+            <button type="button" id="cancelBtn"
+                class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition duration-150">
+                Cancel
+            </button>
+            <button type="submit" id="submitTask"
+                class="ml-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150">
+                Add Task
+            </button>
+        </div>
+    </form>
+</dialog>
+
+<dialog id="add_report_dialog" class="box p-6 rounded-lg shadow-lg">
+    <h3 class="text-lg font-semibold mb-3 text-blue-500">
+        <i class="fas fa-file-alt mr-2"></i> Create Report
+    </h3>
+    <p class="text-sm mb-3 text-white">Enter report title and description</p>
+    <form id="report_form" method="dialog">
+        <div class="mb-4">
+            <label class="block text-white text-sm font-bold mb-2" for="title">Title</label>
+            <input id="report_name"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="title" type="text" placeholder="Enter title">
+        </div>
+        <div class="mb-4">
+            <label class="block text-white text-sm font-bold mb-2" for="description">Description</label>
+            <input id="report_description"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="description" type="text" placeholder="Enter description">
+        </div>
+        <div class="flex justify-end">
+            <button id="close_report_dialog"
+                class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 mr-3">Cancel</button>
+            <button type="submit"
+                class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">Submit</button>
+        </div>
+    </form>
+</dialog>
+
+<dialog id="scheduleMeetingDialog" class="bg-gray-800 text-white rounded-lg shadow-lg p-6">
+    <form id="scheduleMeetingForm" method="dialog" class="space-y-4">
+        <div class="flex flex-col">
+            <label for="meetingTitle" class="text-sm font-bold mb-1">Meeting Title:</label>
+            <input type="text" id="meetingTitle" required
+                class="border rounded-lg p-2 w-full bg-gray-900 text-white">
+        </div>
+        <div class="flex flex-col">
+            <label for="meetingDate" class="text-sm font-bold mb-1">Date:</label>
+            <input type="date" id="meetingDate" required
+                class="border rounded-lg p-2 w-full bg-gray-900 text-white">
+        </div>
+        <div class="flex flex-col">
+            <label for="meetingTime" class="text-sm font-bold mb-1">Time:</label>
+            <input type="time" id="meetingTime" required
+                class="border rounded-lg p-2 w-full bg-gray-900 text-white">
+        </div>
+        <div class="flex flex-col">
+            <label for="participants" class="text-sm font-bold mb-1">Participants:</label>
+            <input type="text" id="participants" placeholder="Comma-separated emails" required
+                class="border rounded-lg p-2 w-full bg-gray-900 text-white">
+        </div>
+        <div class="flex justify-end">
+            <button id="cancelBtn"
+                class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 mr-3">Cancel</button>
+            <button type="submit"
+                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">Schedule</button>
+        </div>
+    </form>
+</dialog>
+
+<div id="notificationDiv"
+    class="fixed top-4 right-4 w-80 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg hidden">
+    <h2 class="text-lg font-semibold mb-2">Notifications</h2>
+    <p id="notificationText" class="text-gray-800 dark:text-gray-200">You have no new notifications.</p>
+    <button id="notification-close-btn"
+        class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+        Close
+    </button>
+</div>
+
+
+
+
+
+<dialog id="updateReportDialog" class="bg-gray-800 text-white rounded-lg shadow-lg p-6">
+<h1 class="text-lg font-semibold mb-3 text-blue-500">Update Report</h1>
+<form id="updateReportForm" method="dialog" class="space-y-4">
+    <div class="flex flex-col">
+        <label for="reportTitle" class="text-sm font-bold mb-1">Report Title:</label>
+        <input type="text" id="updatereportTitle" required
+            class="border rounded-lg p-2 w-full bg-gray-900 text-white">
+    </div>
+    <div class="flex flex-col">
+        <label for="reportDescription" class="text-sm font-bold mb-1">Report Description:</label>
+        <input type="text" id="updatereportDescription" required
+            class="border rounded-lg p-2 w-full bg-gray-900 text-white">
+    </div>
+    <div class="flex justify-end">
+        <button id="cancel_report_update"
+            class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 mr-3">Cancel</button>
+        <button type="submit"
+            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">Update</button>
+    </div>
+</form>
+</dialog>

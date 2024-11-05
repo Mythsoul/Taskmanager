@@ -64,6 +64,39 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       }
     
-});
+      const add_task_btn = document.getElementById("add_task_btn");
+      const add_task_dialog = document.getElementById("taskDialog");
+     const add_task_form = document.getElementById("taskForm");
+     const cancel_form_submission = document.getElementById("cancelBtn");
+     add_task_btn.addEventListener("click" , async() => {
+      add_task_dialog.showModal();  
+     }); 
+     cancel_form_submission.addEventListener("click" , async() => {
+      add_task_dialog.close();
+
+     }) ; 
+     add_task_form.addEventListener("submit" , async()=>{ 
+      const task_name = document.getElementById("taskName").value;
+      const due_date = document.getElementById("due-date").value;
+      const priority = document.getElementById("priority").value;
+      const task = {
+        task_name,
+        due_date,
+        priority
+      };
+      const response = await fetch("/add-task", {
+        method: "POST", 
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(task)
+      });
+      if (response.ok) {
+        alert("Task added successfully");
+      } else {
+        alert("Failed to add task");
+      }
+     })
+    });
 
 

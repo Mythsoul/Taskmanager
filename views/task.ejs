@@ -22,19 +22,20 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 font-sans text-gray-800">
+<%-include('partials/sidebar.ejs')%>
+<%-include('partials/header.ejs')%>
 
     <header class="text-center py-6 bg-indigo-500 text-white">
         <h1 class="text-3xl font-bold">User Tasks</h1>
     </header>
 
     <div class="task-container">
-        <div class="user-tasks space-y-4">
+        <div class="user-tasks space-y-4 text-black">
        
         </div>
     </div>
-
-    <template id="task-template">
+<div class="task-container">
+    <template id="task-template" class="w-96">
         <div class="task-item flex items-center justify-between p-4 bg-white rounded-lg shadow-md">
             <p class="task-text text-lg font-semibold"></p>
             <div class="flex items-center space-x-2">
@@ -45,9 +46,23 @@
                 <button class="status-done p-2 rounded-full hover:bg-green-200 transition">
                     <i class="fas fa-check-circle text-green-500"></i> 
                 </button>
+                
             </div>
         </div>
+    
     </template>
+
+    <div class="task-functions">
+        <div id="add_task_btn" class="add_task_btn flex justify-end">
+            <button id="addTaskBtn" class=  "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Add Task
+            </button>
+        </div>
+    </div>
+</div>
+
+
+    <%-include("partials/forms.ejs")%>
 
 </body>
 </html>

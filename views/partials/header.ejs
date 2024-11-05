@@ -1,0 +1,44 @@
+
+<body class="min-h-screen transition-colors text-gray-800 dark:text-gray-100 bg-gray-100 dark:bg-gray-900" >
+    
+<div class="content  p-4 max-w-7xl mx-auto md:ml-[100px]">
+        <div
+            class="mb-6 animate-fadeIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300">
+            <div class="flex flex-col sm:flex-row items-center justify-between">
+                <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0" >Management Dashboard</h1>
+                <div class="flex items-center space-x-4">
+                    <button id="notificationBtn"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors relative hover-scale">
+                        <i class="fas fa-bell text-gray-600 dark:text-gray-300"></i>
+                        <span id="notificationBadge"
+                            class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500 animate-pulse hidden"></span>
+                    </button>
+                    <div class="relative">
+                        <button id="userMenuBtn"
+                            class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors hover-scale">
+                            <img src="<%= user ? user.picture : 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>"
+                                alt="User" class="user-profile rounded-full w-10 h-10">
+                        </button>
+                        <div id="userMenu"
+                            class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 hidden">
+                            <a href="/dashboard"
+                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <i class="fas fa-user mr-2"></i>Profile
+                            </a>
+                            <a href="/dashboard/settings"
+                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <i class="fas fa-cog mr-2"></i>Settings
+                            </a>
+                            <a href="/logout"
+                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </a>
+                        </div>
+                    </div>
+                    <button id="darkModeToggle"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors hover-rotate">
+                        <i class="fas fa-sun text-gray-600 dark:text-gray-300"></i>
+                    </button>
+                </div>
+            </div>
+        </div>

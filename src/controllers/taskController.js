@@ -3,15 +3,12 @@ import { database } from "../config/db.js";
 import passport from "../config/passport.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
-
+import { render_task } from "../models/Task.js";
 dotenv.config();
 
 export const add_task = async (req, res) => {
     if (req.isAuthenticated()) {
-        console.log("User is authenticated.");
-        console.log("User data:", req.user);
-        console.log("Request body:", req.body);
-  
+ 
         const { taskName, due_date, priority } = req.body;
         const userId = req.user ? req.user.id : null; // Validate if userId exists
   
@@ -124,6 +121,21 @@ export const add_task = async (req, res) => {
     }
   };
   
-  export const render_tasks_page = (req, res) => {
-    res.render("task.ejs");
+  export const render_tasks_page = async(req, res) => {
+    const user = req.user;
+    console.log(user);
+
+    try {
+        const tasks = await render_task(user.id);
+
+
+       
+        res.render("task", {
+            user: user,
+            tasks: tasks,
+        });
+    } catch (err) {
+        console.error("Error loading dashboard:", err);
+        res.status(500).send("Failed to load dashboard");
+    }
   };

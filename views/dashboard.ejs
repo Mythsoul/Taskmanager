@@ -9,21 +9,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/dashboard.css">
     <script src="/js/dashboard.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.css">   
 </head>
 
-<body class="min-h-screen transition-colors text-gray-800 dark:text-gray-100 bg-gray-100 dark:bg-gray-900">
-    <%-include('partials/sidebar.ejs')%>
+<body class="min-h-screen transition-colors text-gray-800 dark:text-gray-100 bg-gray-100 dark:bg-gray-900" >
+    <%-include('partials/sidebar.ejs')%>  
     <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-10"></div>
- 
-    <div class="content p-4 max-w-7xl mx-auto md:ml-[100px]">
+        
+    
+<div class="content  p-4 max-w-7xl mx-auto md:ml-[100px]">
         <div
             class="mb-6 animate-fadeIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300">
             <div class="flex flex-col sm:flex-row items-center justify-between">
-                <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">Management Dashboard</h1>
+                <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0" data-intro=" Hi <%= user ? user.name : 'User' %>, Welcome TO TASK MANAGER'S DASHBOARD  ,
+                     Lets Get Started" data-step="1">Management Dashboard</h1>
                 <div class="flex items-center space-x-4">
                     <button id="notificationBtn"
                         class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors relative hover-scale">
-                        <i class="fas fa-bell text-gray-600 dark:text-gray-300"></i>
+                        <i class="fas fa-bell text-gray-600 dark:text-gray-300" data-intro="Here You Can See Notifications" data-step="2"></i>
                         <span id="notificationBadge"
                             class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500 animate-pulse hidden"></span>
                     </button>
@@ -64,17 +67,17 @@
                     <i class="fas fa-tasks mr-2 text-blue-500"></i>
                     User overview
                 </h2>
-                <div class="space-y-4">
+                <div class="space-y-4" data-intro="Here You Can See Your User Overview" data-step="3">
                     <p><i class="fas fa-clipboard-list mr-2 text-green-500"></i>Todo Tasks: <%= tasks.todo.length %>
                     </p>
                     <p><i class="fas fa-file-alt mr-2 text-yellow-500"></i>Reports: <%= reports.length %>
                     </p>
-                    <p><i class="fas fa-users mr-2 text-purple-500"></i>Meetings: 4</p>
+                    <p><i class="fas fa-users mr-2 text-purple-500"></i>Meetings: <%= meeting.meetings.length %></p>
                 </div>
             </div>
 
             <div
-                class="animate-slideIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300 hover-scale">
+                class="animate-slideIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300 hover-scale" data-intro="Here You Can See Your Performance Metrics" data-step="4">
                 <h2 class="text-lg sm:text-xl font-semibold mb-4 flex items-center">
                     <i class="fas fa-chart-bar mr-2 text-purple-500"></i>
                     Performance Metrics
@@ -102,7 +105,7 @@
                     <i class="fas fa-bolt mr-2 text-yellow-500"></i>
                     Quick Actions
                 </h2>
-                <div class="grid grid-cols-2 gap-2">
+                <div class="grid grid-cols-2 gap-2" data-intro="Here You Can Create Reports And Schedule Meetings also You Can Add Feedback" data-step="5">
                     <button id="add_report_btn"
                         class="px-2 py-1 sm:px-4 sm:py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-500 hover-scale">
                         <i class="fas fa-file-alt mr-1 sm:mr-2"></i>
@@ -127,7 +130,7 @@
             </div>
         </div>
 
-        <div class="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div class="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-intro= "And Here You Can Add Tasks View Tasks Manage Tasks Status and more" data-step="6">
 
             <div id="todoColumn" class="box p-6 rounded-lg bg-white dark:bg-gray-800 shadow-md">
                 <h3 class="text-lg font-semibold mb-3 flex items-center">
@@ -154,7 +157,7 @@
                         <div class="flex space-x-2 text-lg">
                             <button
                                 class="status-btn pending text-blue-400 hover:text-blue-600 transition duration-150 pad-2 mr-2">
-                                <i class=" fas fa-hourglass-half"></i>
+                                <i class="pending fas fa-hourglass-half"></i>
                             </button>
                             <button class="status-btn done text-green-400 hover:text-green-600 transition duration-150">
                                 <i class="done fas fa-check-circle"></i>
@@ -205,8 +208,8 @@
             </div>
         </div>
 
-        <div class="mt-6 grid gap-6 md:grid-cols-3 lg:grid-cols-3 ">
-            <!-- Reports Section -->
+        <div class="mt-6 grid gap-6 md:grid-cols-3 lg:grid-cols-3 " data-intro="Here You Can Add Reports View reports edit reports schedule meetings add meetings and more" data-step="7">
+         
             <div
                 class=" w-50 animate-slideIn  box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300 ">
                 <h2 class="text-lg sm:text-xl font-semibold mb-4 flex items-center">
@@ -291,180 +294,10 @@
             </div>
         </div>
 
-
-        <dialog id="sendfeedbackDialog" class="box p-6 rounded-lg shadow-lg">
-            <h3 class="text-lg font-semibold mb-3 text-blue-500">
-                <i class="fas fa-comments mr-2"></i> Send Feedback
-            </h3>
-            <form id="feedbackForm" method="dialog">
-                <div class="mb-4">
-                    <label for="feedback" class="block text-sm font-medium">Feedback</label>
-                    <textarea id="feedback" required
-                        class="mt-1 p-2 block w-full border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-700"></textarea>
-                </div>
-                <div class="mb-4">
-                    <label for="feedbackemail" class="block text-sm font-medium">Email</label>
-                    <input type="email" id="feedbackemail" 
-                        class="mt-1 p-2 block w-full border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-700" placeholder="OPTIONAL">
-                    </div>
-                <div class="flex justify-end">
-                    <button id="sendFeedbackBtn" type="submit"
-                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        Send
-                    </button>
-                    <button id="closeFeedbackDialog"
-                        class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 ml-3">Cancel</button>
-                </div>
-            </form>
-        </dialog>
-        <script>
-          
-        </script>
+<%-include('partials/forms.ejs')%>
 
 
-        <dialog id="taskDialog" class="box p-6 rounded-lg shadow-lg">
-            <form id="taskForm" method="dialog">
-                <h2 class="text-xl sm:text-2xl font-semibold mb-4">Add New Task</h2>
-                <div class="mb-4">
-                    <label for="taskName" class="block text-sm font-medium">Task Name</label>
-                    <input type="text" id="taskName" required
-                        class="mt-1 p-2 block w-full border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-700">
-                </div>
-                <div class="mb-4">
-                    <label for="due-date" class="block text-sm font-medium">Due Date</label>
-                    <input type="date" id="due-date" required
-                        class="mt-1 p-2 block w-full border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-700">
-                </div>
-                <div class="mb-4">
-                    <label for="priority" class="block text-sm font-medium">Priority</label>
-                    <select id="priority"
-                        class="mt-1 p-2 block w-full border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-700">
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
-                    </select>
-                </div>
-                <div class="flex justify-end">
-                    <button type="button" id="cancelBtn"
-                        class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition duration-150">
-                        Cancel
-                    </button>
-                    <button type="submit" id="submitTask"
-                        class="ml-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150">
-                        Add Task
-                    </button>
-                </div>
-            </form>
-        </dialog>
-
-        <dialog id="add_report_dialog" class="box p-6 rounded-lg shadow-lg">
-            <h3 class="text-lg font-semibold mb-3 text-blue-500">
-                <i class="fas fa-file-alt mr-2"></i> Create Report
-            </h3>
-            <p class="text-sm mb-3 text-white">Enter report title and description</p>
-            <form id="report_form" method="dialog">
-                <div class="mb-4">
-                    <label class="block text-white text-sm font-bold mb-2" for="title">Title</label>
-                    <input id="report_name"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="title" type="text" placeholder="Enter title">
-                </div>
-                <div class="mb-4">
-                    <label class="block text-white text-sm font-bold mb-2" for="description">Description</label>
-                    <input id="report_description"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="description" type="text" placeholder="Enter description">
-                </div>
-                <div class="flex justify-end">
-                    <button id="close_report_dialog"
-                        class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 mr-3">Cancel</button>
-                    <button type="submit"
-                        class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">Submit</button>
-                </div>
-            </form>
-        </dialog>
-
-        <dialog id="scheduleMeetingDialog" class="bg-gray-800 text-white rounded-lg shadow-lg p-6">
-            <form id="scheduleMeetingForm" method="dialog" class="space-y-4">
-                <div class="flex flex-col">
-                    <label for="meetingTitle" class="text-sm font-bold mb-1">Meeting Title:</label>
-                    <input type="text" id="meetingTitle" required
-                        class="border rounded-lg p-2 w-full bg-gray-900 text-white">
-                </div>
-                <div class="flex flex-col">
-                    <label for="meetingDate" class="text-sm font-bold mb-1">Date:</label>
-                    <input type="date" id="meetingDate" required
-                        class="border rounded-lg p-2 w-full bg-gray-900 text-white">
-                </div>
-                <div class="flex flex-col">
-                    <label for="meetingTime" class="text-sm font-bold mb-1">Time:</label>
-                    <input type="time" id="meetingTime" required
-                        class="border rounded-lg p-2 w-full bg-gray-900 text-white">
-                </div>
-                <div class="flex flex-col">
-                    <label for="participants" class="text-sm font-bold mb-1">Participants:</label>
-                    <input type="text" id="participants" placeholder="Comma-separated emails" required
-                        class="border rounded-lg p-2 w-full bg-gray-900 text-white">
-                </div>
-                <div class="flex justify-end">
-                    <button id="cancelBtn"
-                        class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 mr-3">Cancel</button>
-                    <button type="submit"
-                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">Schedule</button>
-                </div>
-            </form>
-        </dialog>
-
-        <div id="notificationDiv"
-            class="fixed top-4 right-4 w-80 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg hidden">
-            <h2 class="text-lg font-semibold mb-2">Notifications</h2>
-            <p id="notificationText" class="text-gray-800 dark:text-gray-200">You have no new notifications.</p>
-            <button id="notification-close-btn"
-                class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
-                Close
-            </button>
-        </div>
-
-
-
-        <div id="funFactPopup" class="fixed inset-0 bg-black bg-opacity-50  items-center justify-center hidden">
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full">
-                <button id="funfact-close-btn" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times"></i>
-                </button>
-                <h2 class="text-lg font-semibold mb-4">Fun Fact</h2>
-                <p id="funFactText" class="text-gray-800 dark:text-gray-200">
-                    <%= funfact %>
-                </p>
-            </div>
-        </div>
-    </div>
-
-
-    <dialog id="updateReportDialog" class="bg-gray-800 text-white rounded-lg shadow-lg p-6">
-        <h1 class="text-lg font-semibold mb-3 text-blue-500">Update Report</h1>
-        <form id="updateReportForm" method="dialog" class="space-y-4">
-            <div class="flex flex-col">
-                <label for="reportTitle" class="text-sm font-bold mb-1">Report Title:</label>
-                <input type="text" id="updatereportTitle" required
-                    class="border rounded-lg p-2 w-full bg-gray-900 text-white">
-            </div>
-            <div class="flex flex-col">
-                <label for="reportDescription" class="text-sm font-bold mb-1">Report Description:</label>
-                <input type="text" id="updatereportDescription" required
-                    class="border rounded-lg p-2 w-full bg-gray-900 text-white">
-            </div>
-            <div class="flex justify-end">
-                <button id="cancel_report_update"
-                    class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 mr-3">Cancel</button>
-                <button type="submit"
-                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">Update</button>
-            </div>
-        </form>
-    </dialog>
-
-
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js"></script>
 </body>
 
 </html>
