@@ -37,14 +37,14 @@ Accessible on all devices, with smooth animations, hover effects, and user-frien
 
 ``` bash
 
-git clone https://github.com/yourusername/taskmanager.git
+git clone https://github.com/Mythsoul/Taskmanager.git
 ```
 
 #### Navigate into the project directory
 
 ```bash
 
-cd taskmanager
+cd Taskmanager
 ```
 
 #### Install the dependencies
