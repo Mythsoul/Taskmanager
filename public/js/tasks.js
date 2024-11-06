@@ -6,14 +6,14 @@ document.addEventListener("DOMContentLoaded", async () => {
    const cancel_form_submission = document.getElementById("cancelBtn");
    
  
-   let reportid = null;
+   let taskid = null;
 
     const update_task_dialog = document.getElementById("editTaskDialog");
    const update_task_form = document.getElementById("editTaskForm");
    const update_task_btn = document.querySelectorAll("#update-task-btn");
    update_task_btn.forEach((btn) => {
      btn.addEventListener("click", () => {
-      const report_id = btn.getAttribute("data-report-id"); 
+       taskid = btn.getAttribute("data-task-id"); 
        update_task_dialog.showModal();
      });
    });
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
      const task_name = document.getElementById("udtaskName").value;
      const due_date = document.getElementById("uddue-date").value;
      const priority = document.getElementById("udpriority").value;
-     const task_id = document.getAttribute("data-task-id");
+     const task_id = taskid;
      const task = {
        taskName: task_name,
        due_date,
