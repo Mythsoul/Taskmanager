@@ -112,25 +112,25 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
     }
-    async function showFunFact() {
-        document.addEventListener("DOMContentLoaded", () => {
-            const funFactCloseBtn = document.getElementById('funfact-close-btn');
-            const funFactSidebar = document.getElementById('funFactPopup');
-            funFactSidebar.classList.remove('hidden');
-            setTimeout(() => {
-                funFactSidebar.classList.add('hidden');
-            }, 5000);
-        })
+    // async function showFunFact() {
+    //     document.addEventListener("DOMContentLoaded", () => {
+    //         const funFactCloseBtn = document.getElementById('funfact-close-btn');
+    //         const funFactSidebar = document.getElementById('funFactPopup');
+    //         funFactSidebar.classList.remove('hidden');
+    //         setTimeout(() => {
+    //             funFactSidebar.classList.add('hidden');
+    //         }, 5000);
+    //     })
 
 
-    }
+    // }
 
-    showFunFact();
+    // showFunFact();
 
-    // Fun fact functionality
-    funFactCloseBtn.addEventListener('click', () => {
-        funFactSidebar.classList.add('hidden');
-    });
+    // // Fun fact functionality
+    // funFactCloseBtn.addEventListener('click', () => {
+    //     funFactSidebar.classList.add('hidden');
+    // });
 
     addTaskBtn.addEventListener("click", () => {
         dialog.showModal();

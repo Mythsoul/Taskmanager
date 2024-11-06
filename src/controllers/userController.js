@@ -16,7 +16,7 @@ export const render_homepage = async(req ,res)=>{
           const reports = await get_reports(user.id);
           const meetingsData = await get_meetings(user.id);
   
-          // Format each meeting's date and time for rendering
+        
           const meetings = meetingsData.map(meeting => ({
               title: meeting.title,
               date: new Date(meeting.date).toLocaleDateString('en-US', {
@@ -24,15 +24,15 @@ export const render_homepage = async(req ,res)=>{
                   month: 'short',
                   day: 'numeric'
               }),
-              time: meeting.time // Make sure meeting.time is in a readable format
+              time: meeting.time
           }));
   
-          // Pass `meetings` as an array to the template
+        
           res.render("dashboard", {
               user: user,
               tasks: tasks,
               reports: reports, 
-              meeting: { meetings },  // This matches the expected structure in the template
+              meeting: { meetings },  
               funfact: await fetchFunFact(),
           });
       } catch (err) {

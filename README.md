@@ -22,7 +22,7 @@ Accessible on all devices, with smooth animations, hover effects, and user-frien
 
 ### 🛠️ Tech Stack
 
-#### Frontend: HTML, CSS (Tailwind CSS for styling), JavaScript (modularized for various components)
+#### Frontend: EJS(Easy for templating), CSS (Tailwind CSS for styling), JavaScript (modularized for various components)
 #### Backend: Node.js, Express
 #### Database: PostgreSQL
 #### Authentication: Google OAuth 2.0

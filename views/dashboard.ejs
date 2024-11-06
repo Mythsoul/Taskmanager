@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/css/dashboard.css">
     <script src="/js/dashboard.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.css">   
+
 </head>
 
 <body class="min-h-screen transition-colors text-gray-800 dark:text-gray-100 bg-gray-100 dark:bg-gray-900" >
@@ -21,12 +22,12 @@
         <div
             class="mb-6 animate-fadeIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300">
             <div class="flex flex-col sm:flex-row items-center justify-between">
-                <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0" data-intro=" Hi <%= user ? user.name : 'User' %>, Welcome TO TASK MANAGER'S DASHBOARD  ,
-                     Lets Get Started" data-step="1">Management Dashboard</h1>
+                <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0" >Management Dashboard</h1>
+               
                 <div class="flex items-center space-x-4">
                     <button id="notificationBtn"
                         class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors relative hover-scale">
-                        <i class="fas fa-bell text-gray-600 dark:text-gray-300" data-intro="Here You Can See Notifications" data-step="2"></i>
+                        <i class="fas fa-bell text-gray-600 dark:text-gray-300" ></i>
                         <span id="notificationBadge"
                             class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500 animate-pulse hidden"></span>
                     </button>
@@ -67,7 +68,7 @@
                     <i class="fas fa-tasks mr-2 text-blue-500"></i>
                     User overview
                 </h2>
-                <div class="space-y-4" data-intro="Here You Can See Your User Overview" data-step="3">
+                <div class="space-y-4" >
                     <p><i class="fas fa-clipboard-list mr-2 text-green-500"></i>Todo Tasks: <%= tasks.todo.length %>
                     </p>
                     <p><i class="fas fa-file-alt mr-2 text-yellow-500"></i>Reports: <%= reports.length %>
@@ -77,7 +78,7 @@
             </div>
 
             <div
-                class="animate-slideIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300 hover-scale" data-intro="Here You Can See Your Performance Metrics" data-step="4">
+                class="animate-slideIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300 hover-scale" >
                 <h2 class="text-lg sm:text-xl font-semibold mb-4 flex items-center">
                     <i class="fas fa-chart-bar mr-2 text-purple-500"></i>
                     Performance Metrics
@@ -99,13 +100,13 @@
                 </div>
             </div>
 
-            <div
+            <div id="quickActions"
                 class="animate-slideIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300 hover-scale">
                 <h2 class="text-lg sm:text-xl font-semibold mb-4 flex items-center">
                     <i class="fas fa-bolt mr-2 text-yellow-500"></i>
                     Quick Actions
                 </h2>
-                <div class="grid grid-cols-2 gap-2" data-intro="Here You Can Create Reports And Schedule Meetings also You Can Add Feedback" data-step="5">
+                <div class="grid grid-cols-2 gap-2">
                     <button id="add_report_btn"
                         class="px-2 py-1 sm:px-4 sm:py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-500 hover-scale">
                         <i class="fas fa-file-alt mr-1 sm:mr-2"></i>
@@ -130,7 +131,7 @@
             </div>
         </div>
 
-        <div class="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-intro= "And Here You Can Add Tasks View Tasks Manage Tasks Status and more" data-step="6">
+        <div id="tasks-column" class="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3" >
 
             <div id="todoColumn" class="box p-6 rounded-lg bg-white dark:bg-gray-800 shadow-md">
                 <h3 class="text-lg font-semibold mb-3 flex items-center">
@@ -208,7 +209,7 @@
             </div>
         </div>
 
-        <div class="mt-6 grid gap-6 md:grid-cols-3 lg:grid-cols-3 " data-intro="Here You Can Add Reports View reports edit reports schedule meetings add meetings and more" data-step="7">
+        <div id="reports-and-meetings" class="mt-6 grid gap-6 md:grid-cols-3 lg:grid-cols-3 " >
          
             <div
                 class=" w-50 animate-slideIn  box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300 ">
@@ -297,7 +298,55 @@
 <%-include('partials/forms.ejs')%>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js">
+</script>
+<script >
+    introJs().setOptions({
+        steps : [
+            {
+                title : "Welcome to Task Manager Your ultimate project management tool",
+                intro : "You can create tasks, reports, meetings and more with Task Manager. Get started by clicking the buttons below",
+            } , 
+            {
+                element : document.getElementById("notificationBtn"),
+                title : "Notifications",
+                intro : "You can view your notifications here",
+            }, { 
+                element : document.getElementById("userMenuBtn"),
+                title : "User Menu",
+                intro : "Click here to view your profile",
+            } , { 
+                element : document.getElementById("quickActions"),
+                title : "Quick Actions",
+                intro : "You can add tasks, reports, meetings and more with quick actions",
+            }
+            , { 
+                element : document.getElementById("tasks-column"),
+                title : "Tasks",
+                intro : "You can view your tasks here and mark them as done or undone and more " ,
+            }
+            ,
+            {
+                element: document.getElementById("reports-and-meetings"),
+                title: "Reports and Meetings",
+                intro: 'You can view your reports and meetings here and more',
+            },
+           
+        ],
+       
+        showBullets : true,
+        showButtons : true,
+        exitOnEsc : true,
+        exitOnOverlayClick : false,
+        dontShowAgain : true,
+        showStepNumbers : true,
+        showProgress : true,
+        disableInteraction : true,
+        nextToDone : true,
+        
+    }).start();
+</script>
+
 </body>
 
 </html>

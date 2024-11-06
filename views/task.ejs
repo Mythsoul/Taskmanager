@@ -6,7 +6,6 @@
     <title>Tasks</title>
     <script type="module" src="/js/tasks.js"></script>
     <script src="https://kit.fontawesome.com/60cc3418d0.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/tailwind.css">
     <style>
         .task-container {
@@ -34,25 +33,30 @@
        
         </div>
     </div>
-<div class="task-container">
-    <template id="task-template" class="w-96">
-        <div class="task-item flex items-center justify-between p-4 bg-white rounded-lg shadow-md">
-            <p class="task-text text-lg font-semibold"></p>
-            <div class="flex items-center space-x-2">
-                
-                <button class="status-pending p-2 rounded-full hover:bg-yellow-200 transition">
-                    <i class="fas fa-hourglass-half text-yellow-500"></i>
-                </button>
-                <button class="status-done p-2 rounded-full hover:bg-green-200 transition">
-                    <i class="fas fa-check-circle text-green-500"></i> 
-                </button>
-                <button class="update-task-btn p-2 rounded-full hover:bg-blue-200 transition">
-                    <i class="fas fa-edit text-blue-500"></i>
-                </button>
+
+    <% tasks.forEach(task => { %>
+        <div class="task-container">
+            <div class="task-item flex items-center justify-between p-4 font-black rounded-lg shadow-md ">
+                <p class="task-text text-lg font-semibold">Task Name : <%=task.task_name %> Due Date : <%= task.due_date %> Status : <%= task.status %> priority : <%= task.priority%> </p>
+                <div class="flex items-center space-x-2">
+                    
+                    <button class="status-pending p-2 rounded-full hover:bg-yellow-200 transition">
+                        <i class="fas fa-hourglass-half text-yellow-500"></i>
+                    </button>
+                    <button class="status-done p-2 rounded-full hover:bg-green-200 transition">
+                        <i class="fas fa-check-circle text-green-500"></i> 
+                    </button>
+                    
+                        <button id="update-task-btn" class="p-2 rounded-full hover:bg-blue-200 transition" data-task-id="<%= task.task_id %>">
+                            <i class="fas fa-edit text-blue-500"></i>
+                        </button>
+                  
+                 
+                </div>
             </div>
-        </div>
     
-    </template>
+    <% }) %>
+ 
 
     <div class="task-functions">
         <div id="add_task_btn" class="add_task_btn flex justify-end">

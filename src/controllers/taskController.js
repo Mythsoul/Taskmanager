@@ -3,7 +3,7 @@ import { database } from "../config/db.js";
 import passport from "../config/passport.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
-import { render_task } from "../models/Task.js";
+import { get_tasks_data } from "../models/Task.js";
 
 dotenv.config();
 
@@ -54,7 +54,7 @@ export const add_task = async (req, res) => {
   
   
   export const update_task_status = async (req, res) => {
-    let { taskName, status } = req.body;
+    let { taskName, status , task_id } = req.body;
     const userId = req.user.id;
   
    
@@ -67,11 +67,11 @@ export const add_task = async (req, res) => {
     try {
       if(status === "done"){
       const result = await database.query(
-        "UPDATE tasks SET status = $1 WHERE task_name = $2 AND user_id = $3",
-        [status, taskName, userId]
+        "UPDATE tasks SET status = $1 WHERE task_id = $2 AND user_id = $3",
+        [status, task_id , userId]
       );
       setTimeout(async () => {
-         const delete_task = await database.query("DELETE FROM tasks WHERE task_name= $1 and user_id = $2" , [taskName , userId])
+         const delete_task = await database.query("DELETE FROM tasks WHERE task_id= $1 and user_id = $2" , [task_id , userId])
         
         }, 1000000); 
       if (result.rowCount === 0) {
@@ -80,7 +80,7 @@ export const add_task = async (req, res) => {
       res.status(200).json({ message: "Task status updated" });
   
     }else{
-      const result = await database.query("UPDATE tasks SET status = $1 WHERE task_name = $2 AND user_id = $3", [status, taskName, userId]);
+      const result = await database.query("UPDATE tasks SET status = $1 WHERE task_id = $2 AND user_id = $3", [status, task_id, userId]);
       console.log("Update result:", result);
       if (result.rowCount === 0) {
         return res.status(404).json({ message: "Task not found" });
@@ -127,8 +127,8 @@ export const add_task = async (req, res) => {
     console.log(user);
 
     try {
-        const tasks = await render_task(user.id);
-
+        const tasks = await get_tasks_data(user.id);
+console.log(tasks); 
 
        
         res.render("task", {
@@ -142,11 +142,12 @@ export const add_task = async (req, res) => {
   };
 
 
- export const update_task = async (req , res)=>{ 
+ export const edit_task = async (req , res)=>{ 
     const {taskName , due_date , priority , task_id} = req.body;
     const userId = req.user.id;
     try{ 
       const response = await database.query("Update tasks set task_name=$1 , due_date=$2 , priority=$3 where user_id=$4 and task_id = $5" , [taskName , due_date , priority , userId , task_id]);
+      res.redirect("/dashboard?query=edit+task");
     }catch(err){ 
         throw err ; 
     }

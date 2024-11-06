@@ -33,8 +33,16 @@ export async function render_task(userId) {
     console.error("Error fetching tasks:", err);
     throw new Error("Failed to fetch tasks");
   }
-}
+}; 
 
+export async function get_tasks_data(userID){ 
+    try{ 
+    const response = await database.query("SELECT * FROM tasks WHERE user_id = $1", [userID]);
+    return response.rows; 
+    }catch(err){ 
+      throw err; 
+    }
+}
 async function get_task_names(userId) {
   try {
     const response = await database.query("SELECT task_name FROM tasks WHERE user_id = $1", [userId]);
