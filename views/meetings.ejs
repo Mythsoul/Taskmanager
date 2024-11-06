@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meetings</title>
+    <script src="https://kit.fontawesome.com/60cc3418d0.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/tailwind.css">
+</head>
+<body>
+    <%- include("partials/sidebar.ejs") %>
+    <%-include ("partials/header.ejs")%>
+
+    <div class="container">
+        <h1 class="text-2xl font-bold mb-4 justify-center text-center"> Your Meetings</h1>
+        <div class="container meetings-container flex justify-center ">
+           <% meetings.forEach(meeting => { %>
+            <div class="meeting-item  items-center justify-between p-4 font-black rounded-lg shadow-md bg-white dark:bg-gray-800 transition-all duration-300 hover-scale gap-3 ">
+                <div class=" flex items-center space-x-2">
+                 <i class="fas fa-users text-blue-500"></i>
+                 <p class="meeting-title text-lg font-semibold ">Title: <%= meeting.title %> </p>
+                </div>
+                 <div class="flex items-center space-x-2">
+                     <i class="fas fa-calendar text-blue-500"></i>
+                     <p class="meeting-date text-lg font-semibold">Date: <%= meeting.date %></p>
+                 </div>
+                 <div class="flex items-center space-x-2">
+                     <i class="fas fa-clock text-blue-500"></i>
+                     <p class="meeting-time text-lg font-semibold">Time: <%= meeting.time %></p>
+                 </div>
+                 <div class="flex items-center space-x-2">
+                     <i class="fas fa-user text-blue-500"></i>
+                     <p class="meeting-attendees text-lg font-semibold">Attendees: <%= meeting.participants%></p>
+                 </div>
+
+               
+             </div>
+           <% }) %>
+        </div>
+    </div>
+</body>
+</html>

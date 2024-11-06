@@ -15,6 +15,7 @@ import authRoutes from "./src/routes/authRoutes.js";
 import taskRoutes from "./src/routes/taskRoutes.js";
 import { ensureAuthenticated } from "./src/middlewares/authMiddleware.js";
 import reportRoutes from "./src/routes/reportRoutes.js";
+import meetingRoutes from "./src/routes/meetingRoutes.js";
 const app = express();
 const port = 3000;
 
@@ -59,6 +60,8 @@ app.use(userRoutes);
 // Task Routes :
 app.use(taskRoutes);
 
+// Meeting Routes 
+app.use(meetingRoutes);
 // Auth Routes :
 app.use(authRoutes);
 
