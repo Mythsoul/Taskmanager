@@ -2,3 +2,4 @@
 
 views/dashboard.ejs linguist-vendored
 views/index.ejs linguist-vendored
+views/partials/* linguist-vendored
