@@ -3,9 +3,31 @@ document.addEventListener("DOMContentLoaded", async () => {
   const add_task_btn = document.getElementById("add_task_btn");
   const add_task_dialog = document.getElementById("taskDialog");
   const add_task_form = document.getElementById("taskForm");
-   const cancel_form_submission = document.getElementById("cancelBtn");
-   
+  const cancel_form_submission = document.getElementById("cancelBtn");
  
+ async function delete_task(){ 
+  const delete_task_btn = document.querySelectorAll("#delete_task_btn");
+   delete_task_btn.forEach((btn) => {
+     btn.addEventListener("click", async () => {
+       const task_id = btn.getAttribute("data-task-id");
+       const response = await fetch("/delete-task", {
+         method: "POST",
+         headers: {
+           "Content-Type": "application/json",
+         },
+         body: JSON.stringify({ task_id }),
+       });
+       if (response.ok) {
+         alert("Task deleted successfully");
+         window.location.reload();
+       } else {
+         alert("Failed to delete task");
+       }
+     });
+   });
+ }
+delete_task(); 
+
    let taskid = null;
 
     const update_task_dialog = document.getElementById("editTaskDialog");
@@ -100,5 +122,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       }
     
+    
     });
-
+ 

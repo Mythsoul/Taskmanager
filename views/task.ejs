@@ -1,75 +1,219 @@
+<!-- tasks.ejs -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tasks</title>
-    <script type="module" src="/js/tasks.js"></script>
-    <script src="https://kit.fontawesome.com/60cc3418d0.js" crossorigin="anonymous"></script>
+    <title>Tasks Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/tailwind.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="module" src="/js/tasks.js"></script>
     <style>
-        .task-container {
-            max-width: 600px;
-            margin: auto;
-            margin-top: 2rem;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        @layer base {
+            :root {
+                --sidebar-bg: 255 255 255;
+                --sidebar-fg: 31 41 55;
+            }
+
+            .dark {
+                --sidebar-bg: 31 41 55;
+                --sidebar-fg: 243 244 246;
+            }
         }
+
+        .task-enter {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .task-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 300ms, transform 300ms;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .task-item {
-            transition: transform 0.2s ease-in-out;
-        }
-        .task-item:hover {
-            transform: scale(1.02);
+            animation: fadeInUp 0.3s ease-out forwards;
         }
     </style>
 </head>
-<%-include('partials/sidebar.ejs')%>
-<%-include('partials/header.ejs')%>
 
-    <header class="text-center py-6 bg-indigo-500 text-white">
-        <h1 class="text-3xl font-bold">User Tasks</h1>
-    </header>
+<body
+    class="bg-gradient-to-br from-purple-50 to-indigo-100 dark:from-gray-900 dark:to-indigo-900 text-gray-800 dark:text-gray-200 font-sans">
+   
+    <%- include('partials/sidebar') %>
+     <div class="flex h-screen overflow-hidden">
+        
 
-    <div class="task-container">
-        <div class="user-tasks space-y-4 text-black">
-       
-        </div>
-    </div>
+            <div class="flex-1 flex flex-col overflow-hidden ">
+                <!-- Header -->
+                <header class="bg-white dark:bg-gray-800 shadow-lg z-10">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                        <h1
+                            class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
+                            Tasks Dashboard</h1>
+                    </div>
+                    <div class="absolute  top-4 right-10 z-10 ">
 
-    <% tasks.forEach(task => { %>
-        <div class="task-container">
-            <div class="task-item flex items-center justify-between p-4 font-black rounded-lg shadow-md ">
-                <p class="task-text text-lg font-semibold">Task Name : <%=task.task_name %> Due Date : <%= task.due_date %> Status : <%= task.status %> priority : <%= task.priority%> </p>
-                <div class="flex items-center space-x-2">
-                    
-                    <button class="status-pending p-2 rounded-full hover:bg-yellow-200 transition">
-                        <i class="fas fa-hourglass-half text-yellow-500"></i>
-                    </button>
-                    <button class="status-done p-2 rounded-full hover:bg-green-200 transition">
-                        <i class="fas fa-check-circle text-green-500"></i> 
-                    </button>
-                    
-                        <button id="update-task-btn" class="p-2 rounded-full hover:bg-blue-200 transition" data-task-id="<%= task.task_id %>">
-                            <i class="fas fa-edit text-blue-500"></i>
+                        <button id="add_task_btn"
+                            class="bg-purple-500 hover:bg-purple-600 text-white font-bold p-4 flex items-center rounded-lg">
+                            <i class="fa-solid fa-plus"></i>
+                            ADD TASK </button>
+                    </div>
+                </header>
+
+                <!-- Main content -->
+                <main class="flex-1 overflow-y-auto p-4 container mx-auto ">
+                    <div class="max-w-7xl mx-auto space-y-8 m-3">
+                        <!-- Task stats -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div
+                                class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 transform hover:scale-105 transition-transform duration-300">
+                                <h3 class="text-lg font-semibold mb-2">Total Tasks</h3>
+                                <p class="text-4xl font-bold text-purple-600 dark:text-purple-400">
+                                    <%= tasks.length %>
+                                </p>
+                            </div>
+                            <div
+                                class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 transform hover:scale-105 transition-transform duration-300">
+                                <h3 class="text-lg font-semibold mb-2">Pending Tasks</h3>
+                                <p class="text-4xl font-bold text-green-600 dark:text-green-400">
+                                    <%= tasks.filter(task=> task.status === 'pending').length %>
+                                </p>
+                            </div>
+                            <div
+                                class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 transform hover:scale-105 transition-transform duration-300 ">
+                                <h3 class="text-lg font-semibold mb-2">Task Completed</h3>
+
+                                <p class="text-4xl font-bold text-green-500 dark:text-green-400">
+                                    <%= tasks.filter(task=>task.status ==="done").length %>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Task filters -->
+                    <div class="flex flex-wrap justify-evenly  m-4 gap-4 max-w-7xl">
+                        <button
+                            class="px-6 py-3 bg-purple-500 text-white rounded-full hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 transition-colors duration-300 shadow-md">
+                            All Tasks
                         </button>
-                  
-                 
-                </div>
+                        <button
+                            class="px-6 py-3 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition-colors duration-300 shadow-md">
+                            In Progress
+                        </button>
+                        <button
+                            class="px-6 py-3 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition-colors duration-300 shadow-md">
+                            Completed
+                        </button>
+                    </div>
+
+                    <!-- Task list -->
+                    <div class="max-w-4xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden">
+                        <ul class="divide-y divide-gray-200 dark:divide-gray-700" id="taskList">
+                            <% tasks.forEach((task)=> { %>
+                                <li class="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 task-item"
+                                    style="transition-delay: 40ms;">
+                                    <div
+                                        class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0">
+                                        <div class="flex-1 min-w-0">
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">
+                                                <%= task.task_name %>
+                                            </h3>
+                                            <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:space-x-6">
+                                                <div
+                                                    class="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-400">
+                                                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400 dark:text-gray-500"
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                        fill="currentColor" aria-hidden="true">
+                                                        <path fill-rule="evenodd"
+                                                            d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                    <%= new Date(task.due_date).toLocaleDateString('en-US', {
+                                                        year: 'numeric' , month: 'short' , day: 'numeric' }) %>
+                                                </div>
+                                                <div class="mt-2 flex items-center text-sm">
+                                                    <span
+                                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
+                                                        <%= task.status %>
+                                                    </span>
+                                                </div>
+                                                <div
+                                                    class="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-400">
+                                                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400 dark:text-gray-500"
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                        fill="currentColor" aria-hidden="true">
+                                                        <path fill-rule="evenodd"
+                                                            d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                    Priority: <%= task.priority %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex-shrink-0 mt-4 sm:mt-0">
+                                            <div class="flex space-x-2">
+                                                <button id="update-task-btn"
+                                                    class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors duration-200" data-task-id="<%= task.task_id %>">
+                                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
+                                                        </path>
+                                                    </svg> 
+                                                    
+                                                    <span class="sr-only">Edit</span>
+                                                </button>
+                                                <button  disabled
+                                                    class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 transition-colors duration-200">
+                                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z">
+                                                        </path>
+                                                    </svg>
+                                                    <span class="sr-only">Update Status</span>
+                                                </button>
+                                                <button id="delete_task_btn"
+                                                    class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200" data-task-id="<%= task.task_id %>"[]>
+                                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                            clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    <span class="sr-only">Delete</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <% }) %>
+                        </ul>
+                    </div>
             </div>
-    
-    <% }) %>
- 
-
-    <div class="task-functions">
-        <div id="add_task_btn" class="add_task_btn flex justify-end">
-            <button id="addTaskBtn" class=  "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Add Task
-            </button>
-        </div>
+            </main>
     </div>
-</div>
-
+    </div>
 
     <%-include("partials/forms.ejs")%>
 
 </body>
+
 </html>

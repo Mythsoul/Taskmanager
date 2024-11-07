@@ -96,15 +96,19 @@ export const add_task = async (req, res) => {
   };
   
   export const delete_task = async (req, res) => { 
-    const taskName = req.body.taskName; 
+    const taskName = req.body.task_id; 
     const userID = req.user.id; 
     console.log(`Deleting task: ${taskName} for user ID: ${userID}`);
     try { 
         const result = await database.query(
-            "DELETE FROM tasks WHERE task_name = $1 AND user_id = $2",
+            "DELETE FROM tasks WHERE task_id = $1 AND user_id = $2",
             [taskName, userID]
         );
-        res.redirect("/dashboard?query=delete+task");
+        if (result.rowCount === 0) { 
+            res.status(404).json({ message: "Task not found" });
+        } else { 
+            res.status(200).json({ message: "Task deleted successfully" });
+        }
     } catch (err) { 
         console.error("Error executing delete query:", err);
         res.status(500).json({ message: "Error deleting task" });
