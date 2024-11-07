@@ -128,9 +128,7 @@ export const add_task = async (req, res) => {
 
     try {
         const tasks = await get_tasks_data(user.id);
-console.log(tasks); 
-
-       
+  
         res.render("task", {
             user: user,
             tasks: tasks,

@@ -1,6 +1,7 @@
 import express from "express"; 
 
 import { database as db } from "../config/db.js";
+import { get_reports } from "../models/reports.js";
 
 export const delete_report = async (req, res) => { 
     const report_id = parseInt(req.params.id);
@@ -85,3 +86,18 @@ const { report_title, report_description , report_id} = req.body;
     return res.status(500).json({ message: "Internal server error" });
  }
 }; 
+
+export const render_reports_page = async(req, res) => {
+    const user = req.user;
+    console.log(user);
+    try {
+        const reports = await get_reports(user.id);
+        res.render("reports.ejs", {
+            user: user,
+            reports: reports,
+        });
+    } catch (err) {
+        console.error("Error loading dashboard:", err);
+        res.status(500).send("Failed to load dashboard");
+    }
+};
