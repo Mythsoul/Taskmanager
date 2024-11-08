@@ -1,143 +1,165 @@
-<!-- reports.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Reports</title>
+    <title>Reports Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://kit.fontawesome.com/60cc3418d0.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/css/tailwind.css">
-
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="module" src="/js/reports.js"></script>
     <style>
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @layer base {
+            :root {
+                --sidebar-bg: 255 255 255;
+                --sidebar-fg: 31 41 55;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(-100%);
-            }
-            to {
-                transform: translateX(0);
+            .dark {
+                --sidebar-bg: 31 41 55;
+                --sidebar-fg: 243 244 246;
             }
         }
-
-        .report-card {
-            animation: fadeInUp 0.5s ease-out;
-            transition: all 0.3s ease;
+        .report-enter {
+            opacity: 0;
+            transform: translateY(20px);
         }
-
-        .report-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(100, 100, 255, 0.1);
-        }
-
-        .progress-bar {
-            width: 0;
-            transition: width 0.3s ease-in-out;
-        }
-
-        .report-card:hover .progress-bar {
-            width: 100%;
-        }
-
-        .status-dot {
-            transition: all 0.3s ease;
-        }
-
-        .report-card:hover .status-dot {
-            transform: scale(1.2);
+        .report-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 300ms, transform 300ms;
         }
     </style>
 </head>
-<%-include("partials/sidebar.ejs")%>
-<body class="bg-gray-100 ">
-    
-<%-include("partials/header.ejs")%>
-    <div class="max-w-7xl mx-auto">
-        <!-- Header Section -->
-        <div class="flex flex-col md:flex-row justify-between items-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 md:mb-0">Your Reports</h1>
-            <div class="flex gap-4 w-full md:w-auto">
-                <div class="relative flex-1 md:flex-initial">
-                    <input 
-                        type="search" 
-                        placeholder="Search reports..." 
-                        class="w-full px-4 py-2 rounded-lg border border-purple-200 focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white/90"
-                    >
+<body class="bg-gradient-to-br from-green-50 to-teal-100 dark:from-gray-900 dark:to-teal-900 text-gray-800 dark:text-gray-200 font-sans">
+    <div class="flex flex-col md:flex-row h-screen overflow-hidden">
+        <%- include('partials/sidebar') %>
+
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <header class="bg-white dark:bg-gray-800 shadow-lg z-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
+                    <h1 class="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-teal-600">Reports Dashboard</h1>
+                    <button id="add_report_btn" class="bg-green-500 text-white rounded-full hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition-colors duration-300 shadow-md px-4 py-2 text-sm md:text-base">
+                        <i class="fa fa-plus mr-2"></i>
+                        Add Report
+                    </button>
                 </div>
-                <button 
-                    class="px-6 py-2 bg-purple-600 text-white rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300 flex items-center gap-2"
-                    onclick="showAddReportModal()"
-                >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    Add Report
-                </button>
-            </div>
-        </div>
+            </header>
 
-     
-
-        <!-- Reports Grid -->
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <% reports.forEach((report) => { %>
-                <div class="report-card bg-white rounded-xl shadow-md overflow-hidden">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            
+            <main class="flex-1 overflow-y-auto p-4">
+                <div class="max-w-7xl mx-auto space-y-6">
+                    <!-- Report stats -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6 transform hover:scale-105 transition-transform duration-300">
+                            <h3 class="text-lg font-semibold mb-2">Total Reports</h3>
+                            <p class="text-3xl md:text-4xl font-bold text-green-600 dark:text-green-400"><%= reports.length %></p>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2"><%= report.report_title %></h3>
-                        <p class="text-gray-600 mb-4 text-sm"><%= report.report_description %></p>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                               
-                            <div class="flex items-center gap-2">
-                                <button class="p-2 text-blue-600 hover:text-blue-800 transition-colors duration-200 hover:bg-blue-50 rounded-full">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
-                                </button>
-                                <button class="p-2 text-red-600 hover:text-red-800 transition-colors duration-200 hover:bg-red-50 rounded-full">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                </button>
-                            </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6 transform hover:scale-105 transition-transform duration-300">
+                            <h3 class="text-lg font-semibold mb-2">Recent Reports</h3>
+                            <p class="text-3xl md:text-4xl font-bold text-teal-600 dark:text-teal-400"><%= reports.filter(r => new Date(r.date) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).length %></p>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6 transform hover:scale-105 transition-transform duration-300">
+                            <h3 class="text-lg font-semibold mb-2">Avg. Report Score</h3>
+                            <p class="text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400"><%= (reports.reduce((sum, r) => sum + r.score, 0) / reports.length).toFixed(1) %></p>
                         </div>
                     </div>
-                    <div class="progress-bar bg-gradient-to-r from-purple-500 to-indigo-600 h-1"></div>
+
+                    <!-- Report visualizations -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6">
+                            <h3 class="text-xl font-semibold mb-4">Report Categories</h3>
+                            <p class="text-3xl md:text-5xl text-center py-8">ON GOING</p>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6">
+                            <h3 class="text-xl font-semibold mb-4">Monthly Report Submissions</h3>
+                            <p class="text-3xl md:text-5xl text-center py-8">ON GOING</p>
+                        </div>
+                    </div>
+
+                    <!-- Report filters -->
+                    <div class="flex flex-wrap gap-2 md:gap-4">
+                        <button class="px-4 py-2 md:px-6 md:py-3 bg-green-500 text-white rounded-full hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition-colors duration-300 shadow-md text-sm md:text-base">
+                            All Reports
+                        </button>
+                        <button class="px-4 py-2 md:px-6 md:py-3 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition-colors duration-300 shadow-md text-sm md:text-base">
+                            Financial
+                        </button>
+                        <button class="px-4 py-2 md:px-6 md:py-3 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition-colors duration-300 shadow-md text-sm md:text-base">
+                            Operational
+                        </button>
+                        <button class="px-4 py-2 md:px-6 md:py-3 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition-colors duration-300 shadow-md text-sm md:text-base">
+                            Marketing
+                        </button>
+                    </div>
+
+                    <!-- Reports list -->
+                    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden">
+                        <ul class="divide-y divide-gray-200 dark:divide-gray-700" id="reportList">
+                            <% reports.forEach((report) => { %>
+                                <li class="px-4 md:px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 report-item" style="transition-delay:200ms;">
+                                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                                        <div class="mb-2 md:mb-0">
+                                            <h3 class="text-base md:text-lg font-semibold"><%= report.report_title %></h3>
+                                        </div>
+                                        <div class="flex items-center space-x-4">
+                                            <button id="view_report_btn" class="text-sm text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 focus:outline-none transition-colors duration-200" data-report-id="<%=report.report_id %>">
+                                                View Report
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="report-description mt-2 hidden" data-report-id="<%=report.report_id %>">
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                                            <%= report.report_description %>
+                                        </p>
+                                    </div>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    </div>
                 </div>
-            <% }); %>
+            </main>
         </div>
     </div>
 
-    <%-include("partials/forms.ejs")%>
-
     <script>
-        function showAddReportModal() {
-          
-            console.log('Add report clicked');
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            localStorage.setItem('color-theme', theme);
         }
 
-      
-        document.addEventListener('DOMContentLoaded', () => {
-            const cards = document.querySelectorAll('.report-card');
-            cards.forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.animation = `fadeInUp 0.5s ease-out ${index * 0.1}s forwards`;
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            setTheme('dark');
+        } else {
+            setTheme('light');
+        }
+
+        document.querySelectorAll('#view_report_btn').forEach(button => {
+            button.addEventListener('click', function() {
+               const report_id = this.getAttribute('data-report-id');
+               const report_description = document.querySelectorAll('.report-description');
+               report_description.forEach(item => {
+                   if (item.getAttribute('data-report-id') === report_id) {
+                      item.classList.toggle('hidden');
+                   } else {
+                     item.classList.add('hidden');
+                   }
+               });
             });
         });
+
+        const reportItems = document.querySelectorAll('.report-item');
+        reportItems.forEach((item, index) => {
+            item.classList.add('report-enter');
+            setTimeout(() => {
+                item.classList.add('report-enter-active');
+            }, 50 * index); 
+        });
     </script>
+
+    <%- include('partials/forms.ejs') %>
 </body>
 </html>
