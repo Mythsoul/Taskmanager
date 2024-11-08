@@ -3,45 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meetings</title>
-    <script src="https://kit.fontawesome.com/60cc3418d0.js" crossorigin="anonymous"></script>
+    <title>Meetings Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/css/tailwind.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="module" src="/js/meeting.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @layer base {
+            :root {
+                --sidebar-bg: 255 255 255;
+                --sidebar-fg: 31 41 55;
+            }
+            .dark {
+                --sidebar-bg: 31 41 55;
+                --sidebar-fg: 243 244 246;
+            }
+        }
+        .meeting-enter {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .meeting-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 300ms, transform 300ms;
+        }
+    </style>
 </head>
-<body>
-    <%- include("partials/sidebar.ejs") %>
-    <%-include ("partials/header.ejs")%>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-indigo-900 text-gray-800 dark:text-gray-200 font-sans">
+    <div class="flex flex-col md:flex-row h-screen overflow-hidden">
+        <%- include('partials/sidebar') %>
 
-    <div class="container">
-        <% if(meetings.length == 0){ %>
-            <h1 class="text-2xl font-bold mb-4 justify-center text-center"> No Meetings Found</h1>
-          <%  }%>
-        <h1 class="text-2xl font-bold mb-4 justify-center text-center"> Your Meetings</h1>
-        <div class="container meetings-container flex justify-center ">
-           <% meetings.forEach(meeting => { %>
-        
-            <div class="meeting-item  items-center justify-between p-4 font-black rounded-lg shadow-md bg-white dark:bg-gray-800 transition-all duration-300 hover-scale gap-3 ">
-                <div class=" flex items-center space-x-2">
-                 <i class="fas fa-users text-blue-500"></i>
-                 <p class="meeting-title text-lg font-semibold ">Title: <%= meeting.title %> </p>
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <header class="bg-white dark:bg-gray-800 shadow-lg z-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
+                    <h1 class="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-600">Meetings Dashboard</h1>
+                    <button id="scheduleMeetingBtn" class="bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-300 shadow-md px-4 py-2 text-sm md:text-base">
+                        <i class="fa fa-plus mr-2"></i>
+                        Add Meeting
+                    </button>
                 </div>
-                 <div class="flex items-center space-x-2">
-                     <i class="fas fa-calendar text-blue-500"></i>
-                     <p class="meeting-date text-lg font-semibold">Date: <%= meeting.date %></p>
-                 </div>
-                 <div class="flex items-center space-x-2">
-                     <i class="fas fa-clock text-blue-500"></i>
-                     <p class="meeting-time text-lg font-semibold">Time: <%= meeting.time %></p>
-                 </div>
-                 <div class="flex items-center space-x-2">
-                     <i class="fas fa-user text-blue-500"></i>
-                     <p class="meeting-attendees text-lg font-semibold">Attendees: <%= meeting.participants%></p>
-                 </div>
+            </header>
 
-               
-             </div>
-           <% }) %>
+            <main class="flex-1 overflow-y-auto p-4">
+                <div class="max-w-7xl mx-auto space-y-6">
+                    <!-- Meeting stats -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6 transform hover:scale-105 transition-transform duration-300">
+                            <h3 class="text-lg font-semibold mb-2">Total Meetings</h3>
+                            <p class="text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400"><%= meetings.length %></p>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6 transform hover:scale-105 transition-transform duration-300">
+                            <h3 class="text-lg font-semibold mb-2">Upcoming Meetings</h3>
+                            <p class="text-3xl md:text-4xl font-bold text-green-600 dark:text-green-400"><%= meetings.filter(m => new Date(m.date + ' ' + m.time) > new Date()).length %></p>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6 transform hover:scale-105 transition-transform duration-300">
+                            <h3 class="text-lg font-semibold mb-2">Past Meetings</h3>
+                            <p class="text-3xl md:text-4xl font-bold text-red-600 dark:text-red-400"><%= meetings.filter(m => new Date(m.date + ' ' + m.time) <= new Date()).length %></p>
+                        </div>
+                    </div>
+
+                    <!-- Meeting visualizations -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6">
+                            <h3 class="text-xl font-semibold mb-4">Meeting Categories</h3>
+                            <div id="meetingCategoriesChart" class="h-64">
+                                <p class="text-center text-gray-400 dark:text-gray-500"> No data available.</p>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6">
+                            <h3 class="text-xl font-semibold mb-4">Monthly Meeting Distribution</h3>
+                            <div id="monthlyMeetingsChart" class="h-64">
+                                <p class="text-center text-gray-400 dark:text-gray-500"> No data available.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Meeting filters -->
+                    <div class="flex flex-wrap gap-2 md:gap-4">
+                        <button class="px-4 py-2 md:px-6 md:py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-300 shadow-md text-sm md:text-base">
+                            All Meetings
+                        </button>
+                        <button class="px-4 py-2 md:px-6 md:py-3 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition-colors duration-300 shadow-md text-sm md:text-base">
+                            Upcoming
+                        </button>
+                        <button class="px-4 py-2 md:px-6 md:py-3 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition-colors duration-300 shadow-md text-sm md:text-base">
+                            Past
+                        </button>
+                    </div>
+
+                    <!-- Meetings list -->
+                    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden">
+                        <ul class="divide-y divide-gray-200 dark:divide-gray-700" id="meetingList">
+                            <% meetings.forEach((meeting) => { %>
+                                <li class="px-4 md:px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 meeting-item" style="transition-delay:200ms;">
+                                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                                        <div class="mb-2 md:mb-0">
+                                            <h3 class="text-base md:text-lg font-semibold"><%= meeting.title %></h3>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400"><%= new Date(meeting.date).toLocaleDateString() %>  at <%= meeting.time %></p>
+                                        </div>
+                                        <div class="flex items-center space-x-4">
+                                            <span class="px-3 py-1 text-xs font-semibold rounded-full <%= new Date(meeting.date + ' ' + meeting.time) > new Date() ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100' %>">
+                                                <%= new Date(meeting.date + ' ' + meeting.time) > new Date() ? 'Upcoming' : 'Past' %>
+                                            </span>
+                                            <button class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 focus:outline-none transition-colors duration-200 view-meeting-btn" data-meeting-id="<%= meeting.id %>">
+                                                View Details
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="meeting-details mt-2 hidden" data-meeting-id="<%= meeting.id %>">
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                                            Attendees: <%= meeting.participants.join(', ') %>
+                                        </p>
+                                    </div>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
+
+
+    <%- include('partials/forms.ejs') %>
 </body>
 </html>

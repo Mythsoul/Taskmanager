@@ -7,7 +7,7 @@ export const render_meetingpage = async (req , res)=>{
     console.log(meeting);
     try  { 
         res.render("meetings.ejs" , { 
-            meetings : await meeting, 
+            meetings :  meeting, 
             user :user,
         })
     }catch(err){ 
