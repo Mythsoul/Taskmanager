@@ -1,7 +1,7 @@
 import express from "express"; 
 import { database } from "../config/db.js"; 
 import passport from "../config/passport.js";
-import bcrypt from "bcrypt";
+
 import dotenv from "dotenv";
 import { get_tasks_data } from "../models/Task.js";
 
@@ -54,26 +54,26 @@ export const add_task = async (req, res) => {
   
   
   export const update_task_status = async (req, res) => {
-    let { taskName, status , task_id } = req.body;
+    let { status , task_id } = req.body;
     const userId = req.user.id;
   
-   
-    taskName = taskName.trim();
+
     
-    if (!taskName || !status) {
-      return res.status(400).json({ message: "Task name and status are required" });
+    if (!task_id || !status) {
+      return res.status(400).json({ message: "Task id and status are required" });
     }
   
     try {
-      if(status === "done"){
+      if(status === "Done"){
       const result = await database.query(
         "UPDATE tasks SET status = $1 WHERE task_id = $2 AND user_id = $3",
         [status, task_id , userId]
       );
-      setTimeout(async () => {
+      setTimeout(
+        async () => {
          const delete_task = await database.query("DELETE FROM tasks WHERE task_id= $1 and user_id = $2" , [task_id , userId])
         
-        }, 1000000); 
+        }, 60000); 
       if (result.rowCount === 0) {
         return res.status(404).json({ message: "Task not found" });
       }

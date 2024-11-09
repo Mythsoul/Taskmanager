@@ -5,6 +5,50 @@ document.addEventListener("DOMContentLoaded", async () => {
   const add_task_form = document.getElementById("taskForm");
   const cancel_form_submission = document.getElementById("cancelBtn");
  
+  async function update_task_status() { 
+      
+ const pending_status_buttons = document.querySelectorAll("#status-pending-btn");
+ pending_status_buttons.forEach ((button) => {
+     button.addEventListener("click", async() => {
+         const task_id = button.getAttribute("data-task-id");
+      const response = await fetch("/update-task-status", {
+         method: "POST",
+         headers: {
+             "Content-Type": "application/json",
+         },
+         body: JSON.stringify({ task_id, status: "Pending" }),
+     }) 
+   
+        if (response.ok) {
+            alert("Task status updated to Pending");
+            window.location.reload();
+        }else{
+            alert("Failed to update task status");
+        }
+     })
+ })
+
+ const done_status_buttons = document.querySelectorAll("#status-done-btn");
+ done_status_buttons.forEach((button) => {
+     button.addEventListener("click", async() => {
+         const task_id = button.getAttribute("data-task-id");
+      const response = await fetch("/update-task-status", {
+         method: "POST",
+         headers: {
+             "Content-Type": "application/json",
+         },
+         body: JSON.stringify({ task_id, status: "Done" }),
+     })
+        if (response.ok) {
+            alert("Task status updated to Done");
+            window.location.reload();
+        }else{
+            alert("Failed to update task status");
+        }
+     })
+ });
+  }
+ update_task_status();
  async function delete_task(){ 
   const delete_task_btn = document.querySelectorAll("#delete_task_btn");
    delete_task_btn.forEach((btn) => {
@@ -99,29 +143,36 @@ delete_task();
  }; 
  add_task();  
  
+ const pendingTasksButton = document.getElementById("pending_tasks");
+ pendingTasksButton.addEventListener("click", () => {
+     const tasks = document.querySelectorAll(".task-item");
+     tasks.forEach((task) => {
+         if (task.getAttribute("data-tasks-status") === "Pending") {
+             task.style.display = "block";
+         } else {
+             task.style.display = "none";
+         }
+     });
+ });
 
-   
-    async function update_task_status(taskName, status , task_id) {
-        try {
-          const response = await fetch("/update-task-status",{
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ taskName, status , task_id }),
-          });
-    
-          if (response.ok) {
-            alert("Task status updated successfully");
-          } else {
-            alert("Failed to update task status");
-          }
-         } catch (error) {
-          console.error("Error updating task status:", error);
-          alert("An error occurred while updating the task status.");
-        }
-      }
-    
-    
-    });
- 
+ const completedTasksButton = document.getElementById("completed_tasks");
+ completedTasksButton.addEventListener("click", () => {
+     const tasks = document.querySelectorAll(".task-item");
+     tasks.forEach((task) => {
+         if (task.getAttribute("data-tasks-status") === "Done") {
+             task.style.display = "block";
+         } else {
+             task.style.display = "none";    
+         }
+     });
+ });
+ const alltasksButton = document.querySelector("#all_tasks");
+ alltasksButton.addEventListener("click", () => {
+     const tasks = document.querySelectorAll(".task-item");
+     tasks.forEach((task) => {
+         task.style.display = "block";
+     });
+ })
+
+
+}); 
