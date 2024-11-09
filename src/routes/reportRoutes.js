@@ -5,7 +5,7 @@ import { ensureAuthenticated  } from "../middlewares/authMiddleware.js";
 const router = express(); 
 
 router.post("/createreport" , ensureAuthenticated , add_report);  
-router.get("/deletereport/:id" , ensureAuthenticated , delete_report);
+router.post("/deletereport" , ensureAuthenticated , delete_report);
 router.post("/updatereport" , ensureAuthenticated , update_report);
 router.get("/dashboard/user/reports" , ensureAuthenticated , render_reports_page);  
 

@@ -4,16 +4,16 @@ import { database as db } from "../config/db.js";
 import { get_reports } from "../models/reports.js";
 
 export const delete_report = async (req, res) => { 
-    const report_id = parseInt(req.params.id);
+    const report_id = req.body.report_id;
     console.log("Report ID:", report_id);
     const user_id = req.user.id; 
     try { 
         const result = await db.query("DELETE FROM reports WHERE report_id = $1 AND user_id = $2", [report_id, user_id]); 
         if (result.rowCount === 0) { 
-            res.redirect("/dashboard?query=delete+failed"); 
+         res.status(404).send("Report not found");
             return;
         } 
-        res.redirect("/dashboard?query=delete+success"); 
+        res.status(200).send("Report deleted successfully");
     } catch (err) { 
         console.error("Error deleting report:", err); 
         res.status(500).send("Failed to delete report");
