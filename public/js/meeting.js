@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const participants = document.getElementById("participants").value;
 
             try {
-                const response = await fetch("/scheduleMeeting", {
+                const response = await fetch("/meetings/createmeeting", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

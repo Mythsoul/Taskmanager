@@ -10,7 +10,7 @@ import session from "express-session" ;
 import { fetchFunFact } from "./src/models/fun.js";
 import connectPgSimple from "connect-pg-simple";
 import userRoutes from "./src/routes/userRoutes.js";
-import { add_report , scheduleMeeting } from "./src/models/quick-action.js";
+
 import authRoutes from "./src/routes/authRoutes.js";
 import taskRoutes from "./src/routes/taskRoutes.js";
 import { ensureAuthenticated } from "./src/middlewares/authMiddleware.js";
@@ -69,7 +69,6 @@ app.use(authRoutes);
 
 app.use(reportRoutes);
 
-app.post("/scheduleMeeting" , ensureAuthenticated , scheduleMeeting);
 
 
 app.listen(port, () => {

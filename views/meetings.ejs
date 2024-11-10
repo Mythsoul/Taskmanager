@@ -160,8 +160,8 @@
                                   </div>
                                 </div>
                                 <div class="meeting-details mt-2 hidden transition-all duration-30 opacity-0 bg-gray-50 dark:bg-gray-200 rounded-lg p-3" data-meeting-id="<%= meeting.id %>">
-                                  <p class="text-xl text-black dark:text-black ">
-                                    <strong>Attendees:</strong> <%= meeting.participants.join(', ') %>
+                                  <p class="text-sm text-black dark:text-black ">
+                                    <strong>Attendees:</strong> <%= meeting.participants %>
                                   </p>
                              
                                 </div>
@@ -173,9 +173,9 @@
                     
                     <!-- Meeting visualizations -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6 h-80 animate-fade-in" style="animation-delay: 0.6s;">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6 h-80 animate-fade-in overflow-auto" style="animation-delay: 0.6s;">
                             <h3 class="text-xl font-semibold mb-4">Meeting Categories</h3>
-                            <canvas id="meetingCategoriesChart"></canvas>
+                            <canvas id="meetingCategoriesChart" class="w-full h-full overscroll-contain"></canvas>
                             <p class="text-sm text-gray-600 dark:text-gray-400 mt-4">These are example charts</p>
                         </div>
                         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6 h-80 animate-fade-in" style="animation-delay: 0.8s;">
