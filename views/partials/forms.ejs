@@ -224,6 +224,47 @@
     </div>
   </dialog>
 
+  <dialog id="updateMeetingDialog" class="bg-gray-800 text-white rounded-xl shadow-2xl transition-all duration-300 ease-in-out transform scale-95 opacity-100 open:scale-100 open:opacity-100">
+    <div class="p-6 space-y-6">
+      <h2 class="text-2xl font-bold text-blue-400 flex items-center">
+        <i class="ri-edit-box-line mr-2"></i> Update Meeting
+      </h2>
+      <form id="updateMeetingForm" method="dialog" class="space-y-4">
+        <div class="space-y-2">
+          <label for="updatemeetingName" class="block text-sm font-medium text-gray-300">Meeting Name</label>
+          <input type="text" id="updatemeetingName" required
+            class="w-full px-3 py-2 text-gray-300 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out hover:bg-gray-600">
+        </div>
+        <div class="space-y-2">
+          <label for="updatemeetingDate" class="block text-sm font-medium text-gray-300">Date</label>
+          <input type="date" id="updatemeetingDate" required
+            class="w-full px-3 py-2 text-gray-300 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out hover:bg-gray-600">
+        </div>
+        <div class="space-y-2">
+          <label for="updatemeetingTime" class="block text-sm font-medium text-gray-300">Time</label>
+          <input type="time" id="updatemeetingTime" required
+            class="w-full px-3 py-2 text-gray-300 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out hover:bg-gray-600">
+        </div>
+        <div class="space-y-2">
+          <label for="updateMeetingParticipants" class="block text-sm font-medium text-gray-300">Participants</label>
+            <input type="text" id="updateMeetingParticipants" required
+              class="w-full px-3 py-2 text-gray-300 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out hover:bg-gray-600">
+        </div>
+        <div class="flex justify-end space-x-3">
+          <button type="button" id="cancel_meeting_update"
+            class="px-4 py-2 text-sm font-medium text-gray-300 bg-gray-700 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all duration-200 ease-in-out">
+            <i class="ri-close-line mr-1"></i> Cancel
+          </button>
+          <button type="submit" id="submitMeeting"
+            class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ease-in-out">
+            <i class="ri-save-line mr-1"></i> Update Meeting
+          </button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+
   <script>
     const dialogs = document.querySelectorAll('dialog');
   

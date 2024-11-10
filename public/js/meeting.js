@@ -52,7 +52,76 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     scheduleMeeting();
-function setTheme(theme) {
+
+async function delete_meeting(){ 
+    const delete_meeting_btn = document.querySelectorAll('#delete_meeting_btn');
+    delete_meeting_btn.forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            const meeting_id = btn.getAttribute('data-meeting-id');
+            console.log(meeting_id);
+            const response = await fetch('/meetings/deletemeeting', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ meeting_id })
+            });
+            if (response.ok) {
+                alert('Meeting deleted successfully!');
+                window.location.reload();
+            } else {
+                const error = await response.json();
+                alert(`Failed to delete meeting: ${error.message}`);
+            }
+        })
+    })
+}; 
+delete_meeting();
+
+const update_meeting_btn = document.querySelectorAll('#update_meeting_btn');
+const update_meeting_dialog = document.getElementById('updateMeetingDialog');
+const update_meeting_form = document.getElementById('updateMeetingForm');
+const cancel_update_meeting_btn = document.getElementById('cancel_meeting_update');
+let meeting_id = null;
+update_meeting_btn.forEach((btn) => {
+    btn.addEventListener('click', () => {
+        meeting_id = btn.getAttribute('data-meeting-id');
+        update_meeting_dialog.showModal();
+        update_meeting_form.setAttribute('data-meeting-id', meeting_id);    
+    });
+});
+update_meeting_form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const title = document.getElementById('updatemeetingName').value;
+    const date = document.getElementById('updatemeetingDate').value;
+    const time = document.getElementById('updatemeetingTime').value;
+    const participants = document.getElementById('updateMeetingParticipants').value;
+    try {
+        const response = await fetch('/meetings/updatemeeting', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ meeting_id, title, date, time, participants })
+        });
+        if (response.ok) {
+            alert('Meeting updated successfully!');
+            window.location.reload();
+        } else {
+            const error = await response.json();
+            alert(`Failed to update meeting: ${error.message}`);
+        }
+    } catch (error) {
+        console.error('Error updating meeting:', error);
+        alert('An error occurred while updating the meeting.');
+    }
+})
+cancel_update_meeting_btn.addEventListener('click', () => {
+     update_meeting_dialog.close();
+});
+
+
+    function setTheme(theme) {
             if (theme === 'dark') {
                 document.documentElement.classList.add('dark');
             } else {
@@ -88,7 +157,6 @@ function setTheme(theme) {
                 item.classList.add('meeting-enter-active');
             }, 50 * index); 
         });
-
 
 
     }); 
