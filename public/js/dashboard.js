@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-    introJs().start();
+
     const dialog = document.getElementById("taskDialog");
-    const addTaskBtn = document.querySelector(".add-task-btn");
+    const addTaskBtn = document.querySelectorAll("#add-task-btn");
     const cancelBtn = document.getElementById("cancelBtn");
     const taskForm = document.getElementById("taskForm");
     const statusBtns = document.querySelectorAll(".status-btn");
@@ -132,9 +132,10 @@ document.addEventListener("DOMContentLoaded", () => {
     //     funFactSidebar.classList.add('hidden');
     // });
 
-    addTaskBtn.addEventListener("click", () => {
+    addTaskBtn.forEach((btn) => btn.addEventListener("click", () => {
         dialog.showModal();
-    });
+    }));
+
 
     cancelBtn.addEventListener("click", () => {
         dialog.close();
@@ -189,37 +190,54 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     taskForm.addEventListener("submit", addTask);
 
-    statusBtns.forEach((statusBtn) => {
-        statusBtn.addEventListener("click", async (event) => {
-            const taskDiv = event.target.closest(".task_div");
-            if (!taskDiv) return;
-            const [taskName, dueDateText] = taskDiv.innerText.split("Due Date: ").map(str => str.trim());
-            const status = event.target.classList.contains("pending") ? "pending" : "done";
-            await updateTaskStatus(taskName, status);
-            taskDiv.remove();
+
+    async function updateTaskStatusbtns() {
+    const pendingStatusButtons = document.querySelectorAll("#pending-task-btn");
+    const doneStatusButtons = document.querySelectorAll("#done-task-btn");
+
+    pendingStatusButtons.forEach((button) => {
+        button.addEventListener("click", async () => {
+            const taskid = button.getAttribute("data-task-id");
+            const status = "Pending";
+          updateTaskStatus(status, taskid);
+        
+            
         });
+    doneStatusButtons.forEach((button) => {
+        button.addEventListener("click", async () => {
+            const taskid = button.getAttribute("data-task-id");
+            const status = "Done";
+          updateTaskStatus(status, taskid);
+        
+            
+        });
+    })
     });
+}
+async function updateTaskStatus(status , task_id) {
+    
+    try {
+        const response = await fetch("/update-task-status", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ task_id, status }),
+        });
 
-    async function updateTaskStatus(taskName, status) {
-        console.log(`Updating task status of : ${taskName} to ${status} `);
-        try {
-            const response = await fetch("/update-task-status", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ taskName, status }),
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                alert(`Failed to update task status: ${error.message}`);
-            }
-        } catch (error) {
-            console.error("Error updating task status:", error);
-            alert("An error occurred while updating the task status.");
+        if (response.ok) {
+            window.location.reload();
+        } else {   
+            const error = await response.json();
+            alert(`Failed to update task status: ${error.message}`);
         }
+    } catch (error) {
+        console.error("Error updating task status:", error);
+        alert("An error occurred while updating the task status.");
+
     }
+         
+}
 
     taskForm.addEventListener("keyup", (event) => {
         if (event.key === "Enter") {
@@ -359,7 +377,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const participants = document.getElementById("participants").value;
 
             try {
-                const response = await fetch("/scheduleMeeting", {
+                const response = await fetch("/meetings/createmeeting", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

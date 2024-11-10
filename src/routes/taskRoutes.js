@@ -12,7 +12,7 @@ router.post("/update-task-status", ensureAuthenticated, update_task_status);
 
 router.post("/update-task", ensureAuthenticated, edit_task);
 
-router.get("/user-tasks", ensureAuthenticated, render_tasks_page);
+router.get("/dashboard/user/tasks", ensureAuthenticated, render_tasks_page);
 
 router.get("/api/user-tasks", ensureAuthenticated, api_render_tasks);
 

@@ -1,9 +1,10 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import { database as db } from "./db.js";
 dotenv.config();
+
 
 passport.use(
     new GoogleStrategy(
