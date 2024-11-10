@@ -61,13 +61,17 @@ Configure a .env file in the root directory with your database credentials, API 
 ### EX 
 
 ``` 
+
+# For local : 
+
+
 DB_USER = "same as below "
 DB_HOST = "same "
 DB_NAME = "same"
 DB_PASSWORD = 'same'
 DB_PORT = 'same'
 
-# #  neon tech database 
+# for online databases like   neon tech database 
 
 # DB_USER="user like taskmanager_owner"
 # DB_HOST ="write host address"
