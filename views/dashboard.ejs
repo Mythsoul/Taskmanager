@@ -1,371 +1,409 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Management Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.css">   
-    <script src="/js/dashboard.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="/js/dashboard.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
-/* Add these custom styles to your existing CSS */
-.hover-scale {
-  transition: transform 0.3s ease;
-}
 
-.hover-scale:hover {
-  transform: scale(1.1);
-}
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
 
-.hover-rotate {
-  transition: transform 0.3s ease;
-}
+        .animate-slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
 
-.hover-rotate:hover {
-  transform: rotate(15deg);
-}
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-.animate-fadeIn {
-  animation: fadeIn 0.5s ease-in-out;
-}
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
 
-.animate-slideIn {
-  animation: slideIn 0.5s ease-in-out;
-}
+        .hover-scale {
+            transition: transform 0.3s ease;
+        }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
 
-@keyframes slideIn {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
 
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1F2937;
+        }
 
-
-.dashboard-content {
-  margin-left: 250px; 
-  padding: 20px;
-}
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #4B5563;
+            border-radius: 20px;
+        }
     </style>
 </head>
+<body class="bg-gray-900 text-gray-100 min-h-screen">
+    <div class="flex h-screen">
+            <%- include('partials/sidebar') %>
 
-<body class="min-h-screen transition-colors duration-300 text-gray-800 bg-gray-100">
-    <%-include('partials/sidebar.ejs')%>  
-    <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-10"></div>
-        
-    <div class="content p-4 max-w-7xl mx-auto md:ml-64 transition-all duration-300">
-        <div class="mb-6 animate-fadeIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300">
-            <div class="flex flex-col sm:flex-row items-center justify-between">
-                <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">Management Dashboard</h1>
-               
-                <div class="flex items-center space-x-4">
-                    <button id="notificationBtn"
-                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors relative hover-scale">
-                        <i class="ri-notification-3-line text-gray-600 dark:text-gray-300"></i>
-                        <span id="notificationBadge"
-                            class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500 animate-pulse hidden"></span>
-                    </button>
-                    <div class="relative">
-                        <button id="userMenuBtn"
-                            class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors hover-scale">
-                            <img src="<%= user ? user.picture : 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>"
-                                alt="User" class="user-profile rounded-full w-10 h-10">
+        <!-- Main Content -->
+        <main class="flex-1 p-4 md:p-8 overflow-y-auto h-screen">
+            <header class="mb-8 animate-fade-in">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <h1 class="text-3xl font-bold mb-4 md:mb-0 text-center ">Management Dashboard</h1>
+                    <div class="flex items-center space-x-4">
+                        <button id="notificationBtn" class="p-2 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors relative hover-scale">
+                            <i class="ri-notification-3-line text-gray-300"></i>
+                            <span id="notificationBadge" class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500 animate-pulse hidden"></span>
                         </button>
-                        <div id="userMenu"
-                            class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 hidden">
-                            <a href="/dashboard"
-                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <i class="ri-user-line mr-2"></i>Profile
-                            </a>
-                            <a href="/dashboard/settings"
-                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <i class="ri-settings-3-line mr-2"></i>Settings
-                            </a>
-                            <a href="/logout"
-                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <i class="ri-logout-box-r-line mr-2"></i>Logout
-                            </a>
-                        </div>
-                    </div>
-                    <button id="darkModeToggle"
-                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors hover-rotate">
-                        <i class="ri-sun-line text-gray-600 dark:text-gray-300"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <div
-                class="animate-slideIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300 hover-scale">
-                <h2 class="text-lg sm:text-xl font-semibold mb-4 flex items-center">
-                    <i class="ri-task-line mr-2 text-blue-500"></i>
-                    User Overview
-                </h2>
-                <div class="space-y-4">
-                    <p><i class="ri-clipboard-line mr-2 text-green-500"></i>Todo Tasks: <%= tasks.todo.length %></p>
-                    <p><i class="ri-file-list-3-line mr-2 text-yellow-500"></i>Reports: <%= reports.length %></p>
-                    <p><i class="ri-team-line mr-2 text-purple-500"></i>Meetings: <%= meeting.meetings.length %></p>
-                </div>
-            </div>
-
-            <div
-                class="animate-slideIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300 hover-scale">
-                <h2 class="text-lg sm:text-xl font-semibold mb-4 flex items-center">
-                    <i class="ri-bar-chart-box-line mr-2 text-purple-500"></i>
-                    Performance Metrics
-                </h2>
-                <div class="space-y-4">
-                    <div class="flex flex-wrap gap-2">
-                        <button
-                            class="px-3 py-1 sm:px-4 sm:py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500">Daily</button>
-                        <button
-                            class="px-3 py-1 sm:px-4 sm:py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500">Weekly</button>
-                        <button
-                            class="px-3 py-1 sm:px-4 sm:py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500">Monthly</button>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <i class="ri-line-chart-line text-green-500"></i>
-                        <span>Daily performance up by 12%</span>
-                    </div>
-                    <div id="performanceChart" class="h-40 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-                </div>
-            </div>
-
-            <div id="quickActions"
-                class="animate-slideIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300 hover-scale">
-                <h2 class="text-lg sm:text-xl font-semibold mb-4 flex items-center">
-                    <i class="ri-flashlight-line mr-2 text-yellow-500"></i>
-                    Quick Actions
-                </h2>
-                <div class="grid grid-cols-2 gap-2">
-                    <button id="add_report_btn"
-                        class="px-2 py-1 sm:px-4 sm:py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-500 hover-scale">
-                        <i class="ri-file-add-line mr-1 sm:mr-2"></i>
-                        <span class="text-xs sm:text-sm">Create Report</span>
-                    </button>
-                    <button id="scheduleMeetingBtn"
-                        class="px-2 py-1 sm:px-4 sm:py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-green-500 hover-scale">
-                        <i class="ri-calendar-event-line mr-1 sm:mr-2"></i>
-                        <span class="text-xs sm:text-sm">Schedule Meeting</span>
-                    </button>
-                    <button id="add_feedback_btn"
-                        class="px-2 py-1 sm:px-4 sm:py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-yellow-500 hover-scale">
-                        <i class="ri-message-2-line mr-1 sm:mr-2"></i>
-                        <span class="text-xs sm:text-sm">Send Feedback</span>
-                    </button>
-                    <button
-                        class="px-2 py-1 sm:px-4 sm:py-2 bg-gray-600 text-white rounded-md flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-purple-500 hover-scale" disabled>
-                        <i class="ri-user-add-line mr-1 sm:mr-2"></i>
-                        <span class="text-xs sm:text-sm">Add Team Member</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div id="tasks-column" class="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <div id="todoColumn" class="box p-6 rounded-lg bg-white dark:bg-gray-800 shadow-md">
-                <h3 class="text-lg font-semibold mb-3 flex items-center">
-                    <i class="ri-checkbox-multiple-line mr-2 text-blue-500"></i>To Do
-                </h3>
-                <p class="text-sm mb-3">You can add up to 5 tasks</p>
-                <% tasks.todo.forEach(task => { %>
-                    <div
-                        class="task_div flex justify-between box p-3 mb-3 rounded-lg shadow-md items-center hover-scale bg-gray-100 dark:bg-gray-700">
-                        <p class="text-sm sm:text-base font-medium">
-                            <% if (task.priority === 'high') { %>
-                                <i class="ri-error-warning-line text-red-600 mr-2"></i>
-                            <% } else if (task.priority === 'medium') { %>
-                                <i class="ri-error-warning-line text-yellow-500 mr-2"></i>
-                            <% } else { %>
-                                <i class="ri-error-warning-line text-green-500 mr-2"></i>
-                            <% } %>
-                            <span class="todo_task_name"><%= task.task_name %></span>
-                            <br> <span class="due_date_todo text-xs sm:text-sm">Due Date: <%= task.due_date %></span>
-                        </p>
-                        <div class="flex space-x-2 text-lg">
-                            <button class="status-btn pending text-blue-400 hover:text-blue-600 transition duration-150 pad-2 mr-2">
-                                <i class="pending ri-time-line"></i>
+                        <div class="relative">
+                            <button id="userMenuBtn" class="p-2 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors hover-scale">
+                                <img src="<%= user.picture || 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>" alt="User" class="rounded-full w-8 h-8">
                             </button>
-                            <button class="status-btn done text-green-400 hover:text-green-600 transition duration-150">
-                                <i class="done ri-checkbox-circle-line"></i>
-                            </button>
-                        </div>
-                    </div>
-                <% }) %>
-                <button id="add-task-btn"
-                    class="add-task-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150 hover-scale w-full">
-                    <i class="ri-add-line mr-2"></i>Add Task
-                </button>
-            </div>
-
-            <div id="inProgressColumn" class="box p-6 rounded-lg bg-white dark:bg-gray-800 shadow-md">
-                <h3 class="text-lg font-semibold mb-3 flex items-center">
-                    <i class="ri-loader-4-line mr-2 text-yellow-500"></i>In Progress
-                </h3>
-                <% tasks.pending.forEach(task => { %>
-                    <div
-                        class="task_div flex justify-between box p-3 mb-3 rounded-lg shadow-md items-center hover-scale bg-gray-100 dark:bg-gray-700">
-                        <p class="text-sm sm:text-base font-medium">
-                            <%= task.task_name %>
-                        </p>
-                        <button class="status-btn done text-green-400 hover:text-green-600 transition duration-150">
-                            <i class="ri-checkbox-circle-line"></i>
-                        </button>
-                    </div>
-                <% }) %>
-            </div>
-
-            <div id="doneColumn" class="box p-6 rounded-lg bg-white dark:bg-gray-800 shadow-md">
-                <h3 class="text-lg font-semibold mb-3 flex items-center">
-                    <i class="ri-checkbox-multiple-fill mr-2 text-green-500"></i>Done
-                </h3>
-                <p class="text-xs sm:text-sm opacity-70">Note: Tasks will be deleted in 1hr automatically</p>
-                <% tasks.done.forEach(task => { %>
-                    <div
-                        class="done_div box flex justify-between p-3 mb-3 rounded-lg shadow-md hover-scale bg-gray-100 dark:bg-gray-700">
-                        <p class="text-sm sm:text-base font-medium">
-                            <%= task.task_name %>
-                        </p>
-                        <button class="delete-task-btn text-red-400 hover:text-red-600 transition duration-150"
-                            data-task-id="<%= task.id %>">
-                            <i class="ri-delete-bin-line"></i>
-                        </button>
-                    </div>
-                <% }) %>
-            </div>
-        </div>
-
-        <div id="reports-and-meetings" class="mt-6 grid gap-6 md:grid-cols-3 lg:grid-cols-3">
-            <div class="w-50 animate-slideIn box rounded-lg shadow-md p-6 bg-white dark:bg-gray-800 transition-all duration-300">
-                <h2 class="text-lg sm:text-xl font-semibold mb-4 flex items-center">
-                    <i class="ri-file-text-line mr-2 text-blue-500"></i>
-                    Reports
-                </h2>
-                <div class="space-y-2">
-                    <p class="text-sm mb-3">View and manage your reports.</p>
-                    <% reports.forEach((report) => { %>
-                        <div class="report-item box p-3 mb-3 rounded-lg shadow-md items-center hover-scale bg-gray-100 dark:bg-gray-700">
-                            <button class="report-dropdown flex justify-between items-center w-full">
-                                <span>
-                                    <i class="ri-file-text-line mr-2"></i>
-                                    <%= report.report_title %>
-                                    <p class="text-xs">View Details..</p>
-                                </span>
-                                <i class="ml-10 ri-arrow-down-s-line"></i>
-                            </button>
-                            <div class="report-dropdown-content hidden mt-2 p-4 bg-gray-100 dark:bg-gray-700 rounded-md">
-                                <p class="text-sm text-gray-700 dark:text-gray-300 mb-2 overflow-hidden text-ellipsis break-words">
-                                    Description: <u class="text-blue-500 dark:text-blue-400 hover:text-blue-600 text-lg">
-                                        <%= report.report_description %>
-                                    </u>
-                                </p>
-                                <div class="flex space-x-2">
-                                    <button id="update_report" data-report-id="<%= report.report_id %>"
-                                        class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                        <i class="ri-edit-line mr-1"></i>Edit
-                                    </button>
-                                    <button
-                                        class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500">
-                                        <i class="ri-delete-bin-line mr-1"></i><a href="/deletereport/<%= report.report_id %>">Delete</a>
-                                    </button>
-                                </div>
+                            <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-1 hidden">
+                                <a href="/dashboard" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">
+                                    <i class="ri-user-line mr-2"></i>Profile
+                                </a>
+                                <a href="/dashboard/settings" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">
+                                    <i class="ri-settings-3-line mr-2"></i>Settings
+                                </a>
+                                <a href="/logout" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">
+                                    <i class="ri-logout-box-r-line mr-2"></i>Logout
+                                </a>
                             </div>
                         </div>
-                    <% }) %>
-                    <button id="add_report_btn"
-                        class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
+                        <button id="darkModeToggle" class="p-2 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors hover-scale">
+                            <i class="ri-sun-line text-gray-300"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-8">
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg animate-slide-in hover-scale">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="ri-task-line mr-2 text-blue-500"></i>
+                        User Overview
+                    </h2>
+                    <div class="space-y-4">
+                        <p><i class="ri-clipboard-line mr-2 text-green-500"></i>Todo Tasks: <%= tasks.todo.length %></p>
+                        <p><i class="ri-file-list-3-line mr-2 text-yellow-500"></i>Reports: <%= reports.length %></p>
+                        <p><i class="ri-team-line mr-2 text-purple-500"></i>Meetings: <%= meeting.length %></p>
+                    </div>
+                </div>
+
+                <div id="quickActions" class="bg-gray-800 rounded-lg p-6 shadow-lg animate-slide-in hover-scale">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="ri-flashlight-line mr-2 text-yellow-500"></i>
+                        Quick Actions
+                    </h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <button id="add_report_btn" class="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-500 hover-scale">
+                            <i class="ri-file-add-line mr-2"></i>
+                            <span>Create Report</span>
+                        </button>
+                        <button id="scheduleMeetingBtn" class="p-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-green-500 hover-scale">
+                            <i class="ri-calendar-event-line mr-2"></i>
+                            <span>Schedule Meeting</span>
+                        </button>
+                        <button id="add_feedback_btn" class="p-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-yellow-500 hover-scale">
+                            <i class="ri-message-2-line mr-2"></i>
+                            <span>Send Feedback</span>
+                        </button>
+                        <button id="add-task-btn" class="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-500 hover-scale"> 
+                            <i class="ri-task-line mr-2"></i>Add Task
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tasks-column" class="grid gap-8 md:grid-cols-3 mb-8">
+                <div id="todoColumn" class="bg-gray-800 rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="ri-checkbox-multiple-line mr-2 text-blue-500"></i>To Do
+                    </h3>
+                    <p class="text-sm mb-4 text-gray-400">You can add up to 5 tasks</p>
+                    <div class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar" id="todoTasks">
+                        <% tasks.todo.forEach((task, index) => { %>
+                            <% if (index < 2) { %>
+                                <div class="task_div bg-gray-700 rounded-lg p-4">
+                                    <div class="flex justify-between items-center">
+                                        <p class="font-medium">
+                                            <% if (task.priority === 'high') { %>
+                                                <i class="ri-error-warning-line text-red-500 mr-2"></i>
+                                            <% } else if (task.priority === 'medium') { %>
+                                                <i class="ri-error-warning-line text-yellow-500 mr-2"></i>
+                                            <% } else { %>
+                                                <i class="ri-error-warning-line text-green-500 mr-2"></i>
+                                            <% } %>
+                                            <span class="todo_task_name"><%= task.task_name %></span>
+                                        </p>
+                                        <div class="flex space-x-2">
+                                            <button   class="status-btn pending text-blue-400 hover:text-blue-300 transition duration-150" data-task-id="<%= task.task_id %>">
+                                                <i class="ri-time-line"></i>
+                                            </button>
+                                            <button class="status-btn done text-green-400 hover:text-green-300 transition duration-150" data-task-id="<%= task.task_id %>">
+                                                <i class="ri-checkbox-circle-line"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-400 mt-2">Due Date: <%= task.due_date %></p>
+                                </div>
+                            <% } %>
+                        <% }) %>
+                    </div>
+                    <% if (tasks.todo.length > 2) { %>
+                        <button id="showMoreTodo" class="mt-4 w-full bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition duration-150 hover-scale">
+                            <a href="/dashboard/user/tasks">Show More</a>
+                        </button>
+                    <% } %>
+                    <button id="add-task-btn" class="mt-4 w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150 hover-scale">
+                        <i class="ri-add-line mr-2"></i>Add Task
+                    </button>
+                </div>
+
+                <div id="inProgressColumn" class="bg-gray-800 rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="ri-loader-4-line mr-2 text-yellow-500"></i>In Progress
+                    </h3>
+                    <div class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar" id="inProgressTasks">
+                        <% tasks.pending.forEach((task, index) => { %>
+                            <% if (index < 2) { %>
+                                <div class="task_div bg-gray-700 rounded-lg p-4">
+                                    <div class="flex justify-between items-center">
+                                        <p class="font-medium"><%= task.task_name %></p>
+                                        <button class="status-btn done text-green-400 hover:text-green-300 transition duration-150" data-task-id="<%= task.task_id %>">
+                                            <i class="ri-checkbox-circle-line"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            <% } %>
+                        <% }) %>
+                    </div>
+                    <% if (tasks.pending.length > 2) { %>
+                        <button id="showMoreInProgress" class="mt-4 w-full bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition duration-150 hover-scale">
+                            <a href="/dashboard/user/tasks">Show More</a>
+                        </button>
+                    <% } %>
+                </div>
+
+                <div id="doneColumn" class="bg-gray-800 rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="ri-checkbox-multiple-fill mr-2 text-green-500"></i>Done
+                    </h3>
+                    <p class="text-sm mb-4 text-gray-400">Tasks will be deleted in 1hr automatically</p>
+                    <div class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar" id="doneTasks">
+                        <% tasks.done.forEach((task, index) => { %>
+                            <% if (index < 2) { %>
+                                <div class="done_div bg-gray-700 rounded-lg p-4 hover-scale">
+                                    <div class="flex justify-between items-center">
+                                        <p class="font-medium"><%= task.task_name %></p>
+                                        <button class="delete-task-btn text-red-400 hover:text-red-300 transition duration-150" data-task-id="<%= task.id %>">
+                                            <i class="ri-delete-bin-line"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            <% } %>
+                        <% }) %>
+                    </div>
+                    <% if (tasks.done.length > 2) { %>
+                        <button id="showMoreDone" class="mt-4 w-full bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition duration-150 hover-scale">
+                            <a href="/dashboard/user/tasks">Show More</a>
+                        </button>
+                    <% } %>
+                </div>
+            </div>
+
+            <div id="reports-and-meetings" class="grid gap-8 md:grid-cols-2">
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg animate-slide-in">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="ri-file-text-line mr-2 text-blue-500"></i>
+                        Reports
+                    </h2>
+                    <p class="text-sm mb-4 text-gray-400">View and manage your reports</p>
+                    <div class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar" id="reportsList">
+                        <% reports.forEach((report, index) => { %>
+                            <% if (index < 2) { %>
+                                <div class="report-item bg-gray-700 rounded-lg p-4">
+                                    <button class="report-dropdown flex justify-between items-center w-full">
+                                        <span class="flex items-center">
+                                            <i class="ri-file-text-line mr-2 text-blue-500"></i>
+                                            <%= report.report_title %>
+                                        </span>
+                                        <i class="ri-arrow-down-s-line"></i>
+                                    </button>
+                                    <div class="report-dropdown-content hidden mt-4 p-4 bg-gray-600 rounded-md">
+                                        <p class="text-sm text-gray-300 mb-2">
+                                            Description: <span class="text-blue-400"><%= report.report_description %></span>
+                                        </p>
+                                        <div class="flex space-x-2 mt-4">
+                                            <button id="update_report" data-report-id="<%= report.report_id %>" class="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                                <i class="ri-edit-line mr-1"></i>Edit
+                                            </button>
+                                            <button class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500">
+                                                <i class="ri-delete-bin-line mr-1"></i><a href="/deletereport/<%= report.report_id %>">Delete</a>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                        <% }) %>
+                    </div>
+                    <% if (reports.length > 2) { %>
+                        <button id="showMoreReports" class="mt-4 w-full bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition duration-150 hover-scale">
+                            <a href="/dashboard/user/reports">Show More</a>
+                        </button>
+                    <% } %>
+                    <button id="add_report_btn" class="mt-4 w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <i class="ri-add-line mr-2"></i>Create New Report
                     </button>
                 </div>
-            </div>
 
-            <div class="box p-6 rounded-lg bg-white dark:bg-gray-800 shadow-md">
-                <h2 class="text-lg sm:text-xl font-semibold mb-4 flex items-center">
-                    <i class="ri-calendar-event-line mr-2 text-green-500"></i>
-                    Meetings
-                </h2>
-                <div class="space-y-2">
-                    <p class="text-sm mb-3">Schedule and manage your meetings.</p>
-                    <% meeting.meetings.forEach((meeting) => { %>
-                        <div class="meeting_div flex justify-between box p-3 mb-3 rounded-lg shadow-md items-center hover-scale bg-gray-100 dark:bg-gray-700">
-                            <h3 class="font-semibold"><%= meeting.title %></h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">
-                                <i class="ri-time-line mr-1"></i>
-                                <%= meeting.date %> at <%= meeting.time %>
-                            </p>
-                        </div>
-                    <% }) %>
-                    <button id="scheduleMeetingBtn"
-                        class="mt-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 w-full">
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg animate-slide-in">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="ri-calendar-event-line mr-2 text-green-500"></i>
+                        Meetings
+                    </h2>
+                    <p class="text-sm mb-4 text-gray-400">Schedule and manage your meetings</p>
+                    <div class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar" id="meetingsList">
+                        <% meeting.meetings.forEach((meeting,index ) => { %>
+                            <% if (index < 2) { %>
+                                <div class="meeting_div bg-gray-700 rounded-lg p-4">
+                                    <h3 class="font-semibold"><%= meeting.title %></h3>
+                                    <p class="text-sm text-gray-400 mt-2">
+                                        <i class="ri-time-line mr-1"></i>
+                                        <%= meeting.date %> at <%= meeting.time %>
+                                    </p>
+                                </div>
+                            <% } %>
+                        <% }) %>
+                    </div>
+                    <% if (meeting.meetings.length > 2) { %>
+                        <button id="showMoreMeetings" class="mt-4 w-full bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition duration-150 hover-scale">
+                            <a href="/dashboard/user/meetings">Show More</a>
+                        </button>
+                    <% } %>
+                    <button id="scheduleMeetingBtn" class="mt-4 w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500">
                         <i class="ri-add-line mr-2"></i>Schedule New Meeting
                     </button>
-                    <button id="viewAllMeetingsBtn"
-                        class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">View all meetings</button>
                 </div>
             </div>
-        </div>
-
-        <%-include('partials/forms.ejs')%>
+        </main>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js"></script>
+<%-include('partials/forms.ejs')%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js"></script>
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const body = document.body;
-    const icon = darkModeToggle.querySelector('i');
+        document.addEventListener('DOMContentLoaded', () => {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const html = document.documentElement;
+            const icon = darkModeToggle.querySelector('i');
 
-    // Function to set the dark mode
-    function setDarkMode(isDark) {
-        if (isDark) {
-            body.classList.add('dark');
-            icon.classList.remove('ri-sun-line');
-            icon.classList.add('ri-moon-line');
-            localStorage.setItem('darkMode', 'true');
-        } else {
-            body.classList.remove('dark');
-            icon.classList.remove('ri-moon-line');
-            icon.classList.add('ri-sun-line');
-            localStorage.setItem('darkMode', 'false');
-        }
-    }
+            function setDarkMode(isDark) {
+                if (isDark) {
+                    html.classList.add('dark');
+                    icon.classList.remove('ri-sun-line');
+                    icon.classList.add('ri-moon-line');
+                    localStorage.setItem('darkMode', 'true');
+                } else {
+                    html.classList.remove('dark');
+                    icon.classList.remove('ri-moon-line');
+                    icon.classList.add('ri-sun-line');
+                    localStorage.setItem('darkMode', 'false');
+                }
+            }
 
- 
-    if (localStorage.getItem('darkMode') === 'true') {
-        setDarkMode(true);
-    }
+            setDarkMode(true);
 
-    darkModeToggle.addEventListener('click', () => {
-        const isDark = body.classList.toggle('dark');
-        setDarkMode(isDark);
-    });
-
-
-    function applyDarkMode() {
-        const isDark = body.classList.contains('dark');
-        document.querySelectorAll('.box, .task_div, .meeting_div, .report-item, .report-dropdown-content')
-            .forEach(el => {
-                el.classList.toggle('dark:bg-gray-800', isDark);
-                el.classList.toggle('bg-white', !isDark);
+            darkModeToggle.addEventListener('click', () => {
+                const isDark = html.classList.toggle('dark');
+                setDarkMode(isDark);
             });
-    }
-    applyDarkMode();
-    darkModeToggle.addEventListener('click', applyDarkMode);
-});
 
 
+
+            document.querySelectorAll('.report-dropdown').forEach(dropdown => {
+                dropdown.addEventListener('click', () => {
+                    const content = dropdown.nextElementSibling;
+                    content.classList.toggle('hidden');
+                });
+            });
+
+            function showMoreItems(listId, btnId) {
+                const list = document.getElementById(listId);
+                const btn = document.getElementById(btnId);
+                const items = list.querySelectorAll('.task_div, .report-item, .meeting_div');
+                
+                items.forEach((item, index) => {
+                    if (index >= 2) {
+                        item.classList.toggle('hidden');
+                    }
+                });
+
+            }
+
+            document.getElementById('showMoreTodo')?.addEventListener('click', () => showMoreItems('todoTasks', 'showMoreTodo'));
+            document.getElementById('showMoreInProgress')?.addEventListener('click', () => showMoreItems('inProgressTasks', 'showMoreInProgress'));
+            document.getElementById('showMoreDone')?.addEventListener('click', () => showMoreItems('doneTasks', 'showMoreDone'));
+            document.getElementById('showMoreReports')?.addEventListener('click', () => showMoreItems('reportsList', 'showMoreReports'));
+            document.getElementById('showMoreMeetings')?.addEventListener('click', () => showMoreItems('meetingsList', 'showMoreMeetings'));
+        });
+        introJs().setOptions({
+        steps : [
+            {
+                title : "Welcome to Task Manager Your ultimate project management tool",
+                intro : "You can create tasks, reports, meetings and more with Task Manager. Get started by clicking the buttons below",
+            } , 
+            {
+                element : document.getElementById("notificationBtn"),
+                title : "Notifications",
+                intro : "You can view your notifications here",
+            }, { 
+                element : document.getElementById("userMenuBtn"),
+                title : "User Menu",
+                intro : "Click here to view your profile",
+            } , { 
+                element : document.getElementById("quickActions"),
+                title : "Quick Actions",
+                intro : "You can add tasks, reports, meetings and more with quick actions",
+            }
+            , { 
+                element : document.getElementById("tasks-column"),
+                title : "Tasks",
+                intro : "You can view your tasks here and mark them as done or undone and more " ,
+            }
+            ,
+            {
+                element: document.getElementById("reports-and-meetings"),
+                title: "Reports and Meetings",
+                intro: 'You can view your reports and meetings here and more',
+            },
+           
+        ],
+       
+        showBullets : true,
+        showButtons : true,
+        exitOnEsc : true,
+        exitOnOverlayClick : false,
+        dontShowAgain : true,
+        showStepNumbers : true,
+        showProgress : true,
+        disableInteraction : true,
+        nextToDone : true,
+        
+    }).start();
     </script>
 </body>
-
 </html>
-
