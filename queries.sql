@@ -51,10 +51,12 @@ CREATE TABLE schedule_meetings (
     id SERIAL PRIMARY KEY,
     user_id VARCHAR(255) NOT NULL,
     title VARCHAR(255) NOT NULL,
+    meeting_id serial UNIQUE NOT NULL,
     date DATE NOT NULL,
     time TIME NOT NULL,
-    participants TEXT[] NOT NULL,
+    participants TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
 );
 
 
