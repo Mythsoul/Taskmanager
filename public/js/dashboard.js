@@ -26,6 +26,49 @@ document.addEventListener("DOMContentLoaded", () => {
     const report_update_form = document.getElementById("updateReportForm");
     const delete_report_btn = document.querySelectorAll("#delete_report_btn");
 
+    const pendingStatusButtons = document.querySelectorAll("#status-pending-btn");
+const doneStatusButtons = document.querySelectorAll("#status-done-btn");
+
+pendingStatusButtons.forEach((button) => {
+  button.addEventListener("click", async () => {
+    const task_id = button.getAttribute("data-task-id");
+    const response = await fetch("/update-task-status", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ task_id ,  status: "Pending" }),
+    });
+
+    if (response.ok) {
+      alert("Task status updated to Pending");
+      window.location.reload();
+    } else {
+      alert("Failed to update task status");
+    }
+  });
+});
+
+doneStatusButtons.forEach((button) => {
+  button.addEventListener("click", async () => {
+    const task_id = button.getAttribute("data-task-id");
+    const response = await fetch("/update-task-status", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ task_id , status: "Done" }),
+    });
+
+    if (response.ok) {
+      alert("Task status updated to Done");
+      window.location.reload();
+    } else {
+      alert("Failed to update task status");
+    }
+  });
+});
+
     delete_report_btn.forEach((btn) => {
         btn.addEventListener("click" ,  async() => {
             const report_id = btn.getAttribute("data-report-id");
@@ -211,54 +254,6 @@ document.addEventListener("DOMContentLoaded", () => {
     taskForm.addEventListener("submit", addTask);
 
 
-    async function updateTaskStatusbtns() {
-    const pendingStatusButtons = document.querySelectorAll("#pending-task-btn");
-    const doneStatusButtons = document.querySelectorAll("#done-task-btn");
-
-    pendingStatusButtons.forEach((button) => {
-        button.addEventListener("click", async () => {
-            const taskid = button.getAttribute("data-task-id");
-            const status = "Pending";
-          updateTaskStatus(status, taskid);
-        
-            
-        });
-    doneStatusButtons.forEach((button) => {
-        button.addEventListener("click", async () => {
-            const taskid = button.getAttribute("data-task-id");
-            const status = "Done";
-          updateTaskStatus(status, taskid);
-        
-            
-        });
-    })
-    });
-}
-async function updateTaskStatus(status , task_id) {
-    
-    try {
-        const response = await fetch("/update-task-status", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ task_id, status }),
-        });
-
-        if (response.ok) {
-            window.location.reload();
-        } else {   
-            const error = await response.json();
-            alert(`Failed to update task status: ${error.message}`);
-        }
-    } catch (error) {
-        console.error("Error updating task status:", error);
-        alert("An error occurred while updating the task status.");
-
-    }
-         
-}
-
     taskForm.addEventListener("keyup", (event) => {
         if (event.key === "Enter") {
             event.preventDefault();
@@ -271,32 +266,26 @@ async function updateTaskStatus(status , task_id) {
 
         deleteTaskBtns.forEach((btn) => {
             btn.addEventListener("click", async (event) => {
-                const taskDiv = event.target.closest(".done_div");
-                if (!taskDiv) return;
-
-                const taskNameElement = taskDiv.querySelector("p");
-                if (!taskNameElement) return;
-
-                const taskName = taskNameElement.textContent.trim();
-
+                event.preventDefault();
+                const taskId = btn.getAttribute("data-task-id");
                 try {
                     const response = await fetch("/delete-task", {
+                    
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({ taskName }),
+                        body: JSON.stringify({ task_id : taskId }),
                     });
-
                     if (response.ok) {
-                        taskDiv.remove();
-                        showNotification(`Deleted task: ${taskName}`);
+                        window.location.reload();
                     } else {
                         const error = await response.json();
                         alert(`Failed to delete task: ${error.message}`);
                     }
                 } catch (error) {
                     console.error("Error deleting task:", error);
+                    alert("An error occurred while deleting the task.");
                 }
             });
         });

@@ -63,7 +63,7 @@
         <main class="flex-1 p-4 md:p-8 overflow-y-auto h-screen">
             <header class="mb-8 animate-fade-in">
                 <div class="flex flex-col md:flex-row justify-between items-center">
-                    <h1 class="text-3xl font-bold mb-4 md:mb-0 text-center ">Management Dashboard</h1>
+                    <h1 class="text-3xl font-bold mb-4 md:mb-0">Management Dashboard</h1>
                     <div class="flex items-center space-x-4">
                         <button id="notificationBtn" class="p-2 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors relative hover-scale">
                             <i class="ri-notification-3-line text-gray-300"></i>
@@ -135,7 +135,8 @@
                     <h3 class="text-xl font-semibold mb-4 flex items-center">
                         <i class="ri-checkbox-multiple-line mr-2 text-blue-500"></i>To Do
                     </h3>
-                    <p class="text-sm mb-4 text-gray-400">You can add up to 5 tasks</p>
+                    <p class="text-sm mb-4 text-gray-400">You can add up to 5 tasks and u currently can add <%= 5 - tasks.todo.length - tasks.pending.length - tasks.done.length %> More Tasks.
+                    <strong>For More Details Click on <a href="/dashboard/user/tasks" class="text-blue-500 hover:underline">Task</a></strong></p>
                     <div class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar" id="todoTasks">
                         <% tasks.todo.forEach((task, index) => { %>
                             <% if (index < 2) { %>
@@ -152,10 +153,10 @@
                                             <span class="todo_task_name"><%= task.task_name %></span>
                                         </p>
                                         <div class="flex space-x-2">
-                                            <button   class="status-btn pendinng text-blue-400 hover:text-blue-300 transition duration-150" data-task-id="<%= task.task_id %>">
+                                            <button id="status-pending-btn"  class=" text-blue-400 hover:text-blue-300 transition duration-150" data-task-id="<%= task.task_id %>">
                                                 <i class="ri-time-line"></i>
                                             </button>
-                                            <button class="status-btn done text-green-400 hover:text-green-300 transition duration-150" data-task-id="<%= task.task_id %>">
+                                            <button id="status-done-btn" class=" text-green-400 hover:text-green-300 transition duration-150" data-task-id="<%= task.task_id %>">
                                                 <i class="ri-checkbox-circle-line"></i>
                                             </button>
                                         </div>
@@ -185,7 +186,7 @@
                                 <div class="task_div bg-gray-700 rounded-lg p-4">
                                     <div class="flex justify-between items-center">
                                         <p class="font-medium"><%= task.task_name %></p>
-                                        <button class="status-btn done text-green-400 hover:text-green-300 transition duration-150" data-task-id="<%= task.task_id %>">
+                                        <button id="status-done-btn" class=" text-green-400 hover:text-green-300 transition duration-150" data-task-id="<%= task.task_id %>">
                                             <i class="ri-checkbox-circle-line"></i>
                                         </button>
                                     </div>
@@ -211,7 +212,7 @@
                                 <div class="done_div bg-gray-700 rounded-lg p-4 hover-scale">
                                     <div class="flex justify-between items-center">
                                         <p class="font-medium"><%= task.task_name %></p>
-                                        <button class="delete-task-btn text-red-400 hover:text-red-300 transition duration-150" data-task-id="<%= task.id %>">
+                                        <button id="delete-task-btn" class="delete-task-btn text-red-400 hover:text-red-300 transition duration-150" data-task-id="<%= task.task_id %>">
                                             <i class="ri-delete-bin-line"></i>
                                         </button>
                                     </div>
@@ -233,7 +234,7 @@
                         <i class="ri-file-text-line mr-2 text-blue-500"></i>
                         Reports
                     </h2>
-                    <p class="text-sm mb-4 text-gray-400">View and manage your reports</p>
+                    <p class="text-sm mb-4 text-gray-400">View and manage your reports <strong>For More details click <a href="/dashboard/user/reports" class="text-blue-500 hover:underline">REPORTS </a></strong></p>
                     <div class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar" id="reportsList">
                         <% reports.forEach((report, index) => { %>
                             <% if (index < 2) { %>
@@ -380,50 +381,51 @@ report_dropdown.forEach(dropdown => {
             document.getElementById('showMoreReports')?.addEventListener('click', () => showMoreItems('reportsList', 'showMoreReports'));
             document.getElementById('showMoreMeetings')?.addEventListener('click', () => showMoreItems('meetingsList', 'showMoreMeetings'));
         });
-        introJs().setOptions({
-        steps : [
-            {
-                title : "Welcome to Task Manager Your ultimate project management tool",
-                intro : "You can create tasks, reports, meetings and more with Task Manager. Get started by clicking the buttons below",
-            } , 
-            {
-                element : document.getElementById("notificationBtn"),
-                title : "Notifications",
-                intro : "You can view your notifications here",
-            }, { 
-                element : document.getElementById("userMenuBtn"),
-                title : "User Menu",
-                intro : "Click here to view your profile",
-            } , { 
-                element : document.getElementById("quickActions"),
-                title : "Quick Actions",
-                intro : "You can add tasks, reports, meetings and more with quick actions",
-            }
-            , { 
-                element : document.getElementById("tasks-column"),
-                title : "Tasks",
-                intro : "You can view your tasks here and mark them as done or undone and more " ,
-            }
-            ,
-            {
-                element: document.getElementById("reports-and-meetings"),
-                title: "Reports and Meetings",
-                intro: 'You can view your reports and meetings here and more',
-            },
+    //     introJs().setOptions({
+    //     steps : [
+    //         {
+    //             title : "Welcome to Task Manager Your ultimate project management tool",
+    //             intro : "You can create tasks, reports, meetings and more with Task Manager. Get started by clicking the buttons below",
+    //         } , 
+    //         {
+    //             element : document.getElementById("notificationBtn"),
+    //             title : "Notifications",
+    //             intro : "You can view your notifications here",
+    //         }, { 
+    //             element : document.getElementById("userMenuBtn"),
+    //             title : "User Menu",
+    //             intro : "Click here to view your profile",
+    //         } , { 
+    //             element : document.getElementById("quickActions"),
+    //             title : "Quick Actions",
+    //             intro : "You can add tasks, reports, meetings and more with quick actions",
+    //         }
+    //         , { 
+    //             element : document.getElementById("tasks-column"),
+    //             title : "Tasks",
+    //             intro : "You can view your tasks here and mark them as done or undone and more " ,
+    //         }
+    //         ,
+    //         {
+    //             element: document.getElementById("reports-and-meetings"),
+    //             title: "Reports and Meetings",
+    //             intro: 'You can view your reports and meetings here and more',
+    //         },
            
-        ],
+    //     ],
        
-        showBullets : true,
-        showButtons : true,
-        exitOnEsc : true,
-        exitOnOverlayClick : false,
-        dontShowAgain : true,
-        showStepNumbers : true,
-        showProgress : true,
-        disableInteraction : true,
-        nextToDone : true,
+    //     showBullets : true,
+    //     showButtons : true,
+    //     exitOnEsc : true,
+    //     exitOnOverlayClick : false,
+    //     dontShowAgain : true,
+    //     showStepNumbers : true,
+    //     showProgress : true,
+    //     disableInteraction : true,
+    //     nextToDone : true,
         
-    }).start();
+    // }).start();
+
     </script>
 </body>
 </html>
