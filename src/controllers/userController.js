@@ -13,6 +13,7 @@ export const render_homepage = async(req ,res)=>{
   
       try {
           const tasks = await render_task(user.id);
+          console.log(tasks);
           const reports = await get_reports(user.id);
           const meetingsData = await get_meetings(user.id);
   

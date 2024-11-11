@@ -25,8 +25,8 @@ export async function render_task(userId) {
 
     return {
       todo: tasks.filter(task => task.status === 'todo'),
-      pending: tasks.filter(task => task.status === 'pending'),
-      done: tasks.filter(task => task.status === 'done'), 
+      pending: tasks.filter(task => task.status === 'Pending'),
+      done: tasks.filter(task => task.status === 'Done'), 
       
     };
   } catch (err) {
