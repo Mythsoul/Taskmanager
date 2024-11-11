@@ -24,6 +24,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const update_report_dailog = document.getElementById("updateReportDialog");
     const cancel_report_update = document.getElementById("cancel_report_update");
     const report_update_form = document.getElementById("updateReportForm");
+    const delete_report_btn = document.querySelectorAll("#delete_report_btn");
+
+    delete_report_btn.forEach((btn) => {
+        btn.addEventListener("click" ,  async() => {
+            const report_id = btn.getAttribute("data-report-id");
+            const response = await fetch("/deletereport", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ report_id })
+            });
+            if (response.ok) {
+                alert(response.json().message);
+                window.location.reload();
+            }else{
+                alert(response.json().message);
+            }
+        }); 
+    });
 
     userMenuBtn.addEventListener('click', function (e) {
         e.stopPropagation();
