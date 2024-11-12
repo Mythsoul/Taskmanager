@@ -57,15 +57,265 @@
 </head>
 <body class="bg-gray-900 text-gray-100 min-h-screen">
     <div class="flex h-screen">
-            <%- include('partials/sidebar') %>
+        <button id="sidebar-toggle" class="fixed top-11 left-12 p-2  bg-gray-800 text-white rounded-full z-30 hover:bg-gray-700 dark:bg-gray-600 dark:hover:bg-gray-500 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <span class="sr-only">Toggle sidebar</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          
+          <!-- Sidebar Overlay -->
+          <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-20 transition-opacity duration-300 ease-in-out opacity-0"></div>
+          
+          <!-- Sidebar Structure -->
+          <aside id="sidebar" class="fixed top-0 left-0 h-full w-72 transform -translate-x-full bg-white dark:bg-gray-800 shadow-lg transition-all duration-300  z-30 overflow-hidden">
+            <div class="sidebar-content h-full flex flex-col">
+              
+              <!-- Header -->
+              <header class="p-4 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+                <div class="flex items-center justify-between">
+                  <h2 class="text-xl font-bold text-gray-800 dark:text-white">Dashboard</h2>
+                  <button id="sidebar-close" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </header>
+              
+              <!-- User Profile Section -->
+              <div class="p-4 bg-gray-100 dark:bg-gray-750 border-b border-gray-200 dark:border-gray-600">
+                <div class="flex items-center space-x-3">
+                  <img src="<%= user ? user.picture : 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>" alt="User Avatar" class="w-12 h-12 rounded-full border-2 border-blue-500">
+                  <div>
+                    <p class="font-semibold text-gray-800 dark:text-gray-900"><%= user.username %></p>
+                    <p class="text-sm text-gray-600 dark:text-gray-900"><%= user.id %></p>
+                  </div>
+                </div>
+                <div class="mt-3">
+                  <a href="/dashboard" class="text-sm text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300">View Profile</a>
+                </div>
+              </div>
+              
+              <!-- Search Bar -->
+              <div class="p-4 border-b border-gray-200 dark:border-gray-600">
+                <div class="relative">
+                  <input type="text" id="sidebar-search" placeholder="Search..." class="w-full pl-10 pr-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-2.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                <div id="search-results" class="mt-2 hidden">
+                  <ul class="bg-white dark:bg-gray-700 rounded-lg shadow-md"></ul>
+                </div>
+              </div>
+              
+              <!-- Sidebar Menu -->
+              <nav class="flex-1 overflow-y-auto py-4">
+                <ul id="sidebar-menu" class="space-y-2 px-3">
+                  <li>
+                    <a href="/dashboard" class="menu-item flex items-center p-3 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                      </svg>
+                      Home
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/dashboard/user/tasks" class="menu-item group flex items-center p-3 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-gray-500 group-hover:text-blue-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                      </svg>
+                      Tasks
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/dashboard/user/reports" class="menu-item group flex items-center p-3 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-gray-500 group-hover:text-blue-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      Reports
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/dashboard/user/meetings" class="menu-item group flex items-center p-3 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-gray-500 group-hover:text-blue-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                      Meetings
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+              
+              <!-- Footer -->
+              <footer class="p-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
+                <div class="flex items-center justify-between">
+                  <a href="/logout" class="flex items-center text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    Logout
+                  </a>
+                  <button id="theme-toggle" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                    <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                    </svg>
+                    <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+                    </svg>
+                  </button>
+                </div>
+              </footer>
+            </div>
+          </aside>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', () => {
+              const sidebar = document.getElementById('sidebar');
+              const sidebarMenu = document.getElementById("sidebar-menu");
+              const overlay = document.getElementById('sidebarOverlay');
+              const sidebarToggle = document.getElementById('sidebar-toggle');
+              const sidebarClose = document.getElementById('sidebar-close');
+              const themeToggle = document.getElementById('theme-toggle');
+              const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+              const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+              const body = document.body;
+              const searchInput = document.getElementById('sidebar-search');
+              const searchResults = document.getElementById('search-results');
+          
+              function toggleSidebar() {
+                sidebar.classList.toggle('-translate-x-full');
+                overlay.classList.toggle('hidden');
+                overlay.classList.toggle('opacity-0');
+              }
+          
+              sidebarToggle.addEventListener('click', toggleSidebar);
+              sidebarClose.addEventListener('click', toggleSidebar);
+              overlay.addEventListener('click', toggleSidebar);
+          
+              // Close sidebar when clicking outside
+              document.addEventListener('click', (e) => {
+                if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target) &&
+                    !sidebar.classList.contains('-translate-x-full')) {
+                  toggleSidebar();
+                }
+              });
+          
+              function setTheme(isDark) {
+                if (isDark) {
+                  body.classList.add('dark');
+                  themeToggleLightIcon.classList.remove('hidden');
+                  themeToggleDarkIcon.classList.add('hidden');
+                  localStorage.setItem('color-theme', 'dark');
+                } else {
+                  body.classList.remove('dark');
+                  themeToggleLightIcon.classList.add('hidden');
+                  themeToggleDarkIcon.classList.remove('hidden');
+                  localStorage.setItem('color-theme', 'light');
+                }
+              }
+          
+              const savedTheme = localStorage.getItem('color-theme');
+              const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+              
+              if (savedTheme === 'dark' || (savedTheme === null && systemTheme)) {
+                setTheme(true);
+              } else {
+                setTheme(false);
+              }
+          
+              themeToggle.addEventListener('click', () => {
+                const isDark = !body.classList.contains('dark');
+                setTheme(isDark);
+              });
+          
+              searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                if (searchTerm.length > 2) {
+                  const results = [
+                    { title: 'Dashboard', url: '/dashboard' },
+                    { title: 'Tasks', url: '/dashboard/user/tasks' },
+                    { title: 'Reports', url: '/dashboard/user/reports' },
+                    { title: 'Meetings', url: '/dashboard/user/meetings' }
+                  ].filter(item => item.title.toLowerCase().includes(searchTerm));
+          
+                  const resultsHtml = results.map(result => `
+                    <li>
+                      <a href="${result.url}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200">
+                        ${result.title}
+                      </a>
+                    </li>
+                  `).join('');
+          
+                  searchResults.querySelector('ul').innerHTML = resultsHtml;
+                  searchResults.classList.remove('hidden');
+                } else {
+                  searchResults.classList.add('hidden');
+                }
+              });
+          
+              document.addEventListener('click', (e) => {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                  searchResults.classList.add('hidden');
+                }
+              });
+            });
+          </script>
+          
+          <style>
+            @layer components {
+              .sidebar-content {
+                @apply scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent;
+              }
+          
+              .menu-item {
+                @apply transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-700;
+              }
+          
+              .menu-item svg {
+                @apply transition-colors duration-200;
+              }
+          
+              .menu-item:hover svg {
+                @apply text-blue-500;
+              }
+          
+              .menu-item.active {
+                @apply bg-blue-50 dark:bg-blue-900;
+              }
+          
+              .menu-item.active svg {
+                @apply text-blue-500;
+              }
+            }
+          
+            @keyframes fadeIn {
+              from { opacity: 0; }
+              to { opacity: 1; }
+            }
+          
+            @keyframes slideIn {
+              from { transform: translateX(-100%); }
+              to { transform: translateX(0); }
+            }
+          
+            #sidebar {
+              animation: slideIn 0.3s ease-out;
+            }
+          
+            #sidebarOverlay {
+              animation: fadeIn 0.3s ease-out;
+            }
+          </style>
 
         <!-- Main Content -->
         <main class="flex-1 p-4 md:p-8 overflow-y-auto h-screen">
-            <header class="mb-8 animate-fade-in">
-                <div class="flex flex-col md:flex-row justify-between items-center">
-                    <h1 class="text-3xl font-bold mb-4 md:mb-0">Management Dashboard</h1>
-                    <div class="flex items-center space-x-4">
-                        <button id="notificationBtn" class="p-2 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors relative hover-scale">
+            <header class="mb-8 animate-fade-in sticky">
+                <div class="flex flex-col md:flex-row bg-slate-700 p-4  justify-center align-middle items-center rounded-lg shadow animate-pulse">
+                    <h1 class="text-3xl font-bold text-white mr-[700px]">Management Dashboard</h1>
+                    <div class="flex justify-end  items-end space-x-4 ">
+                        <button id="notificationBtn" class=" p-2 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors relative hover-scale">
                             <i class="ri-notification-3-line text-gray-300"></i>
                             <span id="notificationBadge" class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500 animate-pulse hidden"></span>
                         </button>

@@ -269,7 +269,7 @@ doneStatusButtons.forEach((button) => {
                 event.preventDefault();
                 const taskId = btn.getAttribute("data-task-id");
                 try {
-                    const response = await fetch("/delete-task", {
+                const response = await fetch("/delete-task", {
                     
                         method: "POST",
                         headers: {
