@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" class="h-full bg-gray-100 dark:bg-gray-900">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,22 +9,10 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <script type="module" src="/js/tasks.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
-        @layer base {
-            :root {
-                --sidebar-bg: 255 255 255;
-                --sidebar-fg: 31 41 55;
-            }
-
-            .dark {
-                --sidebar-bg: 31 41 55;
-                --sidebar-fg: 243 244 246;
-            }
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         .task-enter {
@@ -44,7 +31,6 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -56,145 +42,324 @@
         }
 
         .hover-scale {
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .hover-scale:hover {
-            transform: scale(1.05);
+            transform: scale(1.03);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        @media (max-width: 640px) {
+            .task-item {
+                margin-bottom: 1rem;
+            }
         }
     </style>
 </head>
-
-<body class="bg-gradient-to-br from-indigo-50 to-purple-100 dark:from-gray-900 dark:to-purple-900 text-gray-800 dark:text-gray-200 font-sans">
-    <div class="flex h-screen overflow-hidden">
-        <%- include('partials/sidebar') %>
-
-        <div class="flex-1 flex flex-col overflow-hidden">
-            <header class="bg-white dark:bg-gray-800 shadow-lg z-10">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row justify-between items-center">
-                    <h1 class="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-600 mb-4 sm:mb-0">
-                        Tasks Dashboard
-                    </h1>
-                    <button id="add_task_btn"
-                        class="bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-300 shadow-md px-4 py-2 text-sm md:text-base transform hover:scale-105">
-                        <i class="ri-add-line mr-2"></i>
-                        Add Task
+<body class="h-full overflow-hidden">
+    <div class="flex h-full">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 shadow-lg transform -translate-x-full transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0">
+            <div class="h-full flex flex-col">
+                <div class="flex items-center justify-between h-16 px-4 border-b border-gray-700">
+                    <h2 class="text-xl font-semibold text-white flex items-center">
+                        <i class="ri-hourglass-fill mr-2 text-indigo-500"></i>
+                        TaskManager
+                    </h2>
+                    <button id="closeSidebar" class="text-gray-400 hover:text-white lg:hidden">
+                        <i class="ri-close-line text-2xl"></i>
                     </button>
                 </div>
-            </header>
+                <div class="flex items-center p-4 mt-4 bg-gray-700 rounded-lg mx-2">
+                    <img src="<%= user ? user.picture : 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>" alt="User Avatar" class="w-12 h-12 rounded-full border-2 border-indigo-500">
+                    <div class="ml-3">
+                        <p class="font-semibold text-white"><%= user.username %></p>
+                        <p class="text-sm text-gray-400"><%= user.email %></p>
+                    </div>
+                </div>
+                <nav class="flex-1 overflow-y-auto scrollbar-hide mt-6">
+                    <ul class="px-2 space-y-2">
+                        <li>
+                            <a href="/dashboard" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 transition-all duration-200">
+                                <i class="ri-dashboard-line text-xl mr-3 text-indigo-400"></i>
+                                <span class="font-medium">Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/dashboard/user/tasks" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 transition-all duration-200">
+                                <i class="ri-task-line text-xl mr-3 text-indigo-400"></i>
+                                <span class="font-medium">Tasks</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/dashboard/user/reports" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 transition-all duration-200">
+                                <i class="ri-bar-chart-box-line text-xl mr-3 text-indigo-400"></i>
+                                <span class="font-medium">Reports</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/dashboard/user/meetings" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 transition-all duration-200">
+                                <i class="ri-team-line text-xl mr-3 text-indigo-400"></i>
+                                <span class="font-medium">Meetings</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="p-4 border-t border-gray-700">
+                    <a href="/dashboard" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 transition-all duration-200">
+                        <i class="ri-settings-4-line text-xl mr-3 text-indigo-400"></i>
+                        <span class="font-medium">Settings</span>
+                    </a>
+                    <a href="/logout" class="flex items-center p-3 mt-2 text-red-400 rounded-lg hover:bg-red-900 transition-all duration-200">
+                        <i class="ri-logout-box-line text-xl mr-3"></i>
+                        <span class="font-medium">Logout</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
 
-            <!-- Main content -->
-            <main class="flex-1 overflow-y-auto p-4 container mx-auto">
-                <div class="max-w-7xl mx-auto space-y-8 m-3">
-                    <!-- Task stats -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 hover-scale">
-                            <h3 class="text-lg font-semibold mb-2">Total Tasks</h3>
-                            <p class="text-4xl font-bold text-indigo-600 dark:text-indigo-400">
-                                <%= tasks.length %>
-                            </p>
-                        </div>
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 hover-scale">
-                            <h3 class="text-lg font-semibold mb-2">Pending Tasks</h3>
-                            <p class="text-4xl font-bold text-yellow-600 dark:text-yellow-400">
-                                <%= tasks.filter(task => task.status === 'Pending').length %>
-                            </p>
-                        </div>
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 hover-scale">
-                            <h3 class="text-lg font-semibold mb-2">Tasks Completed</h3>
-                            <p class="text-4xl font-bold text-green-500 dark:text-green-400">
-                                <%= tasks.filter(task => task.status === "Done").length %>
-                            </p>
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <header class=" shadow-sm z-10 transition-all duration-300">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <button id="sidebarToggle" class="text-gray-500 focus:outline-none focus:text-gray-600 lg:hidden">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                        <h1 class="ml-2 text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white">Tasks Dashboard</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button id="add_task_btn" class="bg-indigo-600 text-white rounded-full hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 shadow-md px-4 py-2 text-sm font-medium">
+                            <i class="ri-add-line mr-2"></i>
+                            <span class="hidden sm:inline">Add Task</span>
+                        </button>
+                        <div class="relative">
+                            <button id="user-menu-button" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" aria-expanded="false" aria-haspopup="true">
+                                <img class="h-8 w-8 rounded-full" src="<%= user ? user.picture : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'%>" alt="User avatar">
+                            </button>
                         </div>
                     </div>
                 </div>
+            </header>
 
-                <!-- Task filters -->
-                <div class="flex flex-wrap justify-center m-4 gap-4 max-w-7xl">
-                    <button id="all_tasks" class="px-6 py-3 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 transition-all duration-300 shadow-md transform hover:scale-105">
-                        All Tasks
-                    </button>
-                    <button id="pending_tasks"  class="px-6 py-3 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition-all duration-300 shadow-md transform hover:scale-105">
-                        In Progress
-                    </button>
-                    <button id="completed_tasks" class="px-6 py-3 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition-all duration-300 shadow-md transform hover:scale-105">
-                        Completed
-                    </button>
-                </div>
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900 transition-all duration-300">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    <!-- Task stats -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg hover-scale transition-all duration-300">
+                            <div class="p-5">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 bg-indigo-500 rounded-md p-3">
+                                        <i class="ri-task-line text-2xl text-white"></i>
+                                    </div>
+                                    <div class="ml-5 w-0 flex-1">
+                                        <dl>
+                                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                                Total Tasks
+                                            </dt>
+                                            <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                                <%= tasks.length %>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg hover-scale transition-all duration-300">
+                            <div class="p-5">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
+                                        <i class="ri-time-line text-2xl text-white"></i>
+                                    </div>
+                                    <div class="ml-5 w-0 flex-1">
+                                        <dl>
+                                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                                Pending Tasks
+                                            </dt>
+                                            <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                                <%= tasks.filter(task => task.status === 'Pending').length %>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg hover-scale transition-all duration-300">
+                            <div class="p-5">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
+                                        <i class="ri-checkbox-circle-line text-2xl text-white"></i>
+                                    </div>
+                                    <div class="ml-5 w-0 flex-1">
+                                        <dl>
+                                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                                Completed Tasks
+                                            </dt>
+                                            <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                                <%= tasks.filter(task => task.status === "Done").length %>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg hover-scale transition-all duration-300">
+                            <div class="p-5">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 bg-red-500 rounded-md p-3">
+                                        <i class="ri-error-warning-line text-2xl text-white"></i>
+                                    </div>
+                                    <div class="ml-5 w-0 flex-1">
+                                        <dl>
+                                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                                Overdue Tasks
+                                            </dt>
+                                            <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                                <%= tasks.filter(task => new Date(task.due_date) < new Date() && task.status !== "Done").length %>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                <!-- Task list -->
-                <div class="max-w-4xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden">
-                    <ul class="divide-y divide-gray-200 dark:divide-gray-700" id="taskList">
-                        <% tasks.forEach((task) => { %>
-                            <li class="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 task-item"
-                                style="animation-delay: 30ms;" data-tasks-status = "<%= task.status %>">
-                                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0">
-                                    <div class="flex-1 min-w-0">
-                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">
-                                            <%= task.task_name %>
-                                        </h3>
-                                        <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:space-x-6">
-                                            <div class="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-400">
-                                                <i class="ri-calendar-line mr-1.5 text-gray-400 dark:text-gray-500"></i>
-                                                <%= new Date(task.due_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %>
+                    <!-- Task filters -->
+                    <div class="flex flex-wrap justify-center mb-8 gap-4">
+                        <button id="all_tasks" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 shadow-md">
+                            All Tasks
+                        </button>
+                        <button id="pending_tasks" class="px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-300 shadow-md">
+                            In Progress
+                        </button>
+                        <button id="completed_tasks" class="px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-300 shadow-md">
+                            Completed
+                        </button>
+                        <button id="overdue_tasks" class="px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-300 shadow-md">
+                            Overdue
+                        </button>
+                    </div>
+
+                    <!-- Task list -->
+                    <div class="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
+                        <ul class="divide-y divide-gray-200 dark:divide-gray-700" id="taskList">
+                            <% tasks.forEach((task, index) => { %>
+                                <li class="task-item p-4 sm:p-6 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" style="animation-delay: 100ms;" data-tasks-status="<%= task.status %>">
+                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                                        <div class="mb-4 sm:mb-0">
+                                            <h4 class="text-lg font-bold text-gray-900 dark:text-white mb-1">
+                                                <%= task.task_name %>
+                                            </h4>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                                <%= task.description %>
+                                            </p>
+                                        </div>
+                                        <div class="flex flex-col sm:items-end">
+                                            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                                                <i class="ri-calendar-line mr-1"></i>
+                                                <span data-due-date="<%= task.due_date %>"><%= new Date(task.due_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></span>
                                             </div>
-                                            <div class="mt-2 flex items-center text-sm">
-                                                <i class="ri-time-line mr-1.5 text-gray-400 dark:text-gray-500"></i>
-                                                <span id="task-status" class="text-gray-900 dark:text-gray-100" data-tasks-status = "<%= task.status %>">
-                                                    <%= task.status %>
-                                                </span>
-                                            </div>
-                                            <div class="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-400">
-                                                <i class="ri-flag-line mr-1.5 text-gray-400 dark:text-gray-500"></i>
+                                            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                                                <i class="ri-flag-line mr-1"></i>
                                                 Priority: <%= task.priority %>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="flex-shrink-0 mt-4 sm:mt-0">
+                                    <div class="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                                        <span id="task-status" class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full mb-2 sm:mb-0
+                                            <%= task.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' %>"
+                                            data-tasks-status="<%= task.status %>">
+                                            <%= task.status %>
+                                        </span>
                                         <div class="flex space-x-2">
                                             <button id="update-task-btn"
                                                 class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors duration-200"
                                                 data-task-id="<%= task.task_id %>">
                                                 <i class="ri-edit-line text-xl"></i>
-                                                <span class="sr-only">Edit</span>
                                             </button>
                                             <button id="status-pending-btn"
-                                                class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 transition-colors duration-200" data-task-id="<%= task.task_id %>">
+                                                class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 transition-colors duration-200"
+                                                data-task-id="<%= task.task_id %>">
                                                 <i class="ri-time-line text-xl"></i>
-                                                <span class="sr-only">Update Status</span>
                                             </button>
-                                            <button id="status-done-btn" class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 transition-colors duration-200" data-task-id="<%= task.task_id %>">
+                                            <button id="status-done-btn"
+                                                class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 transition-colors duration-200"
+                                                data-task-id="<%= task.task_id %>">
                                                 <i class="ri-checkbox-circle-line text-xl"></i>
-                                                <span class="sr-only">Update Status</span>
                                             </button>
-                                   <button id="delete_task_btn"
+                                            <button id="delete_task_btn"
                                                 class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200"
                                                 data-task-id="<%= task.task_id %>">
                                                 <i class="ri-delete-bin-line text-xl"></i>
-                                                <span class="sr-only">Delete</span>
                                             </button>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
-                        <% }) %>
-                    </ul>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                    <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">Note: Completed tasks will be automatically deleted after 1 hour.</p>
                 </div>
-                <p class="text-xs sm:text-sm opacity-70">Note : DONE TASKS WILL BE DELETED IN 1HR</p>
             </main>
         </div>
     </div>
-
 
     <%- include("partials/forms.ejs") %>
 
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
-            // Animate task items on load
-            const taskItems = document.querySelectorAll('.task-item');
-            taskItems.forEach((item, index) => {
-                item.style.animationDelay = `${index * 50}ms`;
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const closeSidebar = document.getElementById('closeSidebar');
+            const userMenuButton = document.getElementById('user-menu-button');
+            const userMenu = document.getElementById('user-menu');
+
+            // Sidebar toggle
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
             });
+
+            closeSidebar.addEventListener('click', () => {
+                sidebar.classList.add('-translate-x-full');
+            });
+
+            // Task filtering
+            const allTasksBtn = document.getElementById('all_tasks');
+            const pendingTasksBtn = document.getElementById('pending_tasks');
+            const completedTasksBtn = document.getElementById('completed_tasks');
+            const overdueTasksBtn = document.getElementById('overdue_tasks');
+            const taskItems = document.querySelectorAll('.task-item');
+
+            function filterTasks(status) {
+                taskItems.forEach(item => {
+                    if (status === 'all') {
+                        item.style.display = 'block';
+                    } else if (status === 'overdue') {
+                        const dueDate = new Date(item.querySelector('[data-due-date]').dataset.dueDate);
+                        const isOverdue = dueDate < new Date() && item.dataset.tasksStatus !== 'Done';
+                        item.style.display = isOverdue ? 'block' : 'none';
+                    } else {
+                        item.style.display = item.dataset.tasksStatus === status ? 'block' : 'none';
+                    }
+                });
+            }
+
+            allTasksBtn.addEventListener('click', () => filterTasks('all'));
+            pendingTasksBtn.addEventListener('click', () => filterTasks('Pending'));
+            completedTasksBtn.addEventListener('click', () => filterTasks('Done'));
+            overdueTasksBtn.addEventListener('click', () => filterTasks('overdue'));
 
             // Add hover effect to buttons
             const buttons = document.querySelectorAll('button');
@@ -206,14 +371,13 @@
                     button.classList.remove('scale-105');
                 });
             });
-
-            // Theme toggle functionality ()
-            // const themeToggle = document.getElementById('theme-toggle');
-            // themeToggle.addEventListener('click', () => {
-            //     document.documentElement.classList.toggle('dark');
-            // });
+                        // Close sidebar when clicking outside on mobile
+                        document.addEventListener('click', (e) => {
+                if (window.innerWidth < 768 && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                    sidebar.classList.add('-translate-x-full');
+                }
+            });
         });
     </script>
 </body>
-
 </html>

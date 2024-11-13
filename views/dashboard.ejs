@@ -34,11 +34,12 @@
         }
 
         .hover-scale {
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .hover-scale:hover {
-            transform: scale(1.05);
+            transform: scale(1.03);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
         .custom-scrollbar::-webkit-scrollbar {
@@ -76,136 +77,149 @@
 <body class="bg-gray-900 text-gray-100 min-h-screen">
     <div class="flex flex-col md:flex-row h-screen">
         <!-- Sidebar -->
-        <aside id="sidebar" class="w-64 bg-gray-800 text-gray-100 h-full fixed left-0 top-0 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
-            <div class="flex items-center justify-between p-4 border-b border-gray-700">
-                <h2 class="text-2xl font-bold">Dashboard</h2>
-               
-                <button id="closeSidebar" class="md:hidden text-gray-400 hover:text-white">
-                    <i class="ri-close-line text-2xl"></i>
-                </button>
-            </div>
-            <div class="p-4">
-              <div class="flex items-center space-x-3">
-                <img src="<%= user ? user.picture : 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>" alt="User Avatar" class="w-12 h-12 rounded-full border-2 border-blue-500">
-                <div>
-                  <p class="font-semibold text-gray-300"><%= user.username %></p>
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 shadow-lg transform -translate-x-full transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0">
+            <div class="h-full flex flex-col">
+                <div class="flex items-center justify-between h-16 px-4 border-b border-gray-700">
+                    <h2 class="text-xl font-semibold text-white flex items-center">
+                        <i class="ri-hourglass-fill mr-2 text-indigo-500"></i>
+                        TaskManager
+                    </h2>
+                    <button id="closeSidebar" class="text-gray-400 hover:text-white lg:hidden">
+                        <i class="ri-close-line text-2xl"></i>
+                    </button>
                 </div>
-              </div>
-              </div>
-            <nav class="mt-7 ">
-                <a href="/dashboard" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 mb-8">
-                    <i class="ri-home-line mr-3 text-xl"></i>
-                    <span>Home</span>
-                </a>
-                <a href="/dashboard/user/tasks" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 mb-8">
-                    <i class="ri-task-line mr-3 text-xl"></i>
-                    <span>Tasks</span>
-                </a>
-                <a href="/dashboard/user/reports" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 mb-8">
-                    <i class="ri-file-list-line mr-3 text-xl"></i>
-                    <span>Reports</span>
-                </a>
-                <a href="/dashboard/user/meetings" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
-                    <i class="ri-team-line mr-3 text-xl"></i>
-                    <span>Meetings</span>
-                </a>
-            </nav>
-            <div class="absolute bottom-0 w-full p-4 border-t border-gray-700">
-                <a href="/dashboard" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
-                    <i class="ri-settings-line mr-3 text-xl"></i>
-                    <span>Settings</span>
-                </a>
-                <a href="/logout" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
-                    <i class="ri-logout-box-line mr-3 text-xl"></i>
-                    <span>Logout</span>
-                </a>
+                <div class="flex items-center p-4 mt-4 bg-gray-700 rounded-lg mx-2">
+                    <img src="<%= user ? user.picture : 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>" alt="User Avatar" class="w-12 h-12 rounded-full border-2 border-indigo-500">
+                    <div class="ml-3">
+                        <p class="font-semibold text-white"><%= user.username %></p>
+                        <p class="text-sm text-gray-400"><%= user.email %></p>
+                    </div>
+                </div>
+                <nav class="flex-1 overflow-y-auto scrollbar-hide mt-6">
+                    <ul class="px-2 space-y-2">
+                        <li>
+                            <a href="/dashboard" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 transition-all duration-200">
+                                <i class="ri-dashboard-line text-xl mr-3 text-indigo-400"></i>
+                                <span class="font-medium">Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/dashboard/user/tasks" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 transition-all duration-200">
+                                <i class="ri-task-line text-xl mr-3 text-indigo-400"></i>
+                                <span class="font-medium">Tasks</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/dashboard/user/reports" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 transition-all duration-200">
+                                <i class="ri-bar-chart-box-line text-xl mr-3 text-indigo-400"></i>
+                                <span class="font-medium">Reports</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/dashboard/user/meetings" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 transition-all duration-200">
+                                <i class="ri-team-line text-xl mr-3 text-indigo-400"></i>
+                                <span class="font-medium">Meetings</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="p-4 border-t border-gray-700">
+                    <a href="/dashboard" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 transition-all duration-200">
+                        <i class="ri-settings-4-line text-xl mr-3 text-indigo-400"></i>
+                        <span class="font-medium">Settings</span>
+                    </a>
+                    <a href="/logout" class="flex items-center p-3 mt-2 text-red-400 rounded-lg hover:bg-red-900 transition-all duration-200">
+                        <i class="ri-logout-box-line text-xl mr-3"></i>
+                        <span class="font-medium">Logout</span>
+                    </a>
+                </div>
             </div>
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 p-4 md:p-8 md:ml-64 transition-all duration-300 ease-in-out">
-            <header class="mb-8 sticky top-0 z-10 bg-gray-900 pb-4">
-                <div class="flex flex-col md:flex-row justify-between items-center bg-gray-800 p-4 rounded-lg shadow">
+        <main class="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto transition-all duration-300 ease-in-out">
+            <header class="mb-8  top-0 z-10 bg-gray-900 pb-4">
+                <div class="flex flex-col md:flex-row justify-between items-center bg-gray-800 p-4 rounded-lg shadow-lg">
                     <div class="flex items-center mb-4 md:mb-0">
-                        <button id="sidebarToggle" class="mr-4 text-gray-400 hover:text-white md:hidden">
+                        <button id="sidebarToggle" class="mr-4 text-gray-400 hover:text-white lg:hidden">
                             <i class="ri-menu-line text-2xl"></i>
                         </button>
                         <h1 class="text-2xl md:text-3xl font-bold text-white">Management Dashboard</h1>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <button id="notificationBtn" class="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors relative">
+                        <button id="notificationBtn" class="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors relative" aria-label="Notifications">
                             <i class="ri-notification-3-line text-xl"></i>
                             <span id="notificationBadge" class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500 animate-pulse hidden"></span>
                         </button>
                         <div class="relative">
-                            <button id="userMenuBtn" class="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors">
+                            <button id="userMenuBtn" class="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors" aria-label="User menu" aria-haspopup="true">
                                 <img src="<%= user.picture || 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>" alt="User" class="rounded-full w-8 h-8">
                             </button>
-                            <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg py-1 hidden">
-                                <a href="/dashboard" class="block px-4 py-2 text-sm hover:bg-gray-600">Profile</a>
-                                <a href="/dashboard" class="block px-4 py-2 text-sm hover:bg-gray-600">Settings</a>
-                                <a href="/logout" class="block px-4 py-2 text-sm hover:bg-gray-600">Logout</a>
+                            <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg py-1 hidden" role="menu">
+                                <a href="/dashboard" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600" role="menuitem">Profile</a>
+                                <a href="/dashboard" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600" role="menuitem">Settings</a>
+                                <a href="/logout" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600" role="menuitem">Logout</a>
                             </div>
                         </div>
-                        <button id="darkModeToggle" class="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors">
+                        <button id="darkModeToggle" class="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
                             <i class="ri-sun-line text-xl"></i>
                         </button>
                     </div>
                 </div>
             </header>
 
-
             <div class="grid gap-8 responsive-grid mb-8">
-                <div class="bg-gray-800 rounded-lg p-6 shadow-lg animate-fade-in">
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg animate-fade-in hover-scale">
                     <h2 class="text-xl font-semibold mb-4 flex items-center">
                         <i class="ri-task-line mr-2 text-blue-500"></i>
                         User Overview
                     </h2>
                     <div class="space-y-4">
-                        <p><i class="ri-clipboard-line mr-2 text-green-500"></i>Todo Tasks: <%= tasks.todo.length %></p>
-                        <p><i class="ri-file-list-3-line mr-2 text-yellow-500"></i>Reports: <%= reports.length %></p>
-                        <p><i class="ri-team-line mr-2 text-purple-500"></i>Meetings: <%= meeting.meetings.length %></p>
+                        <p class="flex items-center"><i class="ri-clipboard-line mr-2 text-green-500"></i>Todo Tasks: <span class="ml-auto font-semibold"><%= tasks.todo.length %></span></p>
+                        <p class="flex items-center"><i class="ri-file-list-3-line mr-2 text-yellow-500"></i>Reports: <span class="ml-auto font-semibold"><%= reports.length %></span></p>
+                        <p class="flex items-center"><i class="ri-team-line mr-2 text-purple-500"></i>Meetings: <span class="ml-auto font-semibold"><%= meeting.meetings.length %></span></p>
                     </div>
                 </div>
 
-                <div id="quickActions" class="bg-gray-800 rounded-lg p-6 shadow-lg animate-fade-in">
+                <div id="quickActions" class="bg-gray-800 rounded-lg p-6 shadow-lg animate-fade-in hover-scale">
                     <h2 class="text-xl font-semibold mb-4 flex items-center">
                         <i class="ri-flashlight-line mr-2 text-yellow-500"></i>
                         Quick Actions
                     </h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <button id="add_report_btn" class="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center">
+                        <button id="add_report_btn" class="p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center">
                             <i class="ri-file-add-line mr-2"></i>
                             <span>Create Report</span>
                         </button>
-                        <button id="scheduleMeetingBtn" class="p-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors flex items-center justify-center">
+                        <button id="scheduleMeetingBtn" class="p-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center">
                             <i class="ri-calendar-event-line mr-2"></i>
                             <span>Schedule Meeting</span>
                         </button>
-                        <button id="add_feedback_btn" class="p-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition-colors flex items-center justify-center">
+                        <button id="add_feedback_btn" class="p-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors flex items-center justify-center">
                             <i class="ri-message-2-line mr-2"></i>
                             <span>Send Feedback</span>
                         </button>
-                        <button id="add-task-btn" class="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center">
-                            <i class="ri-task-line mr-2"></i>Add Task
+                        <button id="add-task-btn" class="p-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center">
+                            <i class="ri-task-line mr-2"></i>
+                            <span>Add Task</span>
                         </button>
                     </div>
                 </div>
             </div>
 
             <div class="grid gap-8 responsive-grid mb-8">
-                <div id="todoColumn" class="bg-gray-800 rounded-lg p-6 shadow-lg">
+                <div id="todoColumn" class="bg-gray-800 rounded-lg p-6 shadow-lg hover-scale">
                     <h3 class="text-xl font-semibold mb-4 flex items-center">
                         <i class="ri-checkbox-multiple-line mr-2 text-blue-500"></i>To Do
                     </h3>
                     <p class="text-sm mb-4 text-gray-400">You can add up to 5 tasks and you currently can add <%= 5 - tasks.todo.length - tasks.pending.length - tasks.done.length %> more tasks.
-                    <strong>For more details, click on <a href="/dashboard/user/tasks" class="text-blue-500 hover:underline">Tasks</a></strong></p>
+                    <strong>For more details, visit <a href="/dashboard/user/tasks" class="text-blue-500 hover:underline">Tasks</a></strong></p>
                     <div class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar" id="todoTasks">
                         <% tasks.todo.forEach((task, index) => { %>
                             <% if (index < 2) { %>
-                                <div class="task_div bg-gray-700 rounded-lg p-4">
+                                <div class="task_div bg-gray-700 rounded-lg p-4 hover:bg-gray-600 transition-colors">
                                     <div class="flex justify-between items-center">
-                                        <p class="font-medium">
+                                        <p class="font-medium flex items-center">
                                             <% if (task.priority === 'high') { %>
                                                 <i class="ri-error-warning-line text-red-500 mr-2"></i>
                                             <% } else if (task.priority === 'medium') { %>
@@ -216,10 +230,10 @@
                                             <span class="todo_task_name"><%= task.task_name %></span>
                                         </p>
                                         <div class="flex space-x-2">
-                                            <button id="status-pending-btn" class="text-blue-400 hover:text-blue-300 transition duration-150" data-task-id="<%= task.task_id %>">
+                                            <button id="status-pending-btn" class="text-blue-400 hover:text-blue-300 transition duration-150" data-task-id="<%= task.task_id %>" aria-label="Mark as pending">
                                                 <i class="ri-time-line"></i>
                                             </button>
-                                            <button id="status-done-btn" class="text-green-400 hover:text-green-300 transition duration-150" data-task-id="<%= task.task_id %>">
+                                            <button id="status-done-btn" class="text-green-400 hover:text-green-300 transition duration-150" data-task-id="<%= task.task_id %>" aria-label="Mark as done">
                                                 <i class="ri-checkbox-circle-line"></i>
                                             </button>
                                         </div>
@@ -239,17 +253,17 @@
                     </button>
                 </div>
 
-                <div id="inProgressColumn" class="bg-gray-800 rounded-lg p-6 shadow-lg">
+                <div id="inProgressColumn" class="bg-gray-800 rounded-lg p-6 shadow-lg hover-scale">
                     <h3 class="text-xl font-semibold mb-4 flex items-center">
                         <i class="ri-loader-4-line mr-2 text-yellow-500"></i>In Progress
                     </h3>
                     <div class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar" id="inProgressTasks">
                         <% tasks.pending.forEach((task, index) => { %>
                             <% if (index < 2) { %>
-                                <div class="task_div bg-gray-700 rounded-lg p-4">
+                                <div class="task_div bg-gray-700 rounded-lg p-4 hover:bg-gray-600 transition-colors">
                                     <div class="flex justify-between items-center">
                                         <p class="font-medium"><%= task.task_name %></p>
-                                        <button id="status-done-btn" class="text-green-400 hover:text-green-300 transition duration-150" data-task-id="<%= task.task_id %>">
+                                        <button id="status-done-btn" class="text-green-400 hover:text-green-300 transition duration-150" data-task-id="<%= task.task_id %>" aria-label="Mark as done">
                                             <i class="ri-checkbox-circle-line"></i>
                                         </button>
                                     </div>
@@ -264,7 +278,7 @@
                     <% } %>
                 </div>
 
-                <div id="doneColumn" class="bg-gray-800 rounded-lg p-6 shadow-lg">
+                <div id="doneColumn" class="bg-gray-800 rounded-lg p-6 shadow-lg hover-scale">
                     <h3 class="text-xl font-semibold mb-4 flex items-center">
                         <i class="ri-checkbox-multiple-fill mr-2 text-green-500"></i>Done
                     </h3>
@@ -272,10 +286,10 @@
                     <div class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar" id="doneTasks">
                         <% tasks.done.forEach((task, index) => { %>
                             <% if (index < 2) { %>
-                                <div class="done_div bg-gray-700 rounded-lg p-4">
+                                <div class="done_div bg-gray-700 rounded-lg p-4 hover:bg-gray-600 transition-colors">
                                     <div class="flex justify-between items-center">
                                         <p class="font-medium"><%= task.task_name %></p>
-                                        <button id="delete-task-btn" class="delete-task-btn text-red-400 hover:text-red-300 transition duration-150" data-task-id="<%= task.task_id %>">
+                                        <button id="delete-task-btn" class="delete-task-btn text-red-400 hover:text-red-300 transition duration-150" data-task-id="<%= task.task_id %>" aria-label="Delete task">
                                             <i class="ri-delete-bin-line"></i>
                                         </button>
                                     </div>
@@ -292,17 +306,17 @@
             </div>
 
             <div class="grid gap-8 responsive-grid">
-                <div class="bg-gray-800 rounded-lg p-6 shadow-lg animate-slide-in">
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg animate-slide-in hover-scale">
                     <h2 class="text-xl font-semibold mb-4 flex items-center">
                         <i class="ri-file-text-line mr-2 text-blue-500"></i>
                         Reports
                     </h2>
-                    <p class="text-sm mb-4 text-gray-400">View and manage your reports. <strong>For more details, click <a href="/dashboard/user/reports" class="text-blue-500 hover:underline">REPORTS</a></strong></p>
+                    <p class="text-sm mb-4 text-gray-400">View and manage your reports. <strong>For more details, visit <a href="/dashboard/user/reports" class="text-blue-500 hover:underline">Reports</a></strong></p>
                     <div class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar" id="reportsList">
                         <% reports.forEach((report, index) => { %>
                             <% if (index < 2) { %>
-                                <div class="report-item bg-gray-700 rounded-lg p-4">
-                                    <button class="report-dropdown flex justify-between items-center w-full">
+                                <div class="report-item bg-gray-700 rounded-lg p-4 hover:bg-gray-600 transition-colors">
+                                    <button class="report-dropdown flex justify-between items-center w-full text-left">
                                         <span class="flex items-center">
                                             <i class="ri-file-text-line mr-2 text-blue-500"></i>
                                             <%= report.report_title %>
@@ -312,19 +326,19 @@
                                     <div class="report-dropdown-menu hidden bg-gray-800 rounded-lg p-4 mt-2 shadow-lg animate-slide-in w-full">
                                         <ul class="space-y-2">
                                             <li>
-                                                <a href="/dashboard/user/report" class="flex items-center hover:bg-gray-700 p-2 rounded-lg">
+                                                <a href="/dashboard/user/report" class="flex items-center hover:bg-gray-700 p-2 rounded-lg transition-colors">
                                                     <i class="ri-file-text-line mr-2 text-blue-500"></i>
                                                     View Report
                                                 </a>
                                             </li>
                                             <li>
-                                                <button id="update_report" data-report-id="<%= report.report_id %>" class="flex items-center hover:bg-gray-700 p-2 rounded-lg w-full text-left">
+                                                <button id="update_report" data-report-id="<%= report.report_id %>" class="flex items-center hover:bg-gray-700 p-2 rounded-lg w-full text-left transition-colors">
                                                     <i class="ri-edit-line mr-2 text-yellow-500"></i>
                                                     Edit Report
                                                 </button>
                                             </li>
                                             <li>
-                                                <button id="delete_report_btn" data-report-id="<%= report.report_id %>" class="flex items-center hover:bg-gray-700 p-2 rounded-lg w-full text-left">
+                                                <button id="delete_report_btn" data-report-id="<%= report.report_id %>" class="flex items-center hover:bg-gray-700 p-2 rounded-lg w-full text-left transition-colors">
                                                     <i class="ri-delete-bin-line mr-2 text-red-500"></i>
                                                     Delete Report
                                                 </button>
@@ -345,19 +359,18 @@
                     </button>
                 </div>
 
-                <div class="bg-gray-800 rounded-lg p-6 shadow-lg animate-slide-in">
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg animate-slide-in hover-scale">
                     <h2 class="text-xl font-semibold mb-4 flex items-center">
                         <i class="ri-calendar-event-line mr-2 text-green-500"></i>
                         Meetings
                     </h2>
-                    <p class="text-sm mb-4 text-gray-400">Schedule and manage your meetings</p>
-                    <p>For more options, visit <a href="/dashboard/user/meetings" class="text-blue-500 hover:underline">Meetings</a></p>
+                    <p class="text-sm mb-4 text-gray-400">Schedule and manage your meetings. <strong>For more options, visit <a href="/dashboard/user/meetings" class="text-blue-500 hover:underline">Meetings</a></strong></p>
                     <div class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar" id="meetingsList">
                         <% meeting.meetings.forEach((meeting, index) => { %>
                             <% if (index < 2) { %>
-                                <div class="meeting_div bg-gray-700 rounded-lg p-4">
+                                <div class="meeting_div bg-gray-700 rounded-lg p-4 hover:bg-gray-600 transition-colors">
                                     <h3 class="font-semibold"><%= meeting.title %></h3>
-                                    <p class="text-sm text-gray-400 mt-2">
+                                    <p class="text-sm text-gray-400 mt-2 flex items-center">
                                         <i class="ri-time-line mr-1"></i>
                                         <%= meeting.date %> at <%= meeting.time %>
                                     </p>
@@ -377,82 +390,47 @@
             </div>
         </main>
     </div>
-<%-include('partials/forms.ejs')%>  
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-      const sidebar = document.getElementById('sidebar');
-      const sidebarToggle = document.getElementById('sidebarToggle');
-      const closeSidebarBtn = document.getElementById('closeSidebar');
-      const darkModeToggle = document.getElementById('darkModeToggle');
-      const html = document.documentElement;
-      const userMenuBtn = document.getElementById('userMenuBtn');
-      const userMenu = document.getElementById('userMenu');
-      const mainContent = document.querySelector('main');
 
-      function toggleSidebar() {
-          sidebar.classList.toggle('-translate-x-full');
-          mainContent.classList.toggle('md:ml-64');
-      }
+    <%- include('partials/forms.ejs') %>
 
-      sidebarToggle.addEventListener('click', toggleSidebar);
-      closeSidebarBtn.addEventListener('click', toggleSidebar);
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const closeSidebarBtn = document.getElementById('closeSidebar');
+            
+            const html = document.documentElement;
+            const userMenuBtn = document.getElementById('userMenuBtn');
 
-      function setDarkMode(isDark) {
-          if (isDark) {
-              html.classList.add('dark');
-              darkModeToggle.innerHTML = '<i class="ri-moon-line text-xl"></i>';
-              localStorage.setItem('darkMode', 'true');
-          } else {
-              html.classList.remove('dark');
-              darkModeToggle.innerHTML = '<i class="ri-sun-line text-xl"></i>';
-              localStorage.setItem('darkMode', 'false');
-          }
-      }
+            const mainContent = document.querySelector('main');
 
-      const savedDarkMode = localStorage.getItem('darkMode') === 'true';
-      setDarkMode(savedDarkMode);
+            function toggleSidebar() {
+                sidebar.classList.toggle('-translate-x-full');
+                mainContent.classList.toggle('md:ml-64');
+            }
 
-      darkModeToggle.addEventListener('click', () => {
-          const isDark = !html.classList.contains('dark');
-          setDarkMode(isDark);
-      });
+            sidebarToggle.addEventListener('click', toggleSidebar);
+            closeSidebarBtn.addEventListener('click', toggleSidebar);
 
-      userMenuBtn.addEventListener('click', () => {
-          userMenu.classList.toggle('hidden');
-      });
 
-      document.addEventListener('click', (e) => {
-          if (!userMenuBtn.contains(e.target) && !userMenu.contains(e.target)) {
-              userMenu.classList.add('hidden');
-          }
-      });
+           
+            const reportDropdowns = document.querySelectorAll('.report-dropdown');
+            reportDropdowns.forEach(dropdown => {
+                dropdown.addEventListener('click', () => {
+                    const content = dropdown.nextElementSibling;
+                    content.classList.toggle('hidden');
+                });
+            });
 
-      const reportDropdowns = document.querySelectorAll('.report-dropdown');
-      reportDropdowns.forEach(dropdown => {
-          dropdown.addEventListener('click', () => {
-              const content = dropdown.nextElementSibling;
-              content.classList.toggle('hidden');
-          });
-      });
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth < 768 && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                    sidebar.classList.add('-translate-x-full');
+                }
+            });
 
-      // Close sidebar when clicking outside on mobile
-      document.addEventListener('click', (e) => {
-          if (window.innerWidth < 768 && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
-              sidebar.classList.add('-translate-x-full');
-          }
-      });
-
-      // Adjust layout on window resize
-      window.addEventListener('resize', () => {
-          if (window.innerWidth >= 768) {
-              sidebar.classList.remove('-translate-x-full');
-              mainContent.classList.add('md:ml-64');
-          } else {
-              sidebar.classList.add('-translate-x-full');
-              mainContent.classList.remove('md:ml-64');
-          }
-      });
-  });
-</script>
+            
+        });
+    </script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,16 +10,11 @@
     <script type="module" src="/js/reports.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        @layer base {
-            :root {
-                --sidebar-bg: 255 255 255;
-                --sidebar-fg: 31 41 55;
-            }
-            .dark {
-                --sidebar-bg: 31 41 55;
-                --sidebar-fg: 243 244 246;
-            }
+        
+        body {
+            font-family: 'Inter', sans-serif;
         }
+
         .report-enter {
             opacity: 0;
             transform: translateY(20px);
@@ -29,99 +24,108 @@
             transform: translateY(0);
             transition: opacity 300ms, transform 300ms;
         }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-green-50 to-teal-100 dark:from-gray-900 dark:to-teal-900 text-gray-800 dark:text-gray-200 font-sans">
-    <div class="flex flex-col md:flex-row h-screen overflow-hidden">
-        <%- include('partials/sidebar') %>
+<body class="h-full bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <div class="flex h-full">
+        <!-- Sidebar -->
+     <%-include("partials/sidebar.ejs")%>
 
-        <div class="flex-1 flex flex-col overflow-hidden">
-            <header class="bg-white dark:bg-gray-800 shadow-lg z-10">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row justify-between items-center">
-                    <h1 class="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-600 mb-4 sm:mb-0">
-                        Reports Dashboard
-                    </h1>
-                    <button id="add_report_btn"
-                        class="bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-300 shadow-md px-4 py-2 text-sm md:text-base transform hover:scale-105">
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col overflow-hidden ">
+            <header class=" shadow-sm z-10 ">
+                <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <button id="sidebarToggle" class="text-gray-500 focus:outline-none focus:text-gray-600 lg:hidden mr-4">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Reports Dashboard</h1>
+                    </div>
+                    <button id="add_report_btn" class="bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-300 shadow-md px-4 py-2 text-sm transform hover:scale-105">
                         <i class="ri-add-line mr-2"></i>
-                        Add Report
+                        <span class="hidden sm:inline">Add Report</span>
                     </button>
                 </div>
             </header>
 
-            <main class="flex-1 overflow-y-auto p-4">
-                <div class="max-w-7xl mx-auto space-y-6">
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <!-- Report stats -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6 transform hover:scale-105 transition-transform duration-300">
-                            <div class="flex justify-between items-center mb-2">
-                                <h3 class="text-lg font-semibold">Total Reports</h3>
-                                <i class="ri-file-list-line text-green-500 text-xl"></i>
-                            </div>
-                            <p class="text-3xl md:text-4xl font-bold text-green-600 dark:text-green-400"><%= reports.length %></p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                        <!-- Total Reports -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 animate-fade-in-up">
+                            <h3 class="text-lg font-semibold mb-2">Total Reports</h3>
+                            <p class="text-3xl font-bold text-blue-600 dark:text-blue-400"><%= reports.length %></p>
                         </div>
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6 transform hover:scale-105 transition-transform duration-300">
-                            <div class="flex justify-between items-center mb-2">
-                                <h3 class="text-lg font-semibold">Recent Reports</h3>
-                                <i class="ri-time-line text-teal-500 text-xl"></i>
-                            </div>
-                            <p class="text-3xl md:text-4xl font-bold text-teal-600 dark:text-teal-400"><%= reports.filter(r => new Date(r.date) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).length %></p>
+                        <!-- Recent Reports -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 animate-fade-in-up" style="animation-delay: 0.2s;">
+                            <h3 class="text-lg font-semibold mb-2">Recent Reports</h3>
+                            <p class="text-3xl font-bold text-green-600 dark:text-green-400"><%= reports.filter(r => new Date(r.date) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).length %></p>
                         </div>
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6 transform hover:scale-105 transition-transform duration-300">
-                            <div class="flex justify-between items-center mb-2">
-                                <h3 class="text-lg font-semibold">Avg. Report Score</h3>
-                                <i class="ri-star-line text-blue-500 text-xl"></i>
-                            </div>
-                            <p class="text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400"><%= (reports.reduce((sum, r) => sum + r.score, 0) / reports.length).toFixed(1) %></p>
+                        <!-- Avg. Report Score -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 animate-fade-in-up" style="animation-delay: 0.4s;">
+                            <h3 class="text-lg font-semibold mb-2">Avg. Report Score</h3>
+                            <p class="text-3xl font-bold text-indigo-600 dark:text-indigo-400"><%= (reports.reduce((sum, r) => sum + r.score, 0) / reports.length).toFixed(1) %></p>
                         </div>
                     </div>
 
-                       <!-- Report filters and search -->
-                       <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6">
-                        <div class="flex flex-wrap gap-2 md:gap-4 mb-4">
-                            <button class="filter-btn px-4 py-2 md:px-6 md:py-3 bg-green-500 text-white rounded-full hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition-colors duration-300 shadow-md text-sm md:text-base" data-filter="all">
-                                All Reports
-                            </button>
-                            <button class="filter-btn px-4 py-2 md:px-6 md:py-3 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition-colors duration-300 shadow-md text-sm md:text-base" data-filter="Financial">
-                                Financial
-                            </button>
-                            <button class="filter-btn px-4 py-2 md:px-6 md:py-3 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition-colors duration-300 shadow-md text-sm md:text-base" data-filter="Operational">
-                                Operational
-                            </button>
-                            <button class="filter-btn px-4 py-2 md:px-6 md:py-3 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition-colors duration-300 shadow-md text-sm md:text-base" data-filter="Marketing">
-                                Marketing
-                            </button>
+                    <!-- Report filters and search -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 mb-6 animate-fade-in-up" style="animation-delay: 0.6s;">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <button class="filter-btn px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-300 shadow-md text-sm" data-filter="all">All Reports</button>
+                            <button class="filter-btn px-4 py-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition-all duration-300 shadow-md text-sm" data-filter="Financial">Financial</button>
+                            <button class="filter-btn px-4 py-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition-all duration-300 shadow-md text-sm" data-filter="Operational">Operational</button>
+                            <button class="filter-btn px-4 py-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition-all duration-300 shadow-md text-sm" data-filter="Marketing">Marketing</button>
                         </div>
                         <div class="relative">
-                            <input type="text" id="search_input" placeholder="Search reports..." class="w-full px-4 py-2 rounded-full border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-gray-200">
+                            <input type="text" id="search_input" placeholder="Search reports..." class="w-full px-4 py-2 rounded-full border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
                             <i class="ri-search-line absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                         </div>
                     </div>
 
                     <!-- Reports list -->
-                    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden ">
+                    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden animate-fade-in-up" >
                         <ul class="divide-y divide-gray-200 dark:divide-gray-700" id="reportList">
                             <% reports.forEach((report) => { %>
-                                <li class="px-4 md:px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 report-item m-3" data-category="<%= report.category %>" style="transition-delay:200ms;">
-                                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                                        <div class="mb-2 md:mb-0">
-                                            <h3 class="text-base md:text-lg font-semibold"><%= report.report_title %></h3>
+                                <li class="px-4 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 report-item" data-category="<%= report.category %>">
+                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                                        <div class="mb-2 sm:mb-0">
+                                            <h3 class="text-lg font-semibold"><%= report.report_title %></h3>
                                             <p class="text-sm text-gray-600 dark:text-gray-400"><%= report.category %> - <%= report.date %></p>
                                         </div>
-                                        <div class="flex items-center space-x-2 md:space-x-4">
+                                        <div class="flex items-center space-x-2">
                                             <span class="text-sm font-medium text-gray-600 dark:text-gray-300">Score: <%= report.score %></span>
-                                            <button class="view-report-btn text-sm text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 focus:outline-none transition-colors duration-200 flex items-center" data-report-id="<%= report.report_id %>">
-                                                <i class="ri-eye-line mr-1"></i> View
+                                            <button class="view-report-btn text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 focus:outline-none transition-colors duration-200" data-report-id="<%= report.report_id %>">
+                                                <i class="ri-eye-line"></i>
                                             </button>
-                                            <button id="edit-report-btn" class="edit-report-btn text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 focus:outline-none transition-colors duration-200 flex items-center" data-report-id="<%= report.report_id %>">
-                                                <i class="ri-edit-line mr-1"></i> Edit
+                                            <button id="edit-report-btn" class="edit-report-btn text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 focus:outline-none transition-colors duration-200" data-report-id="<%= report.report_id %>">
+                                                <i class="ri-edit-line"></i>
                                             </button>
-                                            <button id="delete-report-btn" class="delete-report-btn text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 focus:outline-none transition-colors duration-200 flex items-center" data-report-id="<%= report.report_id %>">
-                                                <i class="ri-delete-bin-line mr-1"></i> Delete
+                                            <button id="delete-report-btn" class="delete-report-btn text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 focus:outline-none transition-colors duration-200" data-report-id="<%= report.report_id %>">
+                                                <i class="ri-delete-bin-line"></i>
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="report-description mt-2 hidden" data-report-id="<%= report.report_id %>">
+                                    <div class="report-description mt-2 hidden">
                                         <p class="text-sm text-gray-600 dark:text-gray-400">
                                             <%= report.report_description %>
                                         </p>
@@ -130,187 +134,77 @@
                             <% }) %>
                         </ul>
                     </div>
+
+                </div>
                 
-
-                    <!-- Report visualizations -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6">
-                            <h3 class="text-xl font-semibold mb-4">Report Categories (Ongoing)</h3>
-                            <canvas id="categoryChart" class="w-full h-64"></canvas>
-                        </div>
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6">
-                            <h3 class="text-xl font-semibold mb-4">Monthly Report Submissions (Ongoing)</h3>
-                            <canvas id="monthlyChart" class="w-full h-64"></canvas>
-                        </div>
-                    </div>
-
-                 
+                </div>
             </main>
         </div>
     </div>
 
+    <%- include('partials/forms.ejs') %>
+
     <script>
-        function setTheme(theme) {
-            if (theme === 'dark') {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-            localStorage.setItem('color-theme', theme);
-        }
+        // Sidebar toggle
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const closeSidebarBtn = document.getElementById('closeSidebar');
 
-        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            setTheme('dark');
-        } else {
-            setTheme('light');
-        }
-
-        document.querySelectorAll('.view-report-btn').forEach(button => {
-            button.addEventListener('click', function() {
-               const report_id = this.getAttribute('data-report-id');
-               const report_description = document.querySelectorAll('.report-description');
-               report_description.forEach(item => {
-                   if (item.getAttribute('data-report-id') === report_id) {
-                      item.classList.toggle('hidden');
-                   } else {
-                     item.classList.add('hidden');
-                   }
-               });
-            });
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
         });
 
-
-        const reportItems = document.querySelectorAll('.report-item');
-        reportItems.forEach((item, index) => {
-            item.classList.add('report-enter');
-            setTimeout(() => {
-                item.classList.add('report-enter-active');
-            }, 50 * index); 
-        });
-
-        // Filter functionality
+        closeSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full')});
+        // Report filtering and search
         const filterButtons = document.querySelectorAll('.filter-btn');
-        const reportList = document.getElementById('reportList');
         const searchInput = document.getElementById('search_input');
+        const reportItems = document.querySelectorAll('.report-item');
 
-        filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const filter = button.getAttribute('data-filter');
-                filterReports(filter);
-                filterButtons.forEach(btn => btn.classList.remove('bg-green-500', 'text-white'));
-                button.classList.add('bg-green-500', 'text-white');
-            });
-        });
-
-        searchInput.addEventListener('input', () => {
+        function filterReports() {
             const searchTerm = searchInput.value.toLowerCase();
-            filterReports('all', searchTerm);
-        });
+            const activeFilter = document.querySelector('.filter-btn.bg-blue-500').dataset.filter;
 
-        function filterReports(category, searchTerm = '') {
-            const reports = reportList.querySelectorAll('.report-item');
-            reports.forEach(report => {
-                const reportCategory = report.getAttribute('data-category');
-                const reportTitle = report.querySelector('h3').textContent.toLowerCase();
-                const showCategory = category === 'all' || reportCategory === category;
-                const showSearch = reportTitle.includes(searchTerm);
-                if (showCategory && showSearch) {
-                    report.style.display = 'block';
+            reportItems.forEach(item => {
+                const title = item.querySelector('h3').textContent.toLowerCase();
+                const category = item.dataset.category;
+                const matchesSearch = title.includes(searchTerm);
+                const matchesFilter = activeFilter === 'all' || category === activeFilter;
+
+                if (matchesSearch && matchesFilter) {
+                    item.style.display = 'block';
                 } else {
-                    report.style.display = 'none';
+                    item.style.display = 'none';
                 }
             });
         }
 
-        // Ongoing Charts
-        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-        const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
-
-        const categoryChart = new Chart(categoryCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Financial', 'Operational', 'Marketing'],
-                datasets: [{
-                    label: 'Number of Reports',
-                    data: [0, 0, 0],
-                    backgroundColor: [
-                        'rgba(75, 192, 192, 0.6)',
-                        'rgba(153, 102, 255, 0.6)',
-                        'rgba(255, 159, 64, 0.6)'
-                    ],
-                    borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                },
-                responsive: true,
-                maintainAspectRatio: true
-            }
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('bg-blue-500', 'text-white'));
+                button.classList.add('bg-blue-500', 'text-white');
+                filterReports();
+            });
         });
 
-        const monthlyChart = new Chart(monthlyCtx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Number of Reports',
-                    data: [],
-                    fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                },
-                responsive: true,
-                maintainAspectRatio: true
-            }
+        searchInput.addEventListener('input', filterReports);
+        document.addEventListener('click', (e) => {
+                if (window.innerWidth < 768 && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                    sidebar.classList.add('-translate-x-full');
+                }
+        // View report description
+        const viewButtons = document.querySelectorAll('.view-report-btn');
+        viewButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const reportItem = button.closest('.report-item');
+                const description = reportItem.querySelector('.report-description');
+                description.classList.toggle('hidden');
+            });
         });
 
-        // Function to update charts with ongoing data
-        function updateCharts() {
-            // Simulate fetching new data
-            const newCategoryData = [
-                Math.floor(Math.random() * 20),
-                Math.floor(Math.random() * 20),
-                Math.floor(Math.random() * 20)
-            ];
-            
-            const newMonthlyData = Math.floor(Math.random() * 10);
-            const currentDate = new Date();
-            const currentMonth = currentDate.toLocaleString('default', { month: 'short' });
-            
-            // Update category chart
-            categoryChart.data.datasets[0].data = newCategoryData;
-            categoryChart.update();
-            
-            // Update monthly chart
-            if (monthlyChart.data.labels.length >= 6) {
-                monthlyChart.data.labels.shift();
-                monthlyChart.data.datasets[0].data.shift();
-            }
-            monthlyChart.data.labels.push(currentMonth);
-            monthlyChart.data.datasets[0].data.push(newMonthlyData);
-            monthlyChart.update();
-        }
+        // Charts (example data)
 
-        
-        setInterval(updateCharts, 5000);
+        });
     </script>
-
-    <%- include('partials/forms.ejs') %>
 </body>
 </html>
