@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .toggle-bg:after {
+            content: '';
+            @apply absolute top-0.5 left-0.5 bg-white border border-gray-300 rounded-full h-5 w-5 transition shadow-sm;
+        }
+
+        input:checked + .toggle-bg:after {
+            transform: translateX(100%);
+            @apply border-white;
+        }
+
+        input:checked + .toggle-bg {
+            @apply bg-blue-600 border-blue-600;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8 animate-fade-in">User Settings</h1>
+
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <!-- Notifications Settings -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md animate-fade-in">
+                <h2 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="ri-notification-3-line mr-2 text-primary"></i>
+                    Notifications
+                </h2>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span>Email Notifications</span>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="checkbox" class="hidden" id="emailNotifications" checked>
+                            <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
+                        </label>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>Push Notifications</span>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="checkbox" class="hidden" id="pushNotifications" checked>
+                            <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appearance Settings -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md animate-fade-in">
+                <h2 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="ri-palette-line mr-2 text-secondary"></i>
+                    Appearance
+                </h2>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span>Dark Mode</span>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="checkbox" class="hidden" id="darkModeToggle">
+                            <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
+                        </label>
+                    </div>
+                    <div>
+                        <label for="fontSize" class="block mb-2">Font Size</label>
+                        <select id="fontSize" class="w-full p-2 rounded-md bg-gray-100 dark:bg-gray-700">
+                            <option value="small">Small</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="large">Large</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Settings -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md animate-fade-in">
+                <h2 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="ri-user-settings-line mr-2 text-primary"></i>
+                    Account
+                </h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="email" class="block mb-2">Email</label>
+                        <input type="email" id="email" value="user@example.com" class="w-full p-2 rounded-md bg-gray-100 dark:bg-gray-700">
+                    </div>
+                    <div>
+                        <label for="username" class="block mb-2">Username</label>
+                        <input type="text" id="username" value="johndoe" class="w-full p-2 rounded-md bg-gray-100 dark:bg-gray-700">
+                    </div>
+                    <button id="changePasswordBtn" class="w-full bg-primary text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">
+                        Change Password
+                    </button>
+                </div>
+            </div>
+
+            <!-- Privacy Settings -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md animate-fade-in">
+                <h2 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="ri-shield-check-line mr-2 text-secondary"></i>
+                    Privacy
+                </h2>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span>Profile Visibility</span>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="checkbox" class="hidden" id="profileVisibility" checked>
+                            <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
+                        </label>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>Activity Status</span>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="checkbox" class="hidden" id="activityStatus" checked>
+                            <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Language Settings -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md animate-fade-in">
+                <h2 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="ri-global-line mr-2 text-primary"></i>
+                    Language
+                </h2>
+                <div>
+                    <label for="language" class="block mb-2">Preferred Language</label>
+                    <select id="language" class="w-full p-2 rounded-md bg-gray-100 dark:bg-gray-700">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Logout Button -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md animate-fade-in">
+                <h2 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="ri-logout-box-r-line mr-2 text-red-500"></i>
+                    Logout
+                </h2>
+                <button id="logoutBtn" class="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300">
+                    <a href="/logout">Logout</a>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const html = document.documentElement;
+
+            // Initialize dark mode
+            if (localStorage.getItem('darkMode') === 'true') {
+                html.classList.add('dark');
+                darkModeToggle.checked = true;
+            }
+
+            // Dark mode toggle
+            darkModeToggle.addEventListener('change', () => {
+                html.classList.toggle('dark');
+                localStorage.setItem('darkMode', html.classList.contains('dark'));
+            });
+
+            // Font size change
+            const fontSizeSelect = document.getElementById('fontSize');
+            fontSizeSelect.addEventListener('change', (e) => {
+                document.body.style.fontSize = e.target.value === 'small' ? '14px' : e.target.value === 'large' ? '18px' : '16px';
+            });
+
+            // Simulated save functionality
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.addEventListener('change', () => {
+                    console.log(`Setting changed: ${input.id} = ${input.value || input.checked}`);
+                    // Here you would typically send this data to your backend
+                });
+            });
+
+            // Change password button
+            const changePasswordBtn = document.getElementById('changePasswordBtn');
+            changePasswordBtn.addEventListener('click', () => {
+                alert('Change password functionality would be implemented here.');
+            });
+
+           
+        });
+    </script>
+</body>
+</html>

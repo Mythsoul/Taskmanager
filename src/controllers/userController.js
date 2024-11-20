@@ -42,6 +42,9 @@ export const render_homepage = async(req ,res)=>{
       }
   };
   
+export const render_usermenu = async (req, res) => {
+    res.render("usermenu.ejs")
+}
 // export const render_testpage = async(req ,res)=>{ 
 //     const user = req.user;
 //     console.log(user);
