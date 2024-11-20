@@ -5,5 +5,5 @@ const router = express();
 
 router.get("/" , render_homepage); 
 router.get("/dashboard" , ensureAuthenticated , render_dashboard);
-router.get("/usermenu" , ensureAuthenticated , render_usermenu);
+router.get("/dashboard/usermenu" , ensureAuthenticated , render_usermenu);
 export default router ; 

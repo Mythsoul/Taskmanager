@@ -43,7 +43,8 @@ export const render_homepage = async(req ,res)=>{
   };
   
 export const render_usermenu = async (req, res) => {
-    res.render("usermenu.ejs")
+    const user = req.user
+    res.render("usermenu.ejs" , { user : user})
 }
 // export const render_testpage = async(req ,res)=>{ 
 //     const user = req.user;

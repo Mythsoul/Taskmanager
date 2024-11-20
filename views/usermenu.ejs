@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Settings</title>
+    <title>User Settings - TaskManager</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -24,6 +25,10 @@
 
         body {
             font-family: 'Inter', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         .toggle-bg:after {
@@ -48,133 +53,196 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-8 animate-fade-in">User Settings</h1>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen flex">
+    <button id="sidebarToggle" class="fixed top-4 left-4 z-50 lg:hidden bg-white dark:bg-gray-800 p-2 rounded-md shadow-md">
+        <i class="ri-menu-line text-2xl"></i>
+    </button>
 
-        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            <!-- Notifications Settings -->
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md animate-fade-in">
-                <h2 class="text-xl font-semibold mb-4 flex items-center">
-                    <i class="ri-notification-3-line mr-2 text-primary"></i>
-                    Notifications
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-800 shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out lg:translate-x-0">
+        <div class="h-full flex flex-col">
+            <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-white flex items-center">
+                    <i class="ri-hourglass-fill mr-2 text-indigo-500"></i>
+                    TaskManager
                 </h2>
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span>Email Notifications</span>
-                        <label class="flex items-center cursor-pointer">
-                            <input type="checkbox" class="hidden" id="emailNotifications" checked>
-                            <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
-                        </label>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span>Push Notifications</span>
-                        <label class="flex items-center cursor-pointer">
-                            <input type="checkbox" class="hidden" id="pushNotifications" checked>
-                            <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
-                        </label>
-                    </div>
+                <button id="closeSidebar" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white lg:hidden">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+            <div class="flex items-center p-4 mt-4 bg-gray-100 dark:bg-gray-700 rounded-lg mx-2">
+                <img src="<%= user.picture || 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>" alt="User Avatar" class="w-12 h-12 rounded-full border-2 border-indigo-500">
+                <div class="ml-3">
+                    <p class="font-semibold text-gray-800 dark:text-white"><%= user.username %></p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400"><%= user.email %></p>
                 </div>
             </div>
+            <nav class="flex-1 overflow-y-auto scrollbar-hide mt-6">
+                <ul class="px-2 space-y-2">
+                    <li>
+                        <a href="/dashboard" class="flex items-center p-3 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200">
+                            <i class="ri-dashboard-line text-xl mr-3 text-indigo-400"></i>
+                            <span class="font-medium">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard/user/tasks" class="flex items-center p-3 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200">
+                            <i class="ri-task-line text-xl mr-3 text-indigo-400"></i>
+                            <span class="font-medium">Tasks</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard/user/reports" class="flex items-center p-3 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200">
+                            <i class="ri-bar-chart-box-line text-xl mr-3 text-indigo-400"></i>
+                            <span class="font-medium">Reports</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard/user/meetings" class="flex items-center p-3 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200">
+                            <i class="ri-team-line text-xl mr-3 text-indigo-400"></i>
+                            <span class="font-medium">Meetings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+                <a href="/dashboard/usermenu" class="flex items-center p-3 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200">
+                    <i class="ri-settings-4-line text-xl mr-3 text-indigo-400"></i>
+                    <span class="font-medium">Settings</span>
+                </a>
+                <a href="/logout" class="flex items-center p-3 mt-2 text-red-500 rounded-lg hover:bg-red-100 dark:hover:bg-red-900 transition-all duration-200">
+                    <i class="ri-logout-box-line text-xl mr-3"></i>
+                    <span class="font-medium">Logout</span>
+                </a>
+            </div>
+        </div>
+    </aside>
 
-            <!-- Appearance Settings -->
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md animate-fade-in">
-                <h2 class="text-xl font-semibold mb-4 flex items-center">
-                    <i class="ri-palette-line mr-2 text-secondary"></i>
-                    Appearance
-                </h2>
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span>Dark Mode</span>
-                        <label class="flex items-center cursor-pointer">
-                            <input type="checkbox" class="hidden" id="darkModeToggle">
-                            <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
-                        </label>
+    <div class="flex-1 ml-0 lg:ml-64 transition-all duration-300">
+        <div class="container mx-auto px-4 py-8">
+            <h1 class="text-3xl font-bold mb-8 animate-fade-in">User Settings</h1>
+
+            <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                <!-- Notifications Settings -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md animate-fade-in">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="ri-notification-3-line mr-2 text-primary"></i>
+                        Notifications
+                    </h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span>Email Notifications</span>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" class="hidden" id="emailNotifications" checked>
+                                <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span>Push Notifications</span>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" class="hidden" id="pushNotifications" checked>
+                                <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
+                            </label>
+                        </div>
                     </div>
+                </div>
+
+                <!-- Appearance Settings -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md animate-fade-in">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="ri-palette-line mr-2 text-secondary"></i>
+                        Appearance
+                    </h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span>Dark Mode</span>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" class="hidden" id="darkModeToggle">
+                                <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
+                            </label>
+                        </div>
+                        <div>
+                            <label for="fontSize" class="block mb-2">Font Size</label>
+                            <select id="fontSize" class="w-full p-2 rounded-md bg-gray-100 dark:bg-gray-700">
+                                <option value="small">Small</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="large">Large</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Settings -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md animate-fade-in">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="ri-user-settings-line mr-2 text-primary"></i>
+                        Account
+                    </h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="email" class="block mb-2">Email</label>
+                            <input type="email" id="email" value="<%= user.email ? user.email : "example@gmail.com" %>" class="w-full p-2 rounded-md bg-gray-100 dark:bg-gray-700">
+                        </div>
+                        <div>
+                            <label for="username" class="block mb-2">Username</label>
+                            <input type="text" id="username" value="<%= user.username %>" class="w-full p-2 rounded-md bg-gray-100 dark:bg-gray-700">
+                        </div>
+                        <button id="changePasswordBtn" class="w-full bg-primary text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">
+                            Change Password
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Privacy Settings -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md animate-fade-in">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="ri-shield-check-line mr-2 text-secondary"></i>
+                        Privacy
+                    </h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span>Profile Visibility</span>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" class="hidden" id="profileVisibility" checked>
+                                <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span>Activity Status</span>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" class="hidden" id="activityStatus" checked>
+                                <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Language Settings -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md animate-fade-in">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="ri-global-line mr-2 text-primary"></i>
+                        Language
+                    </h2>
                     <div>
-                        <label for="fontSize" class="block mb-2">Font Size</label>
-                        <select id="fontSize" class="w-full p-2 rounded-md bg-gray-100 dark:bg-gray-700">
-                            <option value="small">Small</option>
-                            <option value="medium" selected>Medium</option>
-                            <option value="large">Large</option>
+                        <label for="language" class="block mb-2">Preferred Language</label>
+                        <select id="language" class="w-full p-2 rounded-md bg-gray-100 dark:bg-gray-700">
+                            <option value="en">English</option>
+                            <option value="es">Español</option>
+                            <option value="fr">Français</option>
+                            <option value="de">Deutsch</option>
                         </select>
                     </div>
                 </div>
-            </div>
-
-            <!-- Account Settings -->
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md animate-fade-in">
-                <h2 class="text-xl font-semibold mb-4 flex items-center">
-                    <i class="ri-user-settings-line mr-2 text-primary"></i>
-                    Account
-                </h2>
-                <div class="space-y-4">
-                    <div>
-                        <label for="email" class="block mb-2">Email</label>
-                        <input type="email" id="email" value="user@example.com" class="w-full p-2 rounded-md bg-gray-100 dark:bg-gray-700">
-                    </div>
-                    <div>
-                        <label for="username" class="block mb-2">Username</label>
-                        <input type="text" id="username" value="johndoe" class="w-full p-2 rounded-md bg-gray-100 dark:bg-gray-700">
-                    </div>
-                    <button id="changePasswordBtn" class="w-full bg-primary text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">
-                        Change Password
-                    </button>
-                </div>
-            </div>
-
-            <!-- Privacy Settings -->
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md animate-fade-in">
-                <h2 class="text-xl font-semibold mb-4 flex items-center">
-                    <i class="ri-shield-check-line mr-2 text-secondary"></i>
-                    Privacy
-                </h2>
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span>Profile Visibility</span>
-                        <label class="flex items-center cursor-pointer">
-                            <input type="checkbox" class="hidden" id="profileVisibility" checked>
-                            <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
-                        </label>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span>Activity Status</span>
-                        <label class="flex items-center cursor-pointer">
-                            <input type="checkbox" class="hidden" id="activityStatus" checked>
-                            <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Language Settings -->
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md animate-fade-in">
-                <h2 class="text-xl font-semibold mb-4 flex items-center">
-                    <i class="ri-global-line mr-2 text-primary"></i>
-                    Language
-                </h2>
-                <div>
-                    <label for="language" class="block mb-2">Preferred Language</label>
-                    <select id="language" class="w-full p-2 rounded-md bg-gray-100 dark:bg-gray-700">
-                        <option value="en">English</option>
-                        <option value="es">Español</option>
-                        <option value="fr">Français</option>
-                        <option value="de">Deutsch</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Logout Button -->
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md animate-fade-in">
-                <h2 class="text-xl font-semibold mb-4 flex items-center">
-                    <i class="ri-logout-box-r-line mr-2 text-red-500"></i>
-                    Logout
-                </h2>
-                <button id="logoutBtn" class="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300">
-                    <a href="/logout">Logout</a>
-                </button>
             </div>
         </div>
     </div>
@@ -183,6 +251,9 @@
         document.addEventListener('DOMContentLoaded', () => {
             const darkModeToggle = document.getElementById('darkModeToggle');
             const html = document.documentElement;
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const closeSidebar = document.getElementById('closeSidebar');
 
             // Initialize dark mode
             if (localStorage.getItem('darkMode') === 'true') {
@@ -202,6 +273,22 @@
                 document.body.style.fontSize = e.target.value === 'small' ? '14px' : e.target.value === 'large' ? '18px' : '16px';
             });
 
+            // Sidebar toggle
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+
+            closeSidebar.addEventListener('click', () => {
+                sidebar.classList.add('-translate-x-full');
+            });
+
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth < 1024 && !sidebar.contains(e.target) && e.target !== sidebarToggle) {
+                    sidebar.classList.add('-translate-x-full');
+                }
+            });
+
             // Simulated save functionality
             const inputs = document.querySelectorAll('input, select');
             inputs.forEach(input => {
@@ -214,10 +301,8 @@
             // Change password button
             const changePasswordBtn = document.getElementById('changePasswordBtn');
             changePasswordBtn.addEventListener('click', () => {
-                alert('Change password functionality would be implemented here.');
+                alert('U Cant Do This Currently : ) ');
             });
-
-           
         });
     </script>
 </body>
