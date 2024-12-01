@@ -1,129 +1,303 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaskManager</title>
-   
+    <title>TaskManager - Boost Your Productivity</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/css/styles.css">
-    <script src="https://kit.fontawesome.com/60cc3418d0.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/css/homepage.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6D28D9;
+            --secondary-color: #4F46E5;
+            --accent-color: #F59E0B;
+            --background-start: #4F46E5;
+            --background-end: #7C3AED;
+            --text-color: #F3F4F6;
+        }
+        .dark {
+            --primary-color: #8B5CF6;
+            --secondary-color: #6D28D9;
+            --accent-color: #FBBF24;
+            --background-start: #111827;
+            --background-end: #1F2937;
+            --text-color: #F9FAFB;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--background-start) 0%, var(--background-end) 100%);
+            color: var(--text-color);
+        }
+        .text-glow { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+        .feature-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .button-glow {
+            transition: all 0.3s ease;
+        }
+        .button-glow:hover {
+            box-shadow: 0 0 15px var(--accent-color);
+            transform: scale(1.05);
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-purple-700 to-blue-600 min-h-screen text-white font-sans flex flex-col items-center">
-    <header class="w-full py-6 flex flex-col md:flex-row justify-between items-center px-4 md:px-8">
-        <a class="text-4xl font-extrabold tracking-wider text-glow mb-4 md:mb-0" href="#">TaskManager</a>
-        <nav class="space-x-4 md:space-x-8 text-lg sticky">
-            <a href="#features" class="hover:text-yellow-300 transition-colors duration-300">Features</a>
-            <a href="#about" class="hover:text-yellow-300 transition-colors duration-300">About</a>
-            <a href="#contact" class="hover:text-yellow-300 transition-colors duration-300">Contact</a>
-            <a href="/dashboard" class="hover:text-yellow-300 transition-colors duration-300">Dashboard</a>
-        </nav>
+<body class="min-h-screen flex flex-col">
+    <header class="w-full py-6 px-4 md:px-8 sticky top-0 z-50 glass">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/" class="text-4xl font-extrabold tracking-wider text-glow">TaskManager</a>
+            <nav class="hidden md:flex space-x-8 text-lg">
+                <a href="#features" class="hover:text-yellow-300 transition-colors duration-300">Features</a>
+                <a href="#testimonials" class="hover:text-yellow-300 transition-colors duration-300">Testimonials</a>
+                <a href="#about" class="hover:text-yellow-300 transition-colors duration-300">About</a>
+                <a href="#contact" class="hover:text-yellow-300 transition-colors duration-300">Contact</a>
+                <a href="/dashboard" class="hover:text-yellow-300 transition-colors duration-300">Dashboard</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <button id="darkModeToggle" class="p-2 rounded-full hover:bg-gray-700 transition-colors duration-300">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="sidebarToggle" class="md:hidden p-2 rounded-full hover:bg-gray-700 transition-colors duration-300">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
     </header>
 
-    <main class="flex flex-col items-center text-center my-12 px-4 md:px-8 animate-fade-in">
-        <section class="mb-16">
-            <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-6 text-glow">
-                Level Up with <span class="text-yellow-300">TaskManager</span>
-            </h1>
-            <p class="text-xl md:text-2xl font-light max-w-2xl mb-8">
-                Organize, track, and accomplish more with TaskManager — the free tool designed to simplify your workday.
-            </p>
-            <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mb-12">
-                <a href="/register" class="bg-yellow-300 text-purple-800 text-lg font-semibold px-8 py-3 rounded-full button-bounce transition-transform duration-300 hover:scale-105">
-                    Get Started
-                </a>
-                <a href="#features" class="border border-yellow-300 text-lg font-semibold px-8 py-3 rounded-full button-bounce transition-transform duration-300 hover:scale-105">
-                    Explore
-                </a>
-            </div>
-        </section>
+    <aside id="sidebar" class="sidebar fixed inset-y-0 left-0 w-64 bg-gray-800 text-white p-4 overflow-y-auto transform -translate-x-full transition-transform duration-300 ease-in-out z-40 md:hidden">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-bold">Menu</h2>
+            <button id="closeSidebar" class="text-white hover:text-gray-300">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav>
+            <ul class="space-y-4">
+                <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded transition-colors duration-300">Home</a></li>
+                <li><a href="#features" class="block py-2 px-4 hover:bg-gray-700 rounded transition-colors duration-300">Features</a></li>
+                <li><a href="#testimonials" class="block py-2 px-4 hover:bg-gray-700 rounded transition-colors duration-300">Testimonials</a></li>
+                <li><a href="#about" class="block py-2 px-4 hover:bg-gray-700 rounded transition-colors duration-300">About</a></li>
+                <li><a href="#contact" class="block py-2 px-4 hover:bg-gray-700 rounded transition-colors duration-300">Contact</a></li>
+                <li><a href="/dashboard" class="block py-2 px-4 hover:bg-gray-700 rounded transition-colors duration-300">Dashboard</a></li>
+            </ul>
+        </nav>
+    </aside>
 
-        <section id="features" class="w-full py-16 bg-gray-900 bg-opacity-70 px-4 md:px-8 glass rounded-t-3xl mb-12">
-            <h2 class="text-center text-4xl font-semibold text-yellow-300 mb-10">All-in-One Features</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto">
-                <div class="bg-gradient-to-br from-white to-gray-100 p-6 rounded-lg shadow-lg text-gray-800 feature-card glass">
-                    <i class="fas fa-tasks text-4xl text-blue-600 mb-4"></i>
-                    <h3 class="text-2xl font-semibold mb-3 text-blue-600">Effortless Task Management</h3>
-                    <p class="text-lg">Organize your tasks, set priorities, and manage deadlines with ease to stay on track.</p>
+    <main class="flex-grow">
+        <section class="py-20 px-4 md:px-8 text-center animate-fade-in">
+            <div class="container mx-auto">
+                <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-6 text-glow">
+                    Level Up with <span class="text-yellow-300">TaskManager</span>
+                </h1>
+                <p class="text-xl md:text-2xl font-light max-w-2xl mx-auto mb-8">
+                    Organize, track, and accomplish more with TaskManager — the free tool designed to simplify your workday.
+                </p>
+                <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4 mb-12">
+                    <a href="/register" class="bg-yellow-300 text-purple-800 text-lg font-semibold px-8 py-3 rounded-full button-glow transition-transform duration-300 hover:scale-105">
+                        Get Started - It's Free!
+                    </a>
+                    <a href="#features" class="border border-yellow-300 text-yellow-300 text-lg font-semibold px-8 py-3 rounded-full button-glow transition-transform duration-300 hover:scale-105">
+                        Explore Features
+                    </a>
                 </div>
-                <div class="bg-gradient-to-br from-white to-gray-100 p-6 rounded-lg shadow-lg text-gray-800 feature-card glass">
-                    <i class="fas fa-clock text-4xl text-blue-600 mb-4"></i>
-                    <h3 class="text-2xl font-semibold mb-3 text-blue-600">Accurate Time Tracking</h3>
-                    <p class="text-lg">Track the time spent on tasks to understand your work patterns and optimize productivity.</p>
-                </div>
-                <div class="bg-gradient-to-br from-white to-gray-100 p-6 rounded-lg shadow-lg text-gray-800 feature-card glass">
-                    <i class="fas fa-chart-line text-4xl text-blue-600 mb-4"></i>
-                    <h3 class="text-2xl font-semibold mb-3 text-blue-600">Real-time Dashboard</h3>
-                    <p class="text-lg">Get a comprehensive view of your tasks, projects, and time to make data-driven decisions.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="about" class="py-16 w-full px-4 md:px-8 bg-gradient-to-br from-purple-600 to-blue-600 text-center mb-12">
-            <h2 class="text-4xl font-semibold text-white mb-6">Why TaskManager?</h2>
-            <p class="max-w-3xl mx-auto text-lg mb-8 text-gray-200">
-                TaskManager empowers everyone to keep track of their tasks, manage time, and stay productive with no cost. Start optimizing your workflow today!
-            </p>
-            <div class="flex flex-col md:flex-row justify-center gap-8 max-w-4xl mx-auto">
-                <div class="bg-purple-500 p-6 rounded-lg text-center glass">
-                    <h3 class="text-2xl font-semibold text-yellow-300 mb-2">Always Free</h3>
-                    <p>TaskManager is free for everyone, with no hidden fees or surprises. Focus on achieving more!</p>
-                </div>
-                <div class="bg-blue-500 p-6 rounded-lg text-center glass">
-                    <h3 class="text-2xl font-semibold text-yellow-300 mb-2">Secure & Reliable</h3>
-                    <p>Your data is safe with us. Enjoy a secure place to store and manage your tasks effectively.</p>
+                <div class="mt-16 float-animation">
+                    <img src="/views/dashboard.png" alt="TaskManager Dashboard" class="rounded-lg shadow-2xl mx-auto" width="1200" height="800">
                 </div>
             </div>
         </section>
 
-        <section id="contact" class="py-16 w-full px-4 md:px-8 bg-gray-900 bg-opacity-70 glass rounded-b-3xl text-center mb-12">
-            <h2 class="text-4xl font-semibold text-yellow-300 mb-8">Get in Touch</h2>
-            <form class="max-w-md mx-auto flex flex-col items-center" action="/register">
-                <div class="relative w-full mb-4" >
-                    <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                    <input
-                        type="email"
-                        placeholder="Enter your email"
-                        class="w-full pl-10 pr-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+        <section id="features" class="py-20 bg-gray-900 bg-opacity-70">
+            <div class="container mx-auto px-4 md:px-8">
+                <h2 class="text-center text-4xl font-semibold text-yellow-300 mb-16">Powerful Features - All for Free</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                    <div class="bg-white p-8 rounded-lg shadow-lg feature-card">
+                        <i class="fas fa-tasks text-4xl text-purple-600 mb-6"></i>
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800">Task Management</h3>
+                        <p class="text-gray-600">Create, organize, and track tasks with ease. Set priorities and deadlines to stay on top of your work.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-lg feature-card">
+                        <i class="fas fa-calendar-alt text-4xl text-purple-600 mb-6"></i>
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800">Meeting Scheduler</h3>
+                        <p class="text-gray-600">Schedule and manage meetings effortlessly. Send invitations and set reminders for participants.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-lg feature-card">
+                        <i class="fas fa-chart-line text-4xl text-purple-600 mb-6"></i>
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800">Report Generation</h3>
+                        <p class="text-gray-600">Generate detailed reports on tasks, projects, and team performance. Export in various formats.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-lg feature-card">
+                        <i class="fas fa-users text-4xl text-purple-600 mb-6"></i>
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800">Team Collaboration</h3>
+                        <p class="text-gray-600">Work seamlessly with your team. Share tasks, files, and updates in real-time.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-lg feature-card">
+                        <i class="fas fa-clock text-4xl text-purple-600 mb-6"></i>
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800">Time Tracking</h3>
+                        <p class="text-gray-600">Track time spent on tasks and projects. Analyze your productivity and optimize your workflow.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-lg feature-card">
+                        <i class="fas fa-chart-bar text-4xl text-purple-600 mb-6"></i>
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800">Analytics Dashboard</h3>
+                        <p class="text-gray-600">Get insights into your productivity with visual analytics and customizable dashboards.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="py-20">
+            <div class="container mx-auto px-4 md:px-8">
+                <h2 class="text-center text-4xl font-semibold text-white mb-16">What Our Users Say</h2>
+                <div id="testimonials-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Testimonials will be dynamically inserted here by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-20 bg-gray-900 bg-opacity-70">
+            <div class="container mx-auto px-4 md:px-8 text-center">
+                <h2 class="text-4xl font-semibold text-yellow-300 mb-8">Why Choose TaskManager?</h2>
+                <p class="max-w-3xl mx-auto text-xl mb-16 text-gray-300">
+                    TaskManager empowers individuals and teams to achieve more, stay organized, and boost productivity. Our platform is designed with you in mind, offering powerful features completely free of charge.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    <div class="bg-white p-8 rounded-lg text-center glass">
+                        <i class="fas fa-infinity text-4xl text-purple-600 mb-4"></i>
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800">Always Free</h3>
+                        <p class="text-gray-600">Enjoy all features at no cost. Focus on your work, not your wallet.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg text-center glass">
+                        <i class="fas fa-shield-alt text-4xl text-purple-600 mb-4"></i>
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800">Secure & Reliable</h3>
+                        <p class="text-gray-600">Your data is protected with industry-standard security measures.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg text-center glass">
+                        <i class="fas fa-sync-alt text-4xl text-purple-600 mb-4"></i>
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800">Constant Improvements</h3>
+                        <p class="text-gray-600">We regularly update TaskManager with new features based on user feedback.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20">
+            <div class="container mx-auto px-4 md:px-8 text-center">
+                <h2 class="text-4xl font-semibold text-yellow-300 mb-8">Get Started Today</h2>
+                <p class="max-w-2xl mx-auto text-xl mb-12 text-gray-300">
+                    Join thousands of satisfied users and take control of your tasks and time. Sign up now and experience the difference!
+                </p>
+                <form id="contactForm" class="max-w-md mx-auto flex flex-col items-center">
+                    <div class="relative w-full mb-6">
+                        <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email"
+                            class="w-full pl-10 pr-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+                            required
+                        >
+                    </div>
+                    <button
+                        type="submit"
+                        class="bg-yellow-300 text-purple-800 text-lg font-semibold px-8 py-3 rounded-lg button-glow transition-transform duration-300 hover:scale-105"
                     >
-                </div>
-                <button
-                    type="button"
-                    class="bg-yellow-300 text-purple-800 text-lg font-semibold px-8 py-3 rounded-lg button-bounce transition-transform duration-300 hover:scale-105"
-                > <a href="/register">
-                    Sign Up</a>
-                </button>
-            </form>
-            <p class="text-sm mt-4 text-gray-300">
-                By signing up, you agree to our
-                <button onclick="showTermsAndConditions()" class="underline ml-1">
-                    Terms & Conditions
-                </button>
-                .
-            </p>
+                        Start For Free
+                    </button>
+                </form>
+                <p id="formMessage" class="mt-4 text-green-400 hidden"></p>
+                <p class="text-sm mt-6 text-gray-400">
+                    By signing up, you agree to our 
+                    <button type="button" id="showTerms" class="underline ml-1">
+                        Terms & Conditions
+                    </button>
+                </p>
+            </div>
         </section>
     </main>
 
-    <footer class="py-4 bg-gray-800 text-center text-white mt-12 w-full">
-        <p>&copy; 2024 TaskManager. All rights reserved.</p>
-        <div class="space-x-4">
-            <button onclick="showTermsAndConditions()" class="underline">
-                Terms of Service
-            </button>
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">TaskManager</h3>
+                    <p class="text-gray-400">Elevate your productivity and streamline your workflow with our free task management solution.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Home</a></li>
+                        <li><a href="#features" class="text-gray-400 hover:text-white transition-colors duration-300">Features</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition-colors duration-300">About</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition-colors duration-300">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Legal</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Cookie Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-800 text-center">
+                <p class="text-gray-400">&copy; 2024 TaskManager. All rights reserved.</p>
+            </div>
         </div>
     </footer>
 
     <div id="funFactPopup" class="fixed right-4 bottom-4 bg-white text-gray-800 p-6 rounded-lg shadow-lg max-w-sm hidden animate-slide-in">
-        <button onclick="closeFunFactPopup()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+        <button id="closeFunFact" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
             <i class="fas fa-times"></i>
         </button>
         <h2 class="text-2xl font-semibold text-purple-800 mb-2">Did you know?</h2>
-        <p id="funFactText" class="text-lg"><%= funfact %></p>
+        <p id="funFactText" class="text-lg"></p>
     </div>
 
-    <div id="termsModal" class="fixed inset-0 bg-black bg-opacity-50  items-center justify-center z-50 hidden">
+    <div id="termsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full">
             <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Terms & Conditions</h2>
             <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
@@ -144,7 +318,7 @@
                 </li>
             </ul>
             <button
-                onclick="closeTermsModal()"
+                id="closeTerms"
                 class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300"
             >
                 Close
@@ -152,6 +326,140 @@
         </div>
     </div>
 
-    <script src="/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const closeSidebar = document.getElementById('closeSidebar');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const html = document.documentElement;
+            const contactForm = document.getElementById('contactForm');
+            const formMessage = document.getElementById('formMessage');
+            const showTerms = document.getElementById('showTerms');
+            const closeTerms = document.getElementById('closeTerms');
+            const termsModal = document.getElementById('termsModal');
+            const funFactPopup = document.getElementById('funFactPopup');
+            const closeFunFact = document.getElementById('closeFunFact');
+            const funFactText = document.getElementById('funFactText');
+
+            // Sidebar toggle
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+            });
+
+            closeSidebar.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+            });
+
+            // Dark mode toggle
+            darkModeToggle.addEventListener('click', () => {
+                html.classList.toggle('dark');
+                localStorage.setItem('darkMode', html.classList.contains('dark'));
+                updateDarkModeIcon();
+            });
+
+            // Check for saved dark mode preference
+            if (localStorage.getItem('darkMode') === 'true') {
+                html.classList.add('dark');
+            }
+
+            function updateDarkModeIcon() {
+                const icon = darkModeToggle.querySelector('i');
+                if (html.classList.contains('dark')) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+            }
+
+            updateDarkModeIcon();
+
+
+
+            // Terms modal
+            showTerms.addEventListener('click', () => {
+                termsModal.classList.remove('hidden');
+            });
+
+            closeTerms.addEventListener('click', () => {
+                termsModal.classList.add('hidden');
+            });
+
+            // Fun fact popup
+            function showFunFactPopup() {
+                const facts = [
+                    "The average person spends 13 years of their life in meetings.",
+                    "Multitasking can reduce productivity by up to 40%.",
+                    "The most productive day of the week is Tuesday.",
+                    "Taking regular breaks can increase productivity by up to 20%.",
+                    "The Pomodoro Technique suggests working in 25-minute intervals for optimal focus."
+                ];
+                funFactText.textContent = facts[Math.floor(Math.random() * facts.length)];
+                funFactPopup.classList.remove('hidden');
+            }
+
+            closeFunFact.addEventListener('click', () => {
+                funFactPopup.classList.add('hidden');
+            });
+
+            setTimeout(showFunFactPopup, 30000); // Show fun fact after 30 seconds
+
+            // Fetch and display testimonials
+            async function fetchTestimonials() {
+                try {
+                    const response = await fetch('https://randomuser.me/api/?results=3');
+                    const data = await response.json();
+                    const testimonials = data.results.map(user => ({
+                        name: `${user.name.first} ${user.name.last}`,
+                        image: user.picture.medium,
+                        job: `${user.location.city} ${getRandomJob()}`,
+                        text: getRandomTestimonial()
+                    }));
+                    displayTestimonials(testimonials);
+                } catch (error) {
+                    console.error('Error fetching testimonials:', error);
+                }
+            }
+
+            function displayTestimonials(testimonials) {
+                const container = document.getElementById('testimonials-container');
+                testimonials.forEach(testimonial => {
+                    const testimonialElement = document.createElement('div');
+                    testimonialElement.className = 'bg-white rounded-lg p-6 shadow-lg';
+                    testimonialElement.innerHTML = `
+                        <div class="flex items-center mb-4">
+                            <img src="${testimonial.image}" alt="${testimonial.name}" class="w-12 h-12 rounded-full mr-4">
+                            <div>
+                                <h3 class="font-semibold text-lg text-gray-800">${testimonial.name}</h3>
+                                <p class="text-gray-600">${testimonial.job}</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700">"${testimonial.text}"</p>
+                    `;
+                    container.appendChild(testimonialElement);
+                });
+            }
+
+            function getRandomJob() {
+                const jobs = ['Designer', 'Developer', 'Manager', 'Entrepreneur', 'Freelancer', 'Student'];
+                return jobs[Math.floor(Math.random() * jobs.length)];
+            }
+
+            function getRandomTestimonial() {
+                const testimonials = [
+                    "TaskManager has revolutionized the way I work. I'm more productive than ever!",
+                    "I can't believe this amazing tool is completely free. It's a game-changer for my business.",
+                    "The intuitive interface and powerful features make TaskManager stand out from the rest.",
+                    "TaskManager has helped our team stay organized and focused on what matters most.",
+                    "I love how TaskManager adapts to my workflow. It's like it was made just for me!"
+                ];
+                return testimonials[Math.floor(Math.random() * testimonials.length)];
+            }
+
+            fetchTestimonials();
+        });
+    </script>
 </body>
 </html>
