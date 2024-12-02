@@ -7,7 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script type="module" src="/js/dashboard.js"></script>
+    <script src="https://unpkg.com/framer-motion@latest/dist/framer-motion.min.js"></script>
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -71,6 +72,94 @@
             .responsive-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
+        }
+
+        /* Dark mode styles */
+        .dark {
+            @apply bg-gray-900 text-gray-100;
+        }
+
+        .dark .bg-gray-800 {
+            @apply bg-gray-800;
+        }
+
+        .dark .bg-gray-700 {
+            @apply bg-gray-700;
+        }
+
+        .dark .text-gray-300 {
+            @apply text-gray-300;
+        }
+
+        .dark .hover\:bg-gray-700:hover {
+            @apply hover:bg-gray-700;
+        }
+
+        /* Light mode styles */
+        .light {
+            @apply bg-gray-100 text-gray-900;
+        }
+
+        .light .bg-gray-800 {
+            @apply bg-gray-200;
+        }
+
+        .light .bg-gray-700 {
+            @apply bg-gray-300;
+        }
+
+        .light .text-gray-300 {
+            @apply text-gray-700;
+        }
+
+        .light .hover\:bg-gray-700:hover {
+            @apply hover:bg-gray-400;
+        }
+
+        /* Toggle switch styles */
+        .toggle-switch {
+            width: 60px;
+            height: 34px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
         }
     </style>
 </head>
@@ -138,13 +227,13 @@
 
         <!-- Main Content -->
         <main class="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto transition-all duration-300 ease-in-out">
-            <header class="mb-8  top-0 z-10 bg-gray-900 pb-4">
+            <header class="mb-8 top-0 z-10 bg-gray-900 pb-4">
                 <div class="flex flex-col md:flex-row justify-between items-center bg-gray-800 p-4 rounded-lg shadow-lg">
                     <div class="flex items-center mb-4 md:mb-0">
                         <button id="sidebarToggle" class="mr-4 text-gray-400 hover:text-white lg:hidden">
                             <i class="ri-menu-line text-2xl"></i>
                         </button>
-                        <h1 class="text-2xl md:text-3xl font-bold text-white">Management Dashboard</h1>
+                        <h1 id="dashboardTitle" class="text-2xl md:text-3xl font-bold text-white"></h1>
                     </div>
                     <div class="flex items-center space-x-4">
                         <button id="notificationBtn" class="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors relative" aria-label="Notifications">
@@ -162,7 +251,10 @@
                             </div>
                         </div>
                         <button id="darkModeToggle" class="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
-                            <i class="ri-sun-line text-xl"></i>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="darkModeCheckbox">
+                                <span class="toggle-slider"></span>
+                            </label>
                         </button>
                     </div>
                 </div>
@@ -372,7 +464,7 @@
                                     <h3 class="font-semibold"><%= meeting.title %></h3>
                                     <p class="text-sm text-gray-400 mt-2 flex items-center">
                                         <i class="ri-time-line mr-1"></i>
-                                        <%= meeting.date %> at <%= meeting.time %>
+                        <%= meeting.date %> at <%= meeting.time %>
                                     </p>
                                 </div>
                             <% } %>
@@ -401,6 +493,8 @@
             
             const html = document.documentElement;
             const userMenuBtn = document.getElementById('userMenuBtn');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const darkModeCheckbox = document.getElementById('darkModeCheckbox');
 
             const mainContent = document.querySelector('main');
 
@@ -412,8 +506,6 @@
             sidebarToggle.addEventListener('click', toggleSidebar);
             closeSidebarBtn.addEventListener('click', toggleSidebar);
 
-
-           
             const reportDropdowns = document.querySelectorAll('.report-dropdown');
             reportDropdowns.forEach(dropdown => {
                 dropdown.addEventListener('click', () => {
@@ -429,8 +521,37 @@
                 }
             });
 
+            // Dark mode toggle functionality
+            function toggleDarkMode() {
+                html.classList.toggle('dark');
+                html.classList.toggle('light');
+                localStorage.setItem('darkMode', html.classList.contains('dark'));
+            }
+
+            darkModeCheckbox.addEventListener('change', toggleDarkMode);
+
+            // Check for saved dark mode preference
+            if (localStorage.getItem('darkMode') === 'true') {
+                html.classList.add('dark');
+                html.classList.remove('light');
+                darkModeCheckbox.checked = true;
+            } else {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                darkModeCheckbox.checked = false;
+            }
+
             
+            // Typed.js animation for the dashboard title
+            new Typed('#dashboardTitle', {
+                strings: ['Management Dashboard', 'Task Overview', 'Project Status'],
+                typeSpeed: 50,
+                backSpeed: 30,
+                backDelay: 2000,
+                loop: true
+            });
         });
     </script>
+    <script src="/js/dashboard.js"></script>
 </body>
 </html>
