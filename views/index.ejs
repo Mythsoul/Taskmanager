@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     <style>
         :root {
             --primary-color: #6D28D9;
@@ -72,7 +73,7 @@
         }
         @media (max-width: 768px) {
             .sidebar {
-                transform: translateX(-100%);
+                transform: translateX(-80%);
             }
         }
     </style>
@@ -107,7 +108,7 @@
             </button>
         </div>
         <nav>
-            <ul class="space-y-4">
+            <ul class="space-y-4 text-lg">
                 <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded transition-colors duration-300">Home</a></li>
                 <li><a href="#features" class="block py-2 px-4 hover:bg-gray-700 rounded transition-colors duration-300">Features</a></li>
                 <li><a href="#testimonials" class="block py-2 px-4 hover:bg-gray-700 rounded transition-colors duration-300">Testimonials</a></li>
@@ -125,7 +126,7 @@
                     Level Up with <span class="text-yellow-300">TaskManager</span>
                 </h1>
                 <p class="text-xl md:text-2xl font-light max-w-2xl mx-auto mb-8">
-                    Organize, track, and accomplish more with TaskManager — the free tool designed to simplify your workday.
+                    <span id="typed-text"></span> more with TaskManager — the free tool designed to simplify your workday.
                 </p>
                 <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4 mb-12">
                     <a href="/register" class="bg-yellow-300 text-purple-800 text-lg font-semibold px-8 py-3 rounded-full button-glow transition-transform duration-300 hover:scale-105">
@@ -136,7 +137,7 @@
                     </a>
                 </div>
                 <div class="mt-16 float-animation">
-                    <img src="/views/dashboard.png" alt="TaskManager Dashboard" class="rounded-lg shadow-2xl mx-auto" width="1200" height="800">
+                    <img src="/images/dashboard.png" alt="TaskManager Dashboard" class="rounded-lg shadow-2xl mx-auto" width="1200" height="800">
                 </div>
             </div>
         </section>
@@ -333,8 +334,7 @@
             const closeSidebar = document.getElementById('closeSidebar');
             const darkModeToggle = document.getElementById('darkModeToggle');
             const html = document.documentElement;
-            const contactForm = document.getElementById('contactForm');
-            const formMessage = document.getElementById('formMessage');
+          
             const showTerms = document.getElementById('showTerms');
             const closeTerms = document.getElementById('closeTerms');
             const termsModal = document.getElementById('termsModal');
@@ -376,7 +376,13 @@
 
             updateDarkModeIcon();
 
-
+            // Typed.js initialization
+            const typed = new Typed('#typed-text', {
+                strings: ['Organize', 'Track', 'Accomplish'],
+                typeSpeed: 50,
+                backSpeed: 50,
+                loop: true
+            });
 
             // Terms modal
             showTerms.addEventListener('click', () => {
@@ -459,7 +465,8 @@
             }
 
             fetchTestimonials();
-        });
+
+        }); 
     </script>
 </body>
 </html>
